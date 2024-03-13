@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './settings.component.css'
 })
 export class SettingsComponent {
+
+  private router = inject(Router);
 
 }

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainComponent } from './components/main.component';
+import { MainComponent } from './components/main/main.component';
 import { LoginComponent } from './components/login/login.component';
 import { TypingComponent } from './components/typing/typing.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -33,6 +33,6 @@ import { TimerComponent } from './components/timer/timer.component';
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
