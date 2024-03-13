@@ -13,6 +13,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ProgressbarComponent } from './components/progressbar/progressbar.component';
 import { TimerComponent } from './components/timer/timer.component';
+import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { TimerComponent } from './components/timer/timer.component';
     HeaderComponent,
     FooterComponent,
     ProgressbarComponent,
-    TimerComponent
+    TimerComponent,
+    LeaderboardsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

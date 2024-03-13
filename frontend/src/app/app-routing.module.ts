@@ -5,6 +5,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ResultsComponent } from './components/results/results.component';
+import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
+import { AboutComponent } from './components/about/about.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent }, // View 0
@@ -12,11 +14,13 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent }, // Profile View
   { path: 'results', component: ResultsComponent }, // Results View
   { path: 'settings', component: SettingsComponent }, // Settings View
+  { path: 'about', component: AboutComponent }, // About View
+  { path: 'leaderboards', component: LeaderboardsComponent }, // Leaderboards View
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
