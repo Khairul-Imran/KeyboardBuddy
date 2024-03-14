@@ -1,0 +1,1 @@
+If the partial retrieval for the time-based tests is too complicated/troublesome, then just retrieve a fixed number of words for each time range.

@@ -1,4 +1,4 @@
-EasyWords represents the 200 most common english words, taken from https://www.yeuanhvan.com/building-vocabulary/303-the-200-most-common-words-in-english 
+EasyWords represents the 200 most common english words, taken from https://www.yeuanhvan.com/building-vocabulary/303-the-200-most-common-words-in-english (I added / removed some words, as some were too short)
 Their lengths are also moderate, so I think they are suitable for easymode
 - We need the lengths of each word, because although I will randomise the words for each test, I still prefer to skew it more towards choosing the moderately lengthed words, so that not too many short words appear in the test.
 Local Import: mongoimport --db=words -c easywords --type=csv --headerline --file=EasyWords.csv

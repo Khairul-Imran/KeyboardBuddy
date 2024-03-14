@@ -1,11 +1,16 @@
 package com.example.backend.Repositories;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.SampleOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -21,14 +26,21 @@ public class WordsRepository {
         int limit = 20; // Manually setting limit.
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
+        // int minLongWords = (int) (limit * 0.75); // longWordsCount
 
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> words = mongoTemplate.find(query, Document.class, "easywords")
+        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
             .stream()
             .map(w -> Word.fromJson(w))
             .toList();
+
+        // MatchOperation matchLongWords = Aggregation.match(Criteria.where("length").gte(5));
+        // SampleOperation sampleLongerWords = Aggregation.sample(minLongWords);
+        // MatchOperation matchRemainingWords = Aggregation.match(Criteria.exists(true));
+        
+        List<Word> words = new ArrayList<>(retrievedWords);
         
         Collections.shuffle(words);
         return words;
@@ -42,10 +54,12 @@ public class WordsRepository {
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> words = mongoTemplate.find(query, Document.class, "hardwords")
+        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
             .stream()
             .map(w -> Word.fromJson(w))
             .toList();
+        
+        List<Word> words = new ArrayList<>(retrievedWords);
 
         Collections.shuffle(words);
         return words;
@@ -62,10 +76,12 @@ public class WordsRepository {
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> words = mongoTemplate.find(query, Document.class, "easywords")
+        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
             .stream()
             .map(w -> Word.fromJson(w))
             .toList();
+
+        List<Word> words = new ArrayList<>(retrievedWords);
         
         Collections.shuffle(words);
         return words;
@@ -78,10 +94,12 @@ public class WordsRepository {
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> words = mongoTemplate.find(query, Document.class, "hardwords")
+        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
             .stream()
             .map(w -> Word.fromJson(w))
             .toList();
+
+        List<Word> words = new ArrayList<>(retrievedWords);
 
         Collections.shuffle(words);
         return words;
