@@ -7,10 +7,6 @@ import java.util.List;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.aggregation.SampleOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +22,6 @@ public class WordsRepository {
         int limit = 20; // Manually setting limit.
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
-        // int minLongWords = (int) (limit * 0.75); // longWordsCount
 
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
@@ -35,10 +30,6 @@ public class WordsRepository {
             .stream()
             .map(w -> Word.fromJson(w))
             .toList();
-
-        // MatchOperation matchLongWords = Aggregation.match(Criteria.where("length").gte(5));
-        // SampleOperation sampleLongerWords = Aggregation.sample(minLongWords);
-        // MatchOperation matchRemainingWords = Aggregation.match(Criteria.exists(true));
         
         List<Word> words = new ArrayList<>(retrievedWords);
         
@@ -69,7 +60,7 @@ public class WordsRepository {
     // Words-based tests
     // Allow user to do tests based on wordcount too. 10 / 15 / 20 / 40 etc.
     // Have each query have a limit chosen by the user
-    public List<Word> getEasyWordsRandomisedLimited(int limit) {
+    public List<Word> getEasyWordsRandomisedLimited(Integer limit) {
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 
@@ -87,7 +78,7 @@ public class WordsRepository {
         return words;
     }
 
-    public List<Word> getHardWordsRandomisedLimited(int limit) {
+    public List<Word> getHardWordsRandomisedLimited(Integer limit) {
         long wordCount = mongoTemplate.estimatedCount("hardwords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 

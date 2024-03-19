@@ -23,11 +23,11 @@ public class WordsService {
     }
 
     // Word-based tests
-    public List<Word> getEasyWordsLimited(int limit) {
+    public List<Word> getEasyWordsLimited(Integer limit) {
         return wordsRepository.getEasyWordsRandomisedLimited(limit);
     }
 
-    public List<Word> getHardWordsLimited(int limit) {
+    public List<Word> getHardWordsLimited(Integer limit) {
         return wordsRepository.getHardWordsRandomisedLimited(limit);
     }
 }
