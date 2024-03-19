@@ -1,1 +1,26 @@
 <p>This is the typing section!</p>
+
+
+<!-- <div *ngIf="words$ | async as words; else loading">
+    <p>{{ words }}</p>
+</div>
+
+<ng-template #loading>
+    <h3>Loading test...</h3>
+</ng-template>
+
+<div>
+    <button (click)="generateNewTest()">Restart Test</button>
+</div> -->
+
+<div *ngIf="wordsP$ | async as words; else loading">
+    <p>{{ words }}</p>
+</div>
+
+<ng-template #loading>
+    <h3>Loading test...</h3>
+</ng-template>
+
+<div>
+    <button (click)="generateNewLimitedTest()">Restart Test</button>
+</div>

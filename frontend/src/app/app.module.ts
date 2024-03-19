@@ -17,6 +17,9 @@ import { LeaderboardsComponent } from './components/leaderboards/leaderboards.co
 import { AboutComponent } from './components/about/about.component';
 import { TestgeneratorService } from './testgenerator.service';
 
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +37,8 @@ import { TestgeneratorService } from './testgenerator.service';
     AboutComponent
   ],
   imports: [
+    HttpClientModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule
   ],
