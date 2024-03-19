@@ -15,6 +15,7 @@ import { ProgressbarComponent } from './components/progressbar/progressbar.compo
 import { TimerComponent } from './components/timer/timer.component';
 import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
 import { AboutComponent } from './components/about/about.component';
+import { TestgeneratorService } from './testgenerator.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { AboutComponent } from './components/about/about.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ TestgeneratorService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
