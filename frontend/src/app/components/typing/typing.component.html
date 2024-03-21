@@ -1,7 +1,13 @@
 <p>This is the typing section!</p>
 
+<!-- Temporary, to show current settings (to ensure they are being updated correctly) -->
+Current settings are:
+- Type: 
+- Difficulty: 
+- Time (optional): 
 
-<!-- <div *ngIf="words$ | async as words; else loading">
+
+<div *ngIf="words$ | async as words; else loading">
     <p>{{ words }}</p>
 </div>
 
@@ -11,9 +17,9 @@
 
 <div>
     <button (click)="generateNewTest()">Restart Test</button>
-</div> -->
+</div>
 
-<div *ngIf="wordsP$ | async as words; else loading">
+<!-- <div *ngIf="wordsP$ | async as words; else loading">
     <p>{{ words }}</p>
 </div>
 
@@ -23,4 +29,4 @@
 
 <div>
     <button (click)="generateNewLimitedTest()">Restart Test</button>
-</div>
+</div> -->

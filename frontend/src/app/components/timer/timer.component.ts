@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { QuicksettingsService } from '../../quicksettings.service';
 
 @Component({
   selector: 'app-timer',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './timer.component.css'
 })
 export class TimerComponent {
+
+  private quicksettingsService = inject(QuicksettingsService);
 
 }

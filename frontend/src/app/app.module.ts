@@ -19,6 +19,8 @@ import { TestgeneratorService } from './testgenerator.service';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { QuicksettingsComponent } from './components/quicksettings/quicksettings.component';
+import { QuicksettingsService } from './quicksettings.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProgressbarComponent,
     TimerComponent,
     LeaderboardsComponent,
-    AboutComponent
+    AboutComponent,
+    QuicksettingsComponent
   ],
   imports: [
     HttpClientModule,
@@ -42,7 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [ TestgeneratorService ],
+  providers: [ TestgeneratorService, QuicksettingsService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

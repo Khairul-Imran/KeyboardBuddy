@@ -1,0 +1,87 @@
+<p>These are your quick settings!</p>
+
+<div>
+
+    <!-- Test Difficulty -->
+    <div class="settings-group">
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestDifficulty === 'easy'" 
+            (click)="selectedDifficulty('easy')">
+            Easy
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestDifficulty === 'hard'" 
+            (click)="selectedDifficulty('hard')">
+            Hard
+        </button>
+    </div>
+
+    <!-- Test type -->
+    <div class="settings-group">
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestType === 'time'" 
+            (click)="selectedType('time')">
+            Time
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestType === 'word'" 
+            (click)="selectedType('word')">
+            Word
+        </button>
+    </div>
+
+    <!-- Test Word Limit -->
+    <div class="settings-group" *ngIf="selectedTestType === 'word'">
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestWordLimit === 10" 
+            (click)="selectedWordLimit(10)">
+            10
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestWordLimit === 20" 
+            (click)="selectedWordLimit(20)">
+            20
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestWordLimit === 30" 
+            (click)="selectedWordLimit(30)">
+            30
+        </button>
+    </div>
+
+    <!-- Test Time Limit -->
+    <div class="settings-group" *ngIf="selectedTestType === 'time'">
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestTimeLimit === 15" 
+            (click)="selectedTimeLimit(15)">
+            15
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestTimeLimit === 30" 
+            (click)="selectedTimeLimit(30)">
+            30
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestTimeLimit === 45" 
+            (click)="selectedTimeLimit(45)">
+            45
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestTimeLimit === 60" 
+            (click)="selectedTimeLimit(60)">
+            60
+        </button>
+    </div>
+
+</div>

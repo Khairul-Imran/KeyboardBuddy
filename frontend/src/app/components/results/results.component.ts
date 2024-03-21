@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { QuicksettingsService } from '../../quicksettings.service';
 
 @Component({
   selector: 'app-results',
@@ -9,5 +10,6 @@ import { Router } from '@angular/router';
 export class ResultsComponent {
 
   private router = inject(Router);
+  private quicksettingsService = inject(QuicksettingsService);
 
 }
