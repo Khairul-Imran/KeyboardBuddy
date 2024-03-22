@@ -18,6 +18,7 @@ export class QuicksettingsComponent {
 
 
   // Might need to reset certain values after an option is chosen....see how
+  // Especially when changing between test types -> the irrelevant value can just change to null or something.
   selectedType(type: string) {
     this.selectedTestType = type;
     this.quicksettingsService.testType(type); // How do i call the setters in the service?
