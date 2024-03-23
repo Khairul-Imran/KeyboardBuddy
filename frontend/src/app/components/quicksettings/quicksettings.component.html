@@ -1,6 +1,20 @@
-<p>These are your quick settings!</p>
+<div class="settings-group-container">
 
-<div>
+    <!-- Test type -->
+    <div class="settings-group">
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestType === 'time'" 
+            (click)="selectedType('time')">
+            Time
+        </button>
+        <button 
+            class="settings-button" 
+            [class.selected]="selectedTestType === 'words'" 
+            (click)="selectedType('words')">
+            Words
+        </button>
+    </div>
 
     <!-- Test Difficulty -->
     <div class="settings-group">
@@ -18,24 +32,8 @@
         </button>
     </div>
 
-    <!-- Test type -->
-    <div class="settings-group">
-        <button 
-            class="settings-button" 
-            [class.selected]="selectedTestType === 'time'" 
-            (click)="selectedType('time')">
-            Time
-        </button>
-        <button 
-            class="settings-button" 
-            [class.selected]="selectedTestType === 'word'" 
-            (click)="selectedType('word')">
-            Word
-        </button>
-    </div>
-
     <!-- Test Word Limit -->
-    <div class="settings-group" *ngIf="selectedTestType === 'word'">
+    <div class="settings-group" *ngIf="selectedTestType === 'words'">
         <button 
             class="settings-button" 
             [class.selected]="selectedTestWordLimit === 10" 

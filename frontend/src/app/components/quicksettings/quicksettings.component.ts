@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { QuicksettingsService } from '../../quicksettings.service';
 
 @Component({
@@ -6,34 +6,59 @@ import { QuicksettingsService } from '../../quicksettings.service';
   templateUrl: './quicksettings.component.html',
   styleUrl: './quicksettings.component.css'
 })
-export class QuicksettingsComponent {
-
+export class QuicksettingsComponent implements OnInit {
+  
   private quicksettingsService = inject(QuicksettingsService);
-
+  
   // Default values.
   selectedTestType: string = "time";
   selectedTestDifficulty: string = "easy";
-  selectedTestWordLimit: number = 20; // If test type of word is chosen
+  selectedTestWordLimit: number = 20; // If test type of 'words' is chosen
   selectedTestTimeLimit: number = 30;
-
+  
+  ngOnInit(): void {
+    // Initial settings oninit. Time test on easy by default. No need for word limit in this case.
+    this.quicksettingsService.testType = this.selectedTestType;
+    this.quicksettingsService.testDifficulty = this.selectedTestDifficulty;
+    this.quicksettingsService.testDuration = this.selectedTestTimeLimit;
+  }
 
   // Might need to reset certain values after an option is chosen....see how
   // Especially when changing between test types -> the irrelevant value can just change to null or something.
   selectedType(type: string) {
-    this.selectedTestType = type;
-    this.quicksettingsService.testType(type); // How do i call the setters in the service?
+    if (type !== this.selectedTestType) {
+      this.selectedTestType = type;
+      this.quicksettingsService.testType = type; // Setter
+  
+      // Setting the defaults whenever type of test changes.
+      if (type === 'words') {
+        this.selectedTestWordLimit = 20;
+        this.quicksettingsService.wordLimit = 20;
+      } else if (type === 'time') {
+        this.selectedTestTimeLimit = 30;
+        this.quicksettingsService.testDuration = 30;
+      }
+    }
   }
 
   selectedDifficulty(difficulty: string) {
-    this.selectedTestDifficulty = difficulty;
+    if (difficulty !== this.selectedTestDifficulty) {
+      this.selectedTestDifficulty = difficulty;
+      this.quicksettingsService.testDifficulty = difficulty; // Setter
+    }
   }
 
   selectedWordLimit(wordLimit: number) {
-    this.selectedTestWordLimit = wordLimit;
+    if (wordLimit !== this.selectedTestWordLimit) {
+      this.selectedTestWordLimit = wordLimit;
+      this.quicksettingsService.wordLimit = wordLimit; // Setter
+    }
   }
 
   selectedTimeLimit(timeLimit: number) {
-    this.selectedTestTimeLimit = timeLimit;
+    if (timeLimit !== this.selectedTestTimeLimit) {
+      this.selectedTestTimeLimit = timeLimit;
+      this.quicksettingsService.testDuration = timeLimit; // Setter
+    }
   }
-
 }

@@ -1,0 +1,27 @@
+.settings-group-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.settings-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    justify-content: center;
+}
+
+.settings-button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    /* margin: 8px; */
+}
+
+.settings-button.selected {
+    background-color: #007bff;
+    color: #fff;
+}

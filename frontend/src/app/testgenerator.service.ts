@@ -9,6 +9,7 @@ export class TestgeneratorService {
 
   private http = inject(HttpClient);
 
+  // Time-based test
   getRandomWordsTest(testType: string, testDifficulty: string): Observable<string> {
     const params = new HttpParams()
       .set('testType', testType)
@@ -20,6 +21,7 @@ export class TestgeneratorService {
       );
   }
 
+  // Words-based test
   getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<string> {
     const params = new HttpParams()
       .set('testType', testType)
