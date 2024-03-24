@@ -10,19 +10,20 @@ export class TestgeneratorService {
   private http = inject(HttpClient);
 
   // Time-based test
-  getRandomWordsTest(testType: string, testDifficulty: string): Observable<string> {
+  getRandomWordsTest(testType: string, testDifficulty: string): Observable<string[]> {
     const params = new HttpParams()
       .set('testType', testType)
       .set('testDifficulty', testDifficulty);
 
     return this.http.get<string>('/api/words', { params: params, responseType: 'json' })
       .pipe(
-        map((response: any) => response.words)
+        map((response: any) => response.words),
+        map((words: string) => words.split(' ')) // Added this. And changed return type to string[]
       );
   }
 
   // Words-based test
-  getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<string> {
+  getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<string[]> {
     const params = new HttpParams()
       .set('testType', testType)
       .set('testDifficulty', testDifficulty)
@@ -30,7 +31,8 @@ export class TestgeneratorService {
 
     return lastValueFrom(this.http.get<string>('/api/words', { params: params, responseType: 'json' })
       .pipe(
-        map((words: any) => words.words)
+        map((response: any) => response.words),
+        map((words: string) => words.split(' ')) // Added this.
       ));
   }
 }

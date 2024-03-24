@@ -14,8 +14,8 @@ export class TypingComponent implements OnInit, OnDestroy {
   private quicksettingsService = inject(QuicksettingsService);
   private subscription!: Subscription;
   
-  words$!: Observable<any>;
-  wordsP$!: Promise<any>;
+  words$!: Observable<string[]>;
+  wordsP$!: Promise<string[]>;
   errorMessage!: string;
 
   testType: string = "time"; // time or limited

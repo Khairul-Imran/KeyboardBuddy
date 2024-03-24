@@ -1,6 +1,6 @@
 <div class="typing-group-container">
 
-    <div>
+    <!-- <div>
         <div *ngIf="testType === 'time'">
             <div *ngIf="words$ | async as words;">
                 <p>{{ words }}</p>
@@ -16,8 +16,27 @@
         <div>
             <button (click)="generateNewTest()">Restart Test</button>
         </div>
-    </div>
+    </div> -->
     
+    <div>
+        <div *ngIf="testType === 'time'">
+            <div>
+                <span *ngFor="let word of words$ | async">{{ word }} </span>
+            </div>
+        </div>
+    
+        <div *ngIf="testType === 'words'">
+            <div>
+                <span *ngFor="let word of wordsP$ | async">{{ word }} </span>
+            </div>
+        </div>
+    
+        <div>
+            <button (click)="generateNewTest()">Restart Test</button>
+        </div>
+    </div>
+
+    <!-- Might still use this, for when the user is afk, and wants to activate the test again. -->
     <!-- <ng-template #loading>
         <h3>Loading test...</h3>
     </ng-template> -->
