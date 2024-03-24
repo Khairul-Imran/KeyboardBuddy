@@ -2,3 +2,61 @@
     display: flex;
     justify-content: center;
 }
+
+.restart-button {
+    justify-content: center;
+    display: flex;
+    padding: 30px;
+}
+
+/* For presentation of words */
+.word {
+    margin-right: 8px;
+}
+
+.space {
+    display: inline-block;
+    width: 8px;
+}
+
+
+
+
+/* Conditional classes for letters */
+.untouched-letter {
+    color: #999;
+    opacity: 0.5;
+}
+
+.correct-letter {
+    /* color: green; */
+    color: white;
+    font-weight: bold;
+}
+
+.incorrect-letter {
+    /* No underline */
+    color: red;
+}
+
+/* Conditional classes for words */
+/* Untouched word means that the user hasn't fully cleared it yet */
+.untouched-word {
+    color: #999;
+    opacity: 0.5;
+}
+
+.correct-word {
+    color: green;
+    font-weight: bold;
+}
+
+.incorrect-word {
+    /* color: red; */
+    text-decoration: underline;
+}
+
+/* I don't want the conditions to be overlapping.
+For example, if the user gets the spelling partially correct, I want them to be able to see which words they got correct
+-> the letters they got correct stays grey, wrong turns red, and when they move to 
+the next word (i.e the previous word is spelt wrongly) -> it is underlined (but not the whole word is in red) */

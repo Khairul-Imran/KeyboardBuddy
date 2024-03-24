@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.Models.Word;
+import com.example.backend.Models.WordStore;
 import com.example.backend.Services.WordsService;
 
 import jakarta.json.Json;
@@ -34,7 +34,7 @@ public class WordsController {
         @RequestParam String testDifficulty, 
         @RequestParam(required = false) Integer limit) {
             
-        List<Word> words = new ArrayList<>();
+        List<WordStore> words = new ArrayList<>();
             
         if (testType.equalsIgnoreCase("time")) { // Time-based tests
             if (testDifficulty.equalsIgnoreCase("easy")) {
@@ -60,7 +60,7 @@ public class WordsController {
         //     .forEach(arrayBuilder::add);
         
         String wordsFormatted = String.join(" ", words.stream()
-            .map(Word::getWord)
+            .map(WordStore::getWord)
             .collect(Collectors.toList()));
         
         JsonObject wordsFormattedToJsonObject = Json.createObjectBuilder()

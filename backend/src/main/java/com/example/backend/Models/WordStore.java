@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Word {
+public class WordStore {
     
     String word;
     Integer length;
@@ -23,8 +23,8 @@ public class Word {
             .build();
     }
 
-    public static Word fromJson(Document document) {
-        Word word = new Word();
+    public static WordStore fromJson(Document document) {
+        WordStore word = new WordStore();
         word.setWord(document.getString("word"));
         word.setLength(document.getInteger("length"));
 

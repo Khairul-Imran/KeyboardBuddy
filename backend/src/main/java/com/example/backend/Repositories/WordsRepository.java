@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.example.backend.Models.Word;
+import com.example.backend.Models.WordStore;
 
 @Repository
 public class WordsRepository {
@@ -18,7 +18,7 @@ public class WordsRepository {
     @Autowired MongoTemplate mongoTemplate;
 
     // Time-based tests
-    public List<Word> getEasyWordsRandomised() {
+    public List<WordStore> getEasyWordsRandomised() {
         int limit = 20; // Manually setting limit.
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
@@ -26,18 +26,18 @@ public class WordsRepository {
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
+        List<WordStore> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
             .stream()
-            .map(w -> Word.fromJson(w))
+            .map(w -> WordStore.fromJson(w))
             .toList();
         
-        List<Word> words = new ArrayList<>(retrievedWords);
+        List<WordStore> words = new ArrayList<>(retrievedWords);
         
         Collections.shuffle(words);
         return words;
     }
 
-    public List<Word> getHardWordsRandomised() {
+    public List<WordStore> getHardWordsRandomised() {
         int limit = 20; // Manually setting limit
         long wordCount = mongoTemplate.estimatedCount("hardwords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
@@ -45,12 +45,12 @@ public class WordsRepository {
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
+        List<WordStore> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
             .stream()
-            .map(w -> Word.fromJson(w))
+            .map(w -> WordStore.fromJson(w))
             .toList();
         
-        List<Word> words = new ArrayList<>(retrievedWords);
+        List<WordStore> words = new ArrayList<>(retrievedWords);
 
         Collections.shuffle(words);
         return words;
@@ -60,37 +60,37 @@ public class WordsRepository {
     // Words-based tests
     // Allow user to do tests based on wordcount too. 10 / 15 / 20 / 40 etc.
     // Have each query have a limit chosen by the user
-    public List<Word> getEasyWordsRandomisedLimited(Integer limit) {
+    public List<WordStore> getEasyWordsRandomisedLimited(Integer limit) {
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
+        List<WordStore> retrievedWords = mongoTemplate.find(query, Document.class, "easywords")
             .stream()
-            .map(w -> Word.fromJson(w))
+            .map(w -> WordStore.fromJson(w))
             .toList();
 
-        List<Word> words = new ArrayList<>(retrievedWords);
+        List<WordStore> words = new ArrayList<>(retrievedWords);
         
         Collections.shuffle(words);
         return words;
     }
 
-    public List<Word> getHardWordsRandomisedLimited(Integer limit) {
+    public List<WordStore> getHardWordsRandomisedLimited(Integer limit) {
         long wordCount = mongoTemplate.estimatedCount("hardwords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 
         Query query = new Query();
         query.skip(randomSkipPoint).limit(limit);
 
-        List<Word> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
+        List<WordStore> retrievedWords = mongoTemplate.find(query, Document.class, "hardwords")
             .stream()
-            .map(w -> Word.fromJson(w))
+            .map(w -> WordStore.fromJson(w))
             .toList();
 
-        List<Word> words = new ArrayList<>(retrievedWords);
+        List<WordStore> words = new ArrayList<>(retrievedWords);
 
         Collections.shuffle(words);
         return words;

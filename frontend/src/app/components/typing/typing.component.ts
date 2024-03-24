@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { TestgeneratorService } from '../../testgenerator.service';
 import { Observable, Subscription } from 'rxjs';
 import { QuicksettingsService } from '../../quicksettings.service';
+import { Word } from '../../Models/Words';
 
 @Component({
   selector: 'app-typing',
@@ -14,8 +15,8 @@ export class TypingComponent implements OnInit, OnDestroy {
   private quicksettingsService = inject(QuicksettingsService);
   private subscription!: Subscription;
   
-  words$!: Observable<string[]>;
-  wordsP$!: Promise<string[]>;
+  words$!: Observable<Word[]>;
+  wordsP$!: Promise<Word[]>;
   errorMessage!: string;
 
   testType: string = "time"; // time or limited
