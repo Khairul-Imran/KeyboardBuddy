@@ -19,9 +19,6 @@
     width: 8px;
 }
 
-
-
-
 /* Conditional classes for letters */
 .untouched-letter {
     color: #999;
@@ -41,16 +38,19 @@
 
 /* Conditional classes for words */
 /* Untouched word means that the user hasn't fully cleared it yet */
-.untouched-word {
+/* Actually, is this even necessary? */
+/* .untouched-word {
     color: #999;
     opacity: 0.5;
-}
+} */
 
+/* For now we make it change to green, but might just leave it as white instead */
 .correct-word {
     color: green;
     font-weight: bold;
 }
 
+/* Only want the word to be underlined, but the line must be red */
 .incorrect-word {
     /* color: red; */
     text-decoration: underline;
@@ -58,5 +58,5 @@
 
 /* I don't want the conditions to be overlapping.
 For example, if the user gets the spelling partially correct, I want them to be able to see which words they got correct
--> the letters they got correct stays grey, wrong turns red, and when they move to 
+-> the letters they got correct stays green or whatever, while wrong turns red, and when they move to 
 the next word (i.e the previous word is spelt wrongly) -> it is underlined (but not the whole word is in red) */

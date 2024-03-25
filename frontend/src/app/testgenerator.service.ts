@@ -10,6 +10,25 @@ export class TestgeneratorService {
 
   private http = inject(HttpClient);
 
+  // // Time-based test
+  // getRandomWordsTest(testType: string, testDifficulty: string): Observable<Word[]> {
+  //   const params = new HttpParams()
+  //     .set('testType', testType)
+  //     .set('testDifficulty', testDifficulty);
+
+  //   return this.http.get<any>('/api/words', { params: params, responseType: 'json' });
+  // }
+
+  // // Words-based test
+  // getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<Word[]> {
+  //   const params = new HttpParams()
+  //     .set('testType', testType)
+  //     .set('testDifficulty', testDifficulty)
+  //     .set('limit', limit);
+
+  //   return lastValueFrom(this.http.get<any>('/api/words', { params: params, responseType: 'json' }));
+  // }
+
   // Time-based test
   getRandomWordsTest(testType: string, testDifficulty: string): Observable<Word[]> {
     const params = new HttpParams()
@@ -31,13 +50,13 @@ export class TestgeneratorService {
   }
 
   // Words-based test
-  getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<Word[]> {
+  getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Observable<Word[]> {
     const params = new HttpParams()
       .set('testType', testType)
       .set('testDifficulty', testDifficulty)
       .set('limit', limit);
 
-    return lastValueFrom(this.http.get<string>('/api/words', { params: params, responseType: 'json' })
+    return this.http.get<string>('/api/words', { params: params, responseType: 'json' })
       .pipe(
         map((response: any) => response.words),
         map((sentence: string) => {
@@ -48,10 +67,11 @@ export class TestgeneratorService {
           }));
           return individualWords;
         })
-      ));
+      );
   }
 
-  // getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<string[]> {
+  // // Words-based test
+  // getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<Word[]> {
   //   const params = new HttpParams()
   //     .set('testType', testType)
   //     .set('testDifficulty', testDifficulty)
@@ -60,7 +80,14 @@ export class TestgeneratorService {
   //   return lastValueFrom(this.http.get<string>('/api/words', { params: params, responseType: 'json' })
   //     .pipe(
   //       map((response: any) => response.words),
-  //       map((words: string) => words.split(' ')) // Added this.
+  //       map((sentence: string) => {
+  //         const individualWords: Word[] = sentence.split(' ').map(word => ({
+  //           letters: word.split('').map(c => ({ character: c, correct: false, untouched: true})),
+  //           fullyCorrect: false,
+  //           untouched: true
+  //         }));
+  //         return individualWords;
+  //       })
   //     ));
   // }
 }

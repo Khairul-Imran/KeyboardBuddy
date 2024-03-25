@@ -19,23 +19,44 @@
     </div> -->
     
     <div>
-        <div *ngIf="testType === 'time'">
+        <div>
             <div>
-                <span class="word" *ngFor="let word of words$ | async" [ngClass]="{'correct-word': word.fullyCorrect, 'incorrect-word': !word.fullyCorrect && !word.untouched}">
-                    <span *ngFor="let letter of word.letters" [ngClass]="{'correct-letter': letter.correct, 'incorrect-letter': !letter.correct && !letter.untouched, 'untouched-letter': letter.untouched}">{{letter.character}} </span>
+                <span class="word" *ngFor="let word of words$ | async" 
+                [ngClass]="{
+                    'correct-word': word.fullyCorrect, 
+                    'incorrect-word': !word.fullyCorrect && !word.untouched
+                    }">
+                    <span *ngFor="let letter of word.letters" 
+                    [ngClass]="{
+                        'correct-letter': letter.correct && !letter.untouched, 
+                        'incorrect-letter': !letter.correct && !letter.untouched, 
+                        'untouched-letter': letter.untouched
+                        }">{{letter.character}} </span>
                     <span class="space"> </span>
                 </span>
             </div>
         </div>
     
-        <div *ngIf="testType === 'words'">
+        <!-- <div *ngIf="testType === 'words'">
             <div>
-                <span class="word" *ngFor="let word of wordsP$ | async" [ngClass]="{'correct-word': word.fullyCorrect, 'incorrect-word': !word.fullyCorrect && !word.untouched}">
-                    <span *ngFor="let letter of word.letters" [ngClass]="{'correct-letter': letter.correct, 'incorrect-letter': !letter.correct && !letter.untouched, 'untouched-letter': letter.untouched}">{{letter.character}} </span>
+                <span class="word" *ngFor="let word of words$ | async" 
+                [ngClass]="{
+                    'correct-word': word.fullyCorrect, 
+                    'incorrect-word': !word.fullyCorrect && !word.untouched
+                    }">
+                    <span *ngFor="let letter of word.letters" 
+                    [ngClass]="{
+                        'correct-letter': letter.correct && !letter.untouched, 
+                        'incorrect-letter': !letter.correct && !letter.untouched, 
+                        'untouched-letter': letter.untouched
+                        }">{{letter.character}} </span>
                     <span class="space"> </span>
                 </span>
             </div>
-        </div>
+        </div> -->
+
+        <input type="text" ((input))="onUserInput($event)" placeholder="Start Typing">
+
     </div>
     
     <!-- Might still use this, for when the user is afk, and wants to activate the test again. -->
