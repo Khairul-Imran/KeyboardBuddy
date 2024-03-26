@@ -15,11 +15,11 @@ export class QuicksettingsService {
   // We then call sendUpdateSettings to send these updates to settingsSource, which triggers the BehaviourSubject
   // to emit the new changes to its subscribers through the Observable (testSettings$)
 
-  // Default 
+  // Settings holder
   private settings: QuickSettings = {
     testType: "time",// time or words
     testDifficulty: "easy", // easy or hard
-    wordLimit: 20,
+    testWordLimit: 20,
     testDuration: 30 // in seconds
   };
 
@@ -27,7 +27,7 @@ export class QuicksettingsService {
   private settingsSource = new BehaviorSubject<QuickSettings>({
     testType: this.settings.testType,
     testDifficulty: this.settings.testDifficulty,
-    wordLimit: this.settings.wordLimit,
+    testWordLimit: this.settings.testWordLimit,
     testDuration: this.settings.testDuration
   });
 
@@ -39,54 +39,55 @@ export class QuicksettingsService {
     this.settingsSource.next(newSettings);
   }
 
-  // Getters and setters.
-  public get testType() : string {
-    return this.settings.testType;
-  }
 
+  // Getters and setters.
   public set testType(v : string) {
     this.settings.testType = v;
-    console.info("From quicksettings service: Changing test type to: ", v);
+    // console.info("From quicksettings service: Changing test type to: ", v);
     console.info("From quicksettings service: Test type has been set to: ", this.settings.testType);
+    
+    this.sendUpdatedSettings(this.settings);
+  }
+
+  public set testDifficulty(v : string) {
+    this.settings.testDifficulty = v;
+    // console.info("From quicksettings service: Changing test difficulty to: ", v);
+    console.info("From quicksettings service: Test difficulty has been set to: ", this.settings.testDifficulty);
 
     this.sendUpdatedSettings(this.settings);
+  }
+
+  public set testWordLimit(v : number) {
+    if (this.settings.testWordLimit !== v) {
+      this.settings.testWordLimit = v;
+      // console.info("From quicksettings service: Changing word limit to: ", v);
+      console.info("From quicksettings service: Word limit has been set to: ", this.settings.testWordLimit);
+  
+      this.sendUpdatedSettings(this.settings);
+    }
+  }
+
+  public set testDuration(v : number) {
+    this.settings.testDuration = v;
+    // console.info("From quicksettings service: Changing test duration to: ", v);
+    console.info("From quicksettings service: Test duration has been set to: ", this.settings.testDuration);
+
+    this.sendUpdatedSettings(this.settings);
+  }
+
+  public get testType() : string {
+    return this.settings.testType;
   }
   
   public get testDifficulty() : string {
     return this.settings.testDifficulty;
   }
 
-  public set testDifficulty(v : string) {
-    this.settings.testDifficulty = v;
-    console.info("From quicksettings service: Changing test difficulty to: ", v);
-    console.info("From quicksettings service: Test difficulty has been set to: ", this.settings.testDifficulty);
-
-    this.sendUpdatedSettings(this.settings);
+  public get testWordLimit() : number {
+    return this.settings.testWordLimit;
   }
 
-  public get wordLimit() : number | null {
-    return this.settings.wordLimit;
-  }
-
-  public set wordLimit(v : number) {
-    if (this.settings.wordLimit !== v) {
-      this.settings.wordLimit = v;
-      console.info("From quicksettings service: Changing word limit to: ", v);
-      console.info("From quicksettings service: Word limit has been set to: ", this.settings.wordLimit);
-  
-      this.sendUpdatedSettings(this.settings);
-    }
-  }
-
-  public get testDuration() : number | null {
+  public get testDuration() : number {
     return this.settings.testDuration;
-  }
-
-  public set testDuration(v : number) {
-    this.settings.testDuration = v;
-    console.info("From quicksettings service: Changing test duration to: ", v);
-    console.info("From quicksettings service: Test duration has been set to: ", this.settings.testDuration);
-
-    this.sendUpdatedSettings(this.settings);
   }
 }

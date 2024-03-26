@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { QuicksettingsService } from '../../quicksettings.service';
+import { TestgeneratorService } from '../../testgenerator.service';
 
 @Component({
   selector: 'app-quicksettings',
@@ -9,18 +10,30 @@ import { QuicksettingsService } from '../../quicksettings.service';
 export class QuicksettingsComponent implements OnInit {
   
   private quicksettingsService = inject(QuicksettingsService);
+  private testGeneratorService = inject(TestgeneratorService);
   
-  // Default values.
-  selectedTestType: string = "time";
-  selectedTestDifficulty: string = "easy";
-  selectedTestWordLimit: number = 20; // If test type of 'words' is chosen
-  selectedTestTimeLimit: number = 30;
+  // Old Default values. -> trying to not set them.
+  // selectedTestType: string = "time";
+  // selectedTestDifficulty: string = "easy";
+  // selectedTestWordLimit: number = 20; // If test type of 'words' is chosen
+  // selectedTestTimeLimit: number = 30;
+
+  selectedTestType!: string;
+  selectedTestDifficulty!: string;
+  selectedTestWordLimit: number = 20;
+  selectedTestDuration: number = 30;
   
   ngOnInit(): void {
     // Initial settings oninit. Time test on easy by default. No need for word limit in this case.
-    this.quicksettingsService.testType = this.selectedTestType;
-    this.quicksettingsService.testDifficulty = this.selectedTestDifficulty;
-    this.quicksettingsService.testDuration = this.selectedTestTimeLimit;
+    // this.quicksettingsService.testType = this.selectedTestType;
+    // this.quicksettingsService.testDifficulty = this.selectedTestDifficulty;
+    // this.quicksettingsService.wordLimit = this.selectedTestWordLimit;
+    // this.quicksettingsService.testDuration = this.selectedTestTimeLimit;
+
+    this.selectedTestType = this.quicksettingsService.testType;
+    this.selectedTestDifficulty = this.quicksettingsService.testDifficulty;
+    this.selectedTestDuration = this.quicksettingsService.testDuration;
+    // this.testGeneratorService.getRandomWordsTest(this.selectedTestType, this.selectedTestDifficulty); -> unnecessary
   }
 
   // Might need to reset certain values after an option is chosen....see how
@@ -30,14 +43,15 @@ export class QuicksettingsComponent implements OnInit {
       this.selectedTestType = type;
       this.quicksettingsService.testType = type; // Setter
   
-      // Setting the defaults whenever type of test changes.
-      if (type === 'words') {
-        this.selectedTestWordLimit = 20;
-        this.quicksettingsService.wordLimit = 20;
-      } else if (type === 'time') {
-        this.selectedTestTimeLimit = 30;
-        this.quicksettingsService.testDuration = 30;
-      }
+      // Setting the defaults whenever type of test changes. -> Not using this anymore, just let the previous values stand.
+      // if (type === 'words') {
+      //   this.selectedTestWordLimit = 20;
+      //   this.quicksettingsService.wordLimit = 20;
+      // } else if (type === 'time') {
+      //   this.selectedTestTimeLimit = 30;
+      //   this.quicksettingsService.testDuration = 30;
+      // }
+      // console.info("Selected type has changed to: ", this.selectedTestType);
     }
   }
 
@@ -51,13 +65,13 @@ export class QuicksettingsComponent implements OnInit {
   selectedWordLimit(wordLimit: number) {
     if (wordLimit !== this.selectedTestWordLimit) {
       this.selectedTestWordLimit = wordLimit;
-      this.quicksettingsService.wordLimit = wordLimit; // Setter
+      this.quicksettingsService.testWordLimit = wordLimit; // Setter
     }
   }
 
   selectedTimeLimit(timeLimit: number) {
-    if (timeLimit !== this.selectedTestTimeLimit) {
-      this.selectedTestTimeLimit = timeLimit;
+    if (timeLimit !== this.selectedTestDuration) {
+      this.selectedTestDuration = timeLimit;
       this.quicksettingsService.testDuration = timeLimit; // Setter
     }
   }

@@ -14,19 +14,19 @@ export class TypingComponent implements OnInit, OnDestroy {
   private testgeneratorService = inject(TestgeneratorService);
   private quicksettingsService = inject(QuicksettingsService);
   private subscription!: Subscription;
+  // private wordsSubscription!: Subscription;
   
-  words$!: Observable<Word[]>;
-  // wordsP$!: Promise<Word[]>;
-  wordsFromObservable: Word[] = [];
-  // wordsFromPromise: Word[] = [];
+  // words$!: Observable<Word[]>;
+  wordsP$!: Promise<Word[]>;
+  // wordsFromObservable: Word[] = [];
+  wordsFromPromise: Word[] = [];
   currentLetterIndex: number = 0;
   currentWordIndex: number = 0;
-  // errorMessage!: string; -> didnt use yet.
 
-  testType: string = "time"; // time or limited
-  testDifficulty: string = "easy"; // easy or hard
-  wordLimit: number = 20;
-  testDuration: number = 30; // in seconds
+  testType: string = "time";
+  testDifficulty: string = "easy";
+  testWordLimit!: number;
+  testDuration: number = 30;
 
   ngOnInit(): void {
     // Receives updated settings from testSettings$ Observable.
@@ -34,8 +34,13 @@ export class TypingComponent implements OnInit, OnDestroy {
     this.subscription = this.quicksettingsService.testSettings$.subscribe(settings => {
       this.testType = settings.testType;
       this.testDifficulty = settings.testDifficulty;
-      this.wordLimit = settings.wordLimit;
+      this.testWordLimit = settings.testWordLimit;
       this.testDuration = settings.testDuration;
+      console.log("Settings have changed: \n type: " + 
+        this.testType + "\n difficulty: " + 
+        this.testDifficulty + "\n word limit: " + 
+        this.testWordLimit + "\n time limit: " + 
+        this.testDuration);
 
       this.generateNewTest();
     })
@@ -51,25 +56,44 @@ export class TypingComponent implements OnInit, OnDestroy {
     if (this.testType === 'time') {
       // Time-based
       console.log(`Settings: Type=${this.testType}, Difficulty=${this.testDifficulty}`);
-      this.words$ = this.testgeneratorService.getRandomWordsTest(this.testType, this.testDifficulty);
+      this.wordsP$ = this.testgeneratorService.getRandomWordsTest(this.testType, this.testDifficulty)
+        .then(words => {
+          this.wordsFromPromise = words;
+          return this.wordsFromPromise;
+        })
+        .catch(error => {
+          console.error("Error fetching words: ", error);
+          return [];
+        })
 
-      this.words$.subscribe(words => {
-        this.wordsFromObservable = words;
-      })
+      // this.wordsSubscription = this.words$.subscribe(words => {
+      //   this.wordsFromObservable = words;
+      // })
+      console.info("These are the words inside the array: ", this.wordsFromPromise);
+
     } else if (this.testType === 'words') {
       // Word-based
-      console.log(`Settings: Type=${this.testType}, Difficulty=${this.testDifficulty}, Word Limit=${this.wordLimit}`);
-      this.words$ = this.testgeneratorService.getRandomWordsTestLimited(this.testType, this.testDifficulty, this.wordLimit)
+      console.log(`Settings: Type=${this.testType}, Difficulty=${this.testDifficulty}, Word Limit=${this.testWordLimit}`);
+      this.wordsP$ = this.testgeneratorService.getRandomWordsTestLimited(this.testType, this.testDifficulty, this.testWordLimit)
+        .then(words => {
+          this.wordsFromPromise = words;
+          return this.wordsFromPromise;
+        })
+        .catch(error => {
+          console.error("Error fetching words: ", error);
+          return [];
+        })
 
-      this.words$.subscribe(words => {
-        this.wordsFromObservable = words;
-      })
+      // this.wordsSubscription = this.words$.subscribe(words => {
+      //   this.wordsFromObservable = words;
+      // })
+      console.info("These are the words inside the array: ", this.wordsFromPromise);
     }
   }
 
   onUserInput(event: Event) {
     const userInput = (event.target as HTMLInputElement).value;
-    const currentWord: Word = this.wordsFromObservable[this.currentWordIndex];
+    const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
     const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
 
 
@@ -90,7 +114,7 @@ export class TypingComponent implements OnInit, OnDestroy {
       currentLetter.untouched = false;
     }
 
-    (event.target as HTMLInputElement).value = '';
+    // (event.target as HTMLInputElement).value = '';
 
   }
 

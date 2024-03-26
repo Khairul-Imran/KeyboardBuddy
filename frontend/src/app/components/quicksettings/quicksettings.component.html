@@ -58,25 +58,25 @@
     <div class="settings-group" *ngIf="selectedTestType === 'time'">
         <button 
             class="settings-button" 
-            [class.selected]="selectedTestTimeLimit === 15" 
+            [class.selected]="selectedTestDuration === 15" 
             (click)="selectedTimeLimit(15)">
             15
         </button>
         <button 
             class="settings-button" 
-            [class.selected]="selectedTestTimeLimit === 30" 
+            [class.selected]="selectedTestDuration === 30" 
             (click)="selectedTimeLimit(30)">
             30
         </button>
         <button 
             class="settings-button" 
-            [class.selected]="selectedTestTimeLimit === 45" 
+            [class.selected]="selectedTestDuration === 45" 
             (click)="selectedTimeLimit(45)">
             45
         </button>
         <button 
             class="settings-button" 
-            [class.selected]="selectedTestTimeLimit === 60" 
+            [class.selected]="selectedTestDuration === 60" 
             (click)="selectedTimeLimit(60)">
             60
         </button>

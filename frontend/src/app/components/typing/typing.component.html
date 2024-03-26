@@ -21,7 +21,7 @@
     <div>
         <div>
             <div>
-                <span class="word" *ngFor="let word of words$ | async" 
+                <span class="word" *ngFor="let word of wordsP$ | async" 
                 [ngClass]="{
                     'correct-word': word.fullyCorrect, 
                     'incorrect-word': !word.fullyCorrect && !word.untouched
@@ -55,7 +55,7 @@
             </div>
         </div> -->
 
-        <input type="text" ((input))="onUserInput($event)" placeholder="Start Typing">
+        <input type="text" (input)="onUserInput($event)" placeholder="Start Typing">
 
     </div>
     

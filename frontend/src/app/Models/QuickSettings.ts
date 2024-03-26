@@ -1,7 +1,7 @@
 export interface QuickSettings {
     testType: string; // words, time, quote, etc.
     testDifficulty: string;
-    wordLimit: number;
+    testWordLimit: number;
     testDuration: number;
 }
 
