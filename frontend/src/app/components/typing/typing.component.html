@@ -26,7 +26,7 @@
                     'correct-word': word.fullyCorrect, 
                     'incorrect-word': !word.fullyCorrect && !word.untouched
                     }">
-                    <span *ngFor="let letter of word.letters" 
+                    <span class="letter" *ngFor="let letter of word.letters" 
                     [ngClass]="{
                         'correct-letter': letter.correct && !letter.untouched, 
                         'incorrect-letter': !letter.correct && !letter.untouched, 
@@ -55,7 +55,7 @@
             </div>
         </div> -->
 
-        <input type="text" (input)="onUserInput($event)" placeholder="Start Typing">
+        <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement>
 
     </div>
     
