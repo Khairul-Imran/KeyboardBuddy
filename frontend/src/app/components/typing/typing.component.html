@@ -20,8 +20,31 @@
     
     <div>
         <div>
-            <div>
-                <span class="word" *ngFor="let word of wordsP$ | async" 
+            <div class="typing-container" #typingContainerElement>
+                <ng-container *ngIf="wordsP$ | async as words">
+                    <span class="word" *ngFor="let word of words; let i = index" 
+                    [ngClass]="{
+                        'correct-word': word.fullyCorrect, 
+                        'incorrect-word': !word.fullyCorrect && !word.untouched
+                        }">
+                        <span class="letter" *ngFor="let letter of word.letters" 
+                        [ngClass]="{
+                            'correct-letter': letter.correct && !letter.untouched, 
+                            'incorrect-letter': !letter.correct && !letter.untouched, 
+                            'untouched-letter': letter.untouched
+                            }">{{letter.character}} </span>
+                        <span class="space" *ngIf="i < words.length - 1">&nbsp;</span>
+                    </span>
+                </ng-container>
+                
+                <span class="caret" [style.left]="caretPosition + 'px'" ></span>
+            </div>
+        </div>
+    
+        <!-- <div>
+            <div class="typing-container" #typingContainerElement>
+                <ng-container>
+                    <span class="word" *ngFor="let word of wordsP$ | async" 
                 [ngClass]="{
                     'correct-word': word.fullyCorrect, 
                     'incorrect-word': !word.fullyCorrect && !word.untouched
@@ -32,28 +55,14 @@
                         'incorrect-letter': !letter.correct && !letter.untouched, 
                         'untouched-letter': letter.untouched
                         }">{{letter.character}} </span>
-                    <span class="space"> </span>
+                    <span class="space" *ngIf="">&nbsp;</span>
                 </span>
-            </div>
-        </div>
-    
-        <!-- <div *ngIf="testType === 'words'">
-            <div>
-                <span class="word" *ngFor="let word of words$ | async" 
-                [ngClass]="{
-                    'correct-word': word.fullyCorrect, 
-                    'incorrect-word': !word.fullyCorrect && !word.untouched
-                    }">
-                    <span *ngFor="let letter of word.letters" 
-                    [ngClass]="{
-                        'correct-letter': letter.correct && !letter.untouched, 
-                        'incorrect-letter': !letter.correct && !letter.untouched, 
-                        'untouched-letter': letter.untouched
-                        }">{{letter.character}} </span>
-                    <span class="space"> </span>
-                </span>
+                </ng-container>
+                
+                <span class="caret" [style.left]="caretPosition + 'px'" ></span>
             </div>
         </div> -->
+
 
         <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement>
 

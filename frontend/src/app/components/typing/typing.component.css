@@ -73,3 +73,22 @@
 For example, if the user gets the spelling partially correct, I want them to be able to see which words they got correct
 -> the letters they got correct stays green or whatever, while wrong turns red, and when they move to 
 the next word (i.e the previous word is spelt wrongly) -> it is underlined (but not the whole word is in red) */
+
+.typing-container {
+    position: relative;
+}
+
+.caret {
+    background-color: black;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    position: absolute;
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0;}
+    50% {opacity: 1;}
+    100% {opacity: 0;}
+}
