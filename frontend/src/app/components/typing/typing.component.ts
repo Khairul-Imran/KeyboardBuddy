@@ -108,31 +108,34 @@ export class TypingComponent implements OnInit, OnDestroy {
     const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
     const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
 
-    console.info("Current word: ", currentWord);
-    console.info("Current letter: ", currentLetter);
+    console.info("Current word before input: ", currentWord);
+    console.info("Current letter before input: ", currentLetter);
 
-    // Recall that in the array, the letters are all back-to-back (no spaces)
-    // This is different from how the css presents them.
-    if (userInput === currentLetter.character) { // Correct letter.
+    if (userInput === currentLetter.character) { // If correct letter.
       currentLetter.untouched = false;
       currentLetter.correct = true;
       this.currentLetterIndex++; // Move to the next letter.
-
-      // if (this.currentLetterIndex === currentWord.letters.length) { // If all the letters are correct | currentLetterIndex is correct?
-      //   currentWord.fullyCorrect = true;
-      //   this.currentWordIndex++;
-      //   this.currentLetterIndex = 0;
-      // }
+      // currentWord.untouched = false; 
+      // -> this would cause issues, with the conditions. 
+      // for now, we just take it as - if the word isn't fully gone through yet, it is untouched.
+      
     } else { // If wrong letter
       currentLetter.correct = false;
       currentLetter.untouched = false;
       this.anyMistakeTracker = true;
       this.currentLetterIndex++;
+      // currentWord.untouched = false;
     }
 
+    // When user inputs the last letter
     // Goes to the next word after you've reached the last letter.
     if (this.currentLetterIndex === currentWord.letters.length) {
+      // If there are errors anywhere.
       if (!currentWord.fullyCorrect && this.anyMistakeTracker) {
+        currentWord.untouched = false;
+      } else {
+        // If no errors
+        currentWord.fullyCorrect = true;
         currentWord.untouched = false;
       }
       
@@ -142,6 +145,8 @@ export class TypingComponent implements OnInit, OnDestroy {
     }
 
     (event.target as HTMLInputElement).value = '';
+    console.info("Current word after input: ", currentWord);
+    console.info("Current letter after input: ", currentLetter);
 
   }
 
