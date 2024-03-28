@@ -16,15 +16,20 @@
     font-size: 25px;
 }
 
-.letter {
-    /* display: inline-block; */
-    /* margin-right: 1px; */
-    /* font-size: 30px; */
+.word span {
+    letter-spacing: -3px;
 }
 
-.word span {
-    letter-spacing: -2px;
+/* .letter {
+    display: inline-block;
+    margin-right: 1px;
+} */
+
+.word .trailing-letter {
+    color: #B22222;
+    margin-right: 4px;
 }
+
 
 .space {
     display: inline-block;
@@ -45,15 +50,8 @@
 .incorrect-letter {
     /* No underline */
     color: red;
+    /* letter-spacing: 2px; */
 }
-
-/* Conditional classes for words */
-/* Untouched word means that the user hasn't fully cleared it yet */
-/* Actually, is this even necessary? */
-/* .untouched-word {
-    color: #999;
-    opacity: 0.5;
-} */
 
 /* For now we make it change to green, but might just leave it as white instead */
 .correct-word {
@@ -62,17 +60,12 @@
 }
 
 /* Only want the word to be underlined, but the line must be red */
-.incorrect-word {
+.word.incorrect-word {
     /* color: red; */
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-decoration-color: red;
 }
-
-/* I don't want the conditions to be overlapping.
-For example, if the user gets the spelling partially correct, I want them to be able to see which words they got correct
--> the letters they got correct stays green or whatever, while wrong turns red, and when they move to 
-the next word (i.e the previous word is spelt wrongly) -> it is underlined (but not the whole word is in red) */
 
 .typing-container {
     position: relative;
@@ -84,7 +77,7 @@ the next word (i.e the previous word is spelt wrongly) -> it is underlined (but 
     bottom: 0;
     width: 2px;
     position: absolute;
-    animation: blink 0.7s infinite;
+    animation: blink 1s infinite;
 }
 
 @keyframes blink {

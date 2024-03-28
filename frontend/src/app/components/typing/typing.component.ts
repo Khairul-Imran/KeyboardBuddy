@@ -18,6 +18,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   
   @ViewChild('userInputElement') userInputElement!: ElementRef;
   anyMistakeTracker: boolean = false; // To track if even 1 mistake is made for the word.
+  // To have a mistake counter too, to keep track of total errors?
 
   @ViewChild('typingContainerElement') typingContainerElement!: ElementRef;
   caretPosition = 0;
@@ -108,6 +109,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.currentLetterIndex = 0;
     this.currentWordIndex = 0;
     this.caretPosition = 0;
+    this.anyMistakeTracker = false; // To prevent any mistakes from carrying over to next test (if user didn't press space)
     this.setUserFocus();
   }
 
@@ -115,18 +117,20 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     const userInput = (event.target as HTMLInputElement).value;
     const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
     const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
+    const TRAILING_LETTERS_LIMIT = 6;
 
     console.info("Current word before input: ", currentWord);
     console.info("Current letter before input: ", currentLetter);
 
     this.updateCaret();
     
-    if (userInput === ' ') { // User entered space.
-      // Reached the last letter of the word.
-      if (this.currentLetterIndex === currentWord.letters.length) {
+    if (userInput === ' ') { // ****User entered space.****
+      // Reached the last letter of the word. >= to include the trailing letters.
+      if (this.currentLetterIndex >= currentWord.letters.length) {
         // If got errors
-        if (!currentWord.fullyCorrect && this.anyMistakeTracker) {
+        if (!currentWord.fullyCorrect && this.anyMistakeTracker || currentWord.trailingLetters.length > 0) {
           currentWord.untouched = false;
+          // currentWord.fullyCorrect = false;
 
           // Reset for the next word.
           this.currentWordIndex++;
@@ -146,91 +150,54 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
         }
       }
 
-      // else if not the last letter of the word....
+      // else if pressed space while not at the last letter of the word....
       // TODO
 
-    } else { // User entered a letter.
+    } else if (/^[a-zA-Z]$/.test(userInput)) { // ****User entered a letter.****
 
-      if (userInput === currentLetter.character) { // If correct letter.
-        currentLetter.untouched = false;
-        currentLetter.correct = true;
-        this.currentLetterIndex++; // Move to the next letter.
-        // currentWord.untouched = false; 
+      // If within a current word
+      if (this.currentLetterIndex < currentWord.letters.length) { // <=
         
-      } else if (userInput !== currentLetter.character) { // If wrong letter
-        currentLetter.correct = false;
-        currentLetter.untouched = false;
-        this.anyMistakeTracker = true;
+        if (userInput === currentLetter.character ) { // If correct letter.
+          currentLetter.untouched = false;
+          currentLetter.correct = true;
+          this.currentLetterIndex++;
+          // currentWord.untouched = false; 
+          
+        } else if (userInput !== currentLetter.character) { // If wrong letter
+          currentLetter.untouched = false;
+          currentLetter.correct = false;
+          this.anyMistakeTracker = true;
+          this.currentLetterIndex++;
+          // currentWord.untouched = false; 
+        }
+
+      // If outside of current word (i.e. trailing letters)
+      } else if (currentWord.trailingLetters.length < TRAILING_LETTERS_LIMIT) { 
+        const trailingLetter: Letter = {
+          character: userInput,
+          correct: false,
+          untouched: false
+        };
+        currentWord.trailingLetters.push(trailingLetter); // Adds the trailing letter to the word.
+        currentWord.fullyCorrect = false;
         this.currentLetterIndex++;
-        // currentWord.untouched = false;
       }
+
+      this.updateCaret();
     }
 
     (event.target as HTMLInputElement).value = '';
     console.info("Current word after input: ", currentWord);
     console.info("Current letter after input: ", currentLetter);
 
+    // TODO: If user presses backspace.
+    // -> backspace to amend mistakes. Need to keep track of this too technically?
+
+    // TODO: Fix issue with trailing spaces carrying over to the next test.
+    // TODO: Set a limit to how far the user can type, especially for word-limit test.
+
   }
-
-
-  // Original
-  // onUserInput(event: Event) {
-  //   const userInput = (event.target as HTMLInputElement).value;
-  //   const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
-  //   const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
-
-  //   console.info("Current word before input: ", currentWord);
-  //   console.info("Current letter before input: ", currentLetter);
-
-  //   this.updateCaret();
-    
-    
-  //   if (userInput === currentLetter.character) { // If correct letter.
-  //     currentLetter.untouched = false;
-  //     currentLetter.correct = true;
-  //     this.currentLetterIndex++; // Move to the next letter.
-  //     // currentWord.untouched = false; 
-  //     // -> this would cause issues, with the conditions. 
-  //     // for now, we just take it as - if the word isn't fully gone through yet, it is untouched.
-      
-  //   } else if (userInput !== currentLetter.character && userInput !== ' ') { // If wrong letter
-  //     currentLetter.correct = false;
-  //     currentLetter.untouched = false;
-  //     this.anyMistakeTracker = true;
-  //     this.currentLetterIndex++;
-  //     // currentWord.untouched = false;
-  //   }
-
-
-  //   // When user inputs the last letter
-  //   // Goes to the next word after you've reached the last letter.
-  //   if (this.currentLetterIndex === currentWord.letters.length) {
-  //     // If there are errors anywhere.
-  //     if (!currentWord.fullyCorrect && this.anyMistakeTracker) {
-  //       currentWord.untouched = false;
-  //     } else {
-  //       // If no errors
-  //       currentWord.fullyCorrect = true;
-  //       currentWord.untouched = false;
-  //     }
-      
-  //     this.currentWordIndex++; // Go to the next word.
-  //     this.currentLetterIndex = 0; // Go back to the first letter.
-  //     this.anyMistakeTracker = false;
-  //   }
-
-  //   (event.target as HTMLInputElement).value = '';
-  //   console.info("Current word after input: ", currentWord);
-  //   console.info("Current letter after input: ", currentLetter);
-
-
-
-  //   // TODO: If user presses backspace.
-
-  //   // TODO: Fix issue with trailing spaces carrying over to the next test.
-  //   // TODO: Set a limit to how far the user can type, especially for word-limit test.
-
-  // }
 
   setUserFocus() {
     if (this.userInputElement) {
@@ -242,18 +209,45 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     const currentWord = this.typingContainerElement.nativeElement.children[this.currentWordIndex];
 
     if (currentWord) { // If there is a current word
-      // If we are at the last letter of the word
-      if (this.currentLetterIndex === currentWord.children.length - 1) { 
-        const nextWord = this.typingContainerElement.nativeElement.children[this.currentWordIndex + 1];
-        if (nextWord) { // If there is a next word
-          this.caretPosition = nextWord.offsetLeft;
+      // At the beginning of a word
+      if (this.currentLetterIndex === 0) {
+        const space = currentWord.previousSibling;
+        if (space === ' ') {
+          this.caretPosition = currentWord.offsetLeft - space.offsetWidth;
+        } else {
+          this.caretPosition = currentWord.offsetLeft;
         }
-      } else {
-        // If we are not at the last letter
-        const letter = currentWord.children[this.currentLetterIndex];
-        if (letter) {
+      }
+      // If we are inside the word or at the last letter of the word
+      if (this.currentLetterIndex <= currentWord.children.length - 1) { 
+
+        // const nextWord = this.typingContainerElement.nativeElement.children[this.currentWordIndex + 1];
+        const letter = currentWord.children[this.currentLetterIndex - 1];
+
+        if (letter) { // If there is a next word
           this.caretPosition = letter.offsetLeft + letter.offsetWidth;
+          // this.caretPosition = nextWord.offsetLeft;
         }
+
+      // If at the trailing letters
+      } else if (this.currentLetterIndex > currentWord.children.length - 1) { 
+        const trailingLetterIndex = this.currentLetterIndex - currentWord.children.length;
+        // const trailingLetters = Array.from(currentWord.children).slice(currentWord.children.length - 1);
+        const trailingLetter = currentWord.children[currentWord.children.length - 1 + trailingLetterIndex];
+        // If there are trailing letters present
+        if (trailingLetter) {
+          // const lastTrailingLetter = trailingLetters[trailingLetters.length - 1] as HTMLElement;
+          this.caretPosition = trailingLetter.offsetLeft + trailingLetter.offsetWidth;
+        } else {
+          this.caretPosition = currentWord.offsetLeft + currentWord.offsetWidth;
+        }
+
+
+
+        // const letter = currentWord.children[this.currentLetterIndex];
+        // if (letter) {
+        //   this.caretPosition = letter.offsetLeft + letter.offsetWidth;
+        // }
       }
     }
   }
