@@ -56,7 +56,7 @@
 /* For now we make it change to green, but might just leave it as white instead */
 .correct-word {
     color: green;
-    font-weight: bold;
+    /* font-weight: bold; */ /* Might be causing issues with the spacing for the caret */
 }
 
 /* Only want the word to be underlined, but the line must be red */

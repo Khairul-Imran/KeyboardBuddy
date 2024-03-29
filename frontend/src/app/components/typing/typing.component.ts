@@ -27,7 +27,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   wordsP$!: Promise<Word[]>;
   // wordsFromObservable: Word[] = [];
   wordsFromPromise: Word[] = [];
-  currentLetterIndex: number = 0;
+  currentLetterIndex: number = 0; // *****Testing -1 Value******
+  currentTrailingLetterIndex: number = 0;
   currentWordIndex: number = 0;
   
   testType!: string;
@@ -107,26 +108,37 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
     // Reset the indexes after generating each test.
     this.currentLetterIndex = 0;
+    this.currentTrailingLetterIndex = 0; // Added
     this.currentWordIndex = 0;
     this.caretPosition = 0;
     this.anyMistakeTracker = false; // To prevent any mistakes from carrying over to next test (if user didn't press space)
+
     this.setUserFocus();
   }
 
-  onUserInput(event: Event) {
-    const userInput = (event.target as HTMLInputElement).value;
+  onUserInput(event: KeyboardEvent) {
+    // const userInput = (event.target as HTMLInputElement).value;
+    const userInput = event.key;
     const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
-    const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
+    const currentLetter: Letter = currentWord.letters[this.currentLetterIndex]; // This doesn't track trailing letters
+    // const currentTrailingLetter: Letter = currentWord.trailingLetters[this.currentTrailingLetterIndex];
+    // const previousWord: Word = this.wordsFromPromise[this.currentWordIndex - 1];
     const TRAILING_LETTERS_LIMIT = 6;
 
-    console.info("Current word before input: ", currentWord);
-    console.info("Current letter before input: ", currentLetter);
+    // console.info("Current word before input: ", currentWord);
+    // console.info("Current letter before input: ", currentLetter);
 
     this.updateCaret();
     
+
     if (userInput === ' ') { // ****User entered space.****
       // Reached the last letter of the word. >= to include the trailing letters.
-      if (this.currentLetterIndex >= currentWord.letters.length) {
+      if (this.currentLetterIndex === currentWord.letters.length - 1 && !currentLetter.untouched) {
+
+        console.info("Before space - current letter index: ", this.currentLetterIndex);
+        console.info("Before space - current word length: ", currentWord.letters.length - 1);
+
+
         // If got errors
         if (!currentWord.fullyCorrect && this.anyMistakeTracker || currentWord.trailingLetters.length > 0) {
           currentWord.untouched = false;
@@ -149,31 +161,46 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           this.updateCaret();
         }
       }
-
       // else if pressed space while not at the last letter of the word....
       // TODO
+
+
 
     } else if (/^[a-zA-Z]$/.test(userInput)) { // ****User entered a letter.****
 
       // If within a current word
       if (this.currentLetterIndex < currentWord.letters.length) { // <=
+        console.info("Current letter: ", currentLetter);
+        console.info("Current index before input: ", this.currentLetterIndex);
+        console.info("User input: ", userInput);
         
-        if (userInput === currentLetter.character ) { // If correct letter.
+        if (userInput === currentLetter.character) { // If correct letter.
+          console.info("Current letter after input: ", currentLetter);
           currentLetter.untouched = false;
           currentLetter.correct = true;
-          this.currentLetterIndex++;
-          // currentWord.untouched = false; 
+
+          // I think the currentLetter variable is updated only when the method is called again, hence the inconsistency.
+          if (this.currentLetterIndex != currentWord.letters.length - 1) { // ******* -1 to ensure it doesn't go out of bounds*****
+            this.currentLetterIndex++;
+            // currentWord.fullyCorrect = true;
+            console.info("Current index: ", this.currentLetterIndex);
+          }
           
         } else if (userInput !== currentLetter.character) { // If wrong letter
           currentLetter.untouched = false;
           currentLetter.correct = false;
           this.anyMistakeTracker = true;
-          this.currentLetterIndex++;
-          // currentWord.untouched = false; 
+          // this.currentLetterIndex++;
+
+          if (this.currentLetterIndex != currentWord.letters.length - 1) { // ******* -1 to ensure it doesn't go out of bounds*****
+            this.currentLetterIndex++;
+            console.info("Current index: ", this.currentLetterIndex);
+          }
+
         }
 
       // If outside of current word (i.e. trailing letters)
-      } else if (currentWord.trailingLetters.length < TRAILING_LETTERS_LIMIT) { 
+      } else if (this.currentLetterIndex >= currentWord.letters.length && currentWord.trailingLetters.length < TRAILING_LETTERS_LIMIT) { 
         const trailingLetter: Letter = {
           character: userInput,
           correct: false,
@@ -182,22 +209,71 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
         currentWord.trailingLetters.push(trailingLetter); // Adds the trailing letter to the word.
         currentWord.fullyCorrect = false;
         this.currentLetterIndex++;
+        console.info("Current letter (trailing): ", currentWord.trailingLetters[this.currentTrailingLetterIndex].character);
+        console.info("Current overall letter: ", currentLetter);
+        this.currentTrailingLetterIndex++;
       }
 
       this.updateCaret();
     }
 
+
+
+
+    
+    else if (userInput === 'Backspace') { // ****User pressed backspace.****
+      console.info("Before backspace - current index: ", this.currentLetterIndex);
+      console.info("Before backspace - current letter: ", currentLetter);
+
+      // For deleting within current word.
+      if (this.currentLetterIndex > 0 && currentWord.trailingLetters.length === 0) {
+        this.currentLetterIndex--; // (incase)
+        console.info("After backspace - current letter: ", currentLetter);
+        currentLetter.correct = false;
+        currentLetter.untouched = true;
+        this.anyMistakeTracker = false;
+
+      }
+
+      // // Deleting current word's trailing letters
+      // if (currentWord.trailingLetters.length > 0) {
+      //   currentWord.trailingLetters.pop();
+      //   this.currentLetterIndex--;
+      // }
+
+
+      // // Deleting previous word (if has errors)
+      // if (this.currentWordIndex > 0 && this.currentLetterIndex === 0 && !previousWord.fullyCorrect) {
+      //   if (previousWord.trailingLetters.length === 0) { // No trailing
+      //     const previousWordBeforeChange = previousWord;
+      //     this.currentWordIndex--;
+      //     // currentWord.untouched = false;
+      //     this.currentLetterIndex = previousWordBeforeChange.letters.length;
+      //   }
+
+      //   if (previousWord.trailingLetters.length > 0) { // Has trailing
+      //     const previousWordBeforeChange = previousWord;
+      //     this.currentWordIndex--;
+      //     // currentWord.untouched = false;
+      //     this.currentLetterIndex = previousWordBeforeChange.letters.length + previousWordBeforeChange.trailingLetters.length;
+      //   }
+      // }
+
+    }
+
+
+    this.updateCaret();
     (event.target as HTMLInputElement).value = '';
-    console.info("Current word after input: ", currentWord);
-    console.info("Current letter after input: ", currentLetter);
+    // console.info("Current word after input: ", currentWord);
+    // console.info("Current letter (trailing): ", currentTrailingLetter);
 
     // TODO: If user presses backspace.
     // -> backspace to amend mistakes. Need to keep track of this too technically?
 
-    // TODO: Fix issue with trailing spaces carrying over to the next test.
+    // TODO: Fix issue with trailing spaces carrying over to the next test. (i think this is solved already)
     // TODO: Set a limit to how far the user can type, especially for word-limit test.
-
   }
+
 
   setUserFocus() {
     if (this.userInputElement) {
@@ -205,49 +281,46 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     }
   }
 
+
+  // TODO: to update the variable names
+  // TODO: to update for trailing letter index
   updateCaret() {
-    const currentWord = this.typingContainerElement.nativeElement.children[this.currentWordIndex];
+    const currentWord = this.wordsFromPromise[this.currentWordIndex];
+    const wordElement = this.typingContainerElement.nativeElement.children[this.currentWordIndex];
 
-    if (currentWord) { // If there is a current word
-      // At the beginning of a word
+    if (wordElement) { // Word element exists
+
       if (this.currentLetterIndex === 0) {
-        const space = currentWord.previousSibling;
-        if (space === ' ') {
-          this.caretPosition = currentWord.offsetLeft - space.offsetWidth;
-        } else {
-          this.caretPosition = currentWord.offsetLeft;
-        }
-      }
-      // If we are inside the word or at the last letter of the word
-      if (this.currentLetterIndex <= currentWord.children.length - 1) { 
+        this.caretPosition = wordElement.offsetLeft;
 
-        // const nextWord = this.typingContainerElement.nativeElement.children[this.currentWordIndex + 1];
-        const letter = currentWord.children[this.currentLetterIndex - 1];
 
-        if (letter) { // If there is a next word
-          this.caretPosition = letter.offsetLeft + letter.offsetWidth;
-          // this.caretPosition = nextWord.offsetLeft;
+      } else if (this.currentLetterIndex <= currentWord.letters.length) { // If caret is at the beginning or inside the word.
+        const letterElement = wordElement.children[this.currentLetterIndex - 1];
+        if (letterElement) {
+          this.caretPosition = letterElement.offsetLeft + letterElement.offsetWidth;
+          // console.log("Caret is at the beginning or inside!")
         }
 
-      // If at the trailing letters
-      } else if (this.currentLetterIndex > currentWord.children.length - 1) { 
-        const trailingLetterIndex = this.currentLetterIndex - currentWord.children.length;
-        // const trailingLetters = Array.from(currentWord.children).slice(currentWord.children.length - 1);
-        const trailingLetter = currentWord.children[currentWord.children.length - 1 + trailingLetterIndex];
-        // If there are trailing letters present
-        if (trailingLetter) {
-          // const lastTrailingLetter = trailingLetters[trailingLetters.length - 1] as HTMLElement;
-          this.caretPosition = trailingLetter.offsetLeft + trailingLetter.offsetWidth;
-        } else {
-          this.caretPosition = currentWord.offsetLeft + currentWord.offsetWidth;
+      } else { // Caret is at the end.
+
+        // If there are trailing letters.
+        if (currentWord.trailingLetters.length > 0) {
+
+          const trailingLetterIndex = this.currentLetterIndex - currentWord.letters.length;
+          const trailingLetterElement = wordElement.children[currentWord.letters.length + trailingLetterIndex - 1];
+          if (trailingLetterElement) {
+            this.caretPosition = trailingLetterElement.offsetLeft + trailingLetterElement.offsetWidth;
+            // console.log("Caret is inside a trailing letter!")
+          }
+
+        } else if (currentWord.trailingLetters.length === 0) { // No trailing letters.
+          const lastLetterElement = wordElement.children[currentWord.letters.length - 1];
+          if (lastLetterElement) {
+            this.caretPosition = lastLetterElement.offsetLeft + lastLetterElement.offsetWidth;
+            // console.log("Caret is at the end of a word!")
+          }
         }
 
-
-
-        // const letter = currentWord.children[this.currentLetterIndex];
-        // if (letter) {
-        //   this.caretPosition = letter.offsetLeft + letter.offsetWidth;
-        // }
       }
     }
   }

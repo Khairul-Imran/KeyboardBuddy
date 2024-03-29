@@ -66,7 +66,8 @@
         </div> -->
 
 
-        <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement>
+        <input type="text" (keydown)="onUserInput($event)" placeholder="Start Typing" #userInputElement>
+        <!-- <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
 
     </div>
     
