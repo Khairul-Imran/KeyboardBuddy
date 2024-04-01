@@ -2,7 +2,7 @@ export interface Word {
     letters: Letter[];
     fullyCorrect: boolean;
     untouched: boolean;
-    trailingLetters: Letter[];
+    // trailingLetters: Letter[];
 }
 
 export interface Letter {

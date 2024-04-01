@@ -34,7 +34,7 @@
                             'untouched-letter': letter.untouched
                             }">{{letter.character}} </span>
                         <!-- Added this -->
-                        <span class="trailing-letter" *ngFor="let trailingLetter of word.trailingLetters">{{ trailingLetter.character }}</span>
+                        <!-- <span class="trailing-letter" *ngFor="let trailingLetter of word.trailingLetters">{{ trailingLetter.character }}</span> -->
                         <span class="space" *ngIf="i < words.length - 1">&nbsp;</span>
                     </span>
                 </ng-container>
