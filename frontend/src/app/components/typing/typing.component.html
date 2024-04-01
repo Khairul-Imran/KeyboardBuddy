@@ -1,22 +1,6 @@
 <div class="typing-group-container">
 
-    <!-- <div>
-        <div *ngIf="testType === 'time'">
-            <div *ngIf="words$ | async as words;">
-                <p>{{ words }}</p>
-            </div>
-        </div>
-    
-        <div *ngIf="testType === 'words'">
-            <div *ngIf="wordsP$ | async as words;">
-                <p>{{ words }}</p>
-            </div>
-        </div>
-    
-        <div>
-            <button (click)="generateNewTest()">Restart Test</button>
-        </div>
-    </div> -->
+
     
     <div>
         <div>
@@ -33,8 +17,6 @@
                             'incorrect-letter': !letter.correct && !letter.untouched, 
                             'untouched-letter': letter.untouched
                             }">{{letter.character}} </span>
-                        <!-- Added this -->
-                        <!-- <span class="trailing-letter" *ngFor="let trailingLetter of word.trailingLetters">{{ trailingLetter.character }}</span> -->
                         <span class="space" *ngIf="i < words.length - 1">&nbsp;</span>
                     </span>
                 </ng-container>
@@ -42,34 +24,14 @@
                 <span class="caret" [style.left]="caretPosition + 'px'" ></span>
             </div>
         </div>
-    
-        <!-- <div>
-            <div class="typing-container" #typingContainerElement>
-                <ng-container>
-                    <span class="word" *ngFor="let word of wordsP$ | async" 
-                [ngClass]="{
-                    'correct-word': word.fullyCorrect, 
-                    'incorrect-word': !word.fullyCorrect && !word.untouched
-                    }">
-                    <span class="letter" *ngFor="let letter of word.letters" 
-                    [ngClass]="{
-                        'correct-letter': letter.correct && !letter.untouched, 
-                        'incorrect-letter': !letter.correct && !letter.untouched, 
-                        'untouched-letter': letter.untouched
-                        }">{{letter.character}} </span>
-                    <span class="space" *ngIf="">&nbsp;</span>
-                </span>
-                </ng-container>
-                
-                <span class="caret" [style.left]="caretPosition + 'px'" ></span>
-            </div>
-        </div> -->
-
 
         <input type="text" (keydown)="onUserInput($event)" placeholder="Start Typing" #userInputElement>
         <!-- <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
 
     </div>
+
+
+
     
     <!-- Might still use this, for when the user is afk, and wants to activate the test again. -->
     <!-- <ng-template #loading>
