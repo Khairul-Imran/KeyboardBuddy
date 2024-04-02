@@ -5,6 +5,7 @@ import { TestgeneratorService } from '../../testgenerator.service';
 import { Observable } from 'rxjs';
 import { Word } from '../../Models/Words';
 import { TestDataService } from '../../test-data.service';
+import { TestData } from '../../Models/TestData';
 
 @Component({
   selector: 'app-results',
@@ -18,6 +19,9 @@ export class ResultsComponent implements OnInit {
   
   wordsFromPreviousTest: Word[] = [];
   showPreviousTest: boolean = false;
+
+  // Results related properties.
+  testData!: TestData[];
   
 
   ngOnInit(): void {

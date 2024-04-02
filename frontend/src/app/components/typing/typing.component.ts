@@ -5,6 +5,7 @@ import { QuicksettingsService } from '../../quicksettings.service';
 import { Letter, Word } from '../../Models/Words';
 import { Router } from '@angular/router';
 import { TestDataService } from '../../test-data.service';
+import { SecondsData, TestData } from '../../Models/TestData';
 
 @Component({
   selector: 'app-typing',
@@ -35,6 +36,13 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   // To be received from the service.
   wordsFromPreviousTest: Word[] = [];
 
+
+  // ------------------------ Results related properties ------------------------
+  // testData!: TestData[];
+
+
+  // ------------------------ Results related properties ------------------------
+
   currentLetterIndex: number = 0;
   currentWordIndex: number = 0;
   testFinished: boolean = false; // New Apr 1
@@ -61,10 +69,11 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       this.testWordLimit = settings.testWordLimit;
       this.testDuration = settings.testDuration;
       console.log("Settings have changed: \n type: " + 
-      this.testType + "\n difficulty: " + 
-      this.testDifficulty + "\n word limit: " + 
-      this.testWordLimit + "\n time limit: " + 
-      this.testDuration);
+        this.testType + "\n difficulty: " + 
+        this.testDifficulty + "\n word limit: " + 
+        this.testWordLimit + "\n time limit: " + 
+        this.testDuration
+      );
       
       this.generateNewTest();
     })
@@ -446,5 +455,128 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     console.log("You are now navigating to the results page!");
     this.router.navigate(['/results']);
   }
+
+  // ------------------------ Results related properties ------------------------
+  testData: TestData[] = [];
+  secondsData: SecondsData[] = [];
+
+  testTimer!: any;
+
+  elapsedTime: number = 0; // Seconds
+  interval!: any;
+
+  // Need to have a time limit for time-based tests
+
+  // ------------------------ Results related properties ------------------------
+
+
+  // ------------------------ Results-related methods ------------------------
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      this.elapsedTime++; // Incremented per second
+    }, 1000)
+  };
+
+  stopTimer() {
+    clearInterval(this.interval);
+  }
+
+  overallWpmCalculator(elapsedTime: number): number { // Calculating overall score first (net wpm)
+
+    let allCharactersTyped = 0; // Regardless right or wrong.
+    let allCharactersTypedWrongly = 0; // Wrong only
+
+    for (let i = 0; i < this.wordsFromPromise.length; i ++) { // accessing each word
+      for (let j = 0; j < this.wordsFromPromise[i].letters.length; j ++) { // accessing each letter in the word
+        if (this.wordsFromPromise[i].letters[j].untouched === false) {
+          allCharactersTyped++;
+        }
+
+        if (this.wordsFromPromise[i].letters[j].untouched === false && this.wordsFromPromise[i].letters[j].correct === false) {
+          allCharactersTypedWrongly++;
+        }
+      }
+    }
+
+    console.info("Number of typed characters: ", allCharactersTyped);
+    console.info("Number of wrong characters: ", allCharactersTypedWrongly);
+
+    const wpm = ((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60); // Net WPM calculation
+
+    return wpm;
+  }
+
+  accuracyCalculator(): number {
+    let allCharactersTyped = 0; // Regardless right or wrong.
+    let allCharactersTypedCorrectly = 0; // Correct only
+
+    for (let i = 0; i < this.wordsFromPromise.length; i ++) { // accessing each word
+      for (let j = 0; j < this.wordsFromPromise[i].letters.length; j ++) { // accessing each letter in the word
+        if (this.wordsFromPromise[i].letters[j].untouched === false) {
+          allCharactersTyped++;
+        }
+
+        if (this.wordsFromPromise[i].letters[j].untouched === false && this.wordsFromPromise[i].letters[j].correct === true) {
+          allCharactersTypedCorrectly++;
+        }
+      }
+    }
+
+    console.info("Number of correct characters ", allCharactersTypedCorrectly);
+    console.info("Number of typed characters ", allCharactersTyped);
+
+    const accuracy = Math.round(allCharactersTypedCorrectly / allCharactersTyped * 100);
+
+    return accuracy;
+  }
+
+  startTypingTest() {
+    console.log("TYPING TEST HAS STARTED!!!!!");
+    this.startTimer();
+
+    // Per second calculations:
+    // let currentSecond = 0;
+
+    // this.testTimer = setInterval(() => {
+    //   currentSecond++;
+    //   const wpm = this.wpmCalculator();
+    //   const errors = ;
+    //   // const accuracy = ;
+    //   this.secondsData.push({
+    //     second: currentSecond,
+    //     wordsPerMinute: wpm,
+    //     errors: errors
+    //   })
+    // }, 1000);
+  }
+
+
+  endTypingTest() {
+    console.log("TYPING TEST HAS STOPPED!!!!!");
+    this.stopTimer();
+
+    // Do something****
+    const overallWpm = this.overallWpmCalculator(this.elapsedTime);
+    const accuracy = this.accuracyCalculator();
+    console.info("Elapsed time: ", this.elapsedTime);
+    console.info("Overall WPM: ", overallWpm);
+    console.info("Accuracy: ", accuracy);
+    // Like send data to the TestData service. TODO!
+    
+
+    this.elapsedTime = 0;
+  }
+
+  // From each second, we just want to know the wpm, and errors
+  // Overall, we want to know the test type, wpm, accuracy, time taken (for word-based test)
+  
+  // Need to know if the test is invalid too:
+  // If didn't type out all the words, or
+  // If didn't type for the allocated amount of time
+  // -> Need to detect if he is afk
+
+
+  // ------------------------ Results-related methods ------------------------
 
 }

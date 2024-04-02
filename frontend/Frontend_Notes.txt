@@ -6,3 +6,7 @@ https://www.learnrxjs.io/learn-rxjs/subjects/behaviorsubject
 Note:
 When changing from time-based to word-based test, it will generate a words-based test twice, as it changes the type, and word limit
 (each will trigger a new test)
+
+
+Formula for wpm, accuracy:
+https://www.speedtypingonline.com/typing-equations 
