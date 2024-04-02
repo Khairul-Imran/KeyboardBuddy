@@ -13,6 +13,9 @@ export class TestDataService {
   // TODO: Create a test data interface to hold the necessary info.
 
   wordsFromPreviousTest: any;
+  testType!: string;
+  overallWpm!: number;
+  accuracy!: number;
 
 
   // Words
@@ -31,8 +34,32 @@ export class TestDataService {
   // Flow: User finishes test -> goToResultsComponent() sets the words from this test into the service
   // -> user goes to the results page -> 
   // user chooses to do a new test (generateNewTest()) -> method CLEARS the existing test from the service -> navigates to typing page
-  // or user chooses to redo the previous test (redoTest()) -> method doesn't clear the existing test from service -> navigates to typing page
-  // OnInit of the typing page, if it detects that there is an existing test (from previous test) -> it will use that test
-  // If not, it will generate a totally new test.
+
+
+  // For results
+  setTestType(testType: string) {
+    this.testType = testType;
+  }
+
+  getTestType() {
+    return this.testType;
+  }
+
+  setOverallWpm(overallWpm: number) {
+    this.overallWpm = overallWpm;
+  }
+
+  getOverallWpm() {
+    return this.overallWpm;
+  }
+
+  setAccuracy(accuracy: number) {
+    this.accuracy = accuracy;
+  }
+
+  getAccuracy() {
+    return this.accuracy;
+  }
+
 
 }

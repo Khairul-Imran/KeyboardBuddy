@@ -563,6 +563,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     console.info("Overall WPM: ", overallWpm);
     console.info("Accuracy: ", accuracy);
     // Like send data to the TestData service. TODO!
+    // REMEMBER: test type need to include the type, how long, difficulty
     
 
     this.elapsedTime = 0;

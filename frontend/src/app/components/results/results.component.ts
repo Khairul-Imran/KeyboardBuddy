@@ -18,6 +18,10 @@ export class ResultsComponent implements OnInit {
   private testDataService = inject(TestDataService);
   
   wordsFromPreviousTest: Word[] = [];
+  testType!: string;
+  overallWpm!: number;
+  accuracy!: number;
+
   showPreviousTest: boolean = false;
 
   // Results related properties.
@@ -26,6 +30,9 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.wordsFromPreviousTest = this.testDataService.getWordsFromPreviousTest();
+    this.testType = this.testDataService.getTestType();
+    this.overallWpm = this.testDataService.getOverallWpm();
+    this.accuracy = this.testDataService.getAccuracy();
   }
 
   
