@@ -2,47 +2,57 @@
 
 <!-- <button [routerLink]="['/']"> Next Test </button> -->
 
-<button (click)="generateNewTest()"> Next Test </button>
-
-<button (click)="togglePreviousTest()"> {{ showPreviousTest ? 'Hide Test History' : 'Show Test History' }} </button>
 
 <!-- TODO: Insert the test results here -->
-
-
-
-
-<!-- **********For showing the previous test********** -->
-<div *ngIf="showPreviousTest">
-
-    <div>
-        <div>
-            <div class="typing-container" #typingContainerElement>
-                <ng-container *ngIf="wordsFromPreviousTest as words">
-                    <span class="word" *ngFor="let word of words; let i = index" 
-                    [ngClass]="{
-                        'correct-word': word.fullyCorrect, 
-                        'incorrect-word': !word.fullyCorrect && !word.untouched
-                        }">
-                        <span class="letter" *ngFor="let letter of word.letters" 
-                        [ngClass]="{
-                            'correct-letter': letter.correct && !letter.untouched, 
-                            'incorrect-letter': !letter.correct && !letter.untouched, 
-                            'untouched-letter': letter.untouched
-                            }">{{letter.character}} </span>
-                        <span class="space" *ngIf="i < words.length - 1">&nbsp;</span>
-                    </span>
-                </ng-container>
-                
-                <!-- <span class="caret" [style.left]="caretPosition + 'px'" ></span> -->
-            </div>
-        </div>
-    
-        <!-- <input type="text" (keydown)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
-        <!-- <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
-    
-    </div>
-
+<div class="typing-results-container">
+    <br>
+    Test Type: {{ testType }}
+    <br>
+    WPM: {{ overallWpm }}
+    <br>
+    Accuracy: {{ accuracy }}%
 </div>
 
 
+<!-- **********For showing the previous test********** -->
+
+<div class="typing-test-container">
+    <div *ngIf="showPreviousTest">
+
+        <div>
+            <div>
+                <div class="typing-container" #typingContainerElement>
+                    <ng-container *ngIf="wordsFromPreviousTest as words">
+                        <span class="word" *ngFor="let word of words; let i = index" 
+                        [ngClass]="{
+                            'correct-word': word.fullyCorrect, 
+                            'incorrect-word': !word.fullyCorrect && !word.untouched
+                            }">
+                            <span class="letter" *ngFor="let letter of word.letters" 
+                            [ngClass]="{
+                                'correct-letter': letter.correct && !letter.untouched, 
+                                'incorrect-letter': !letter.correct && !letter.untouched, 
+                                'untouched-letter': letter.untouched
+                                }">{{letter.character}} </span>
+                            <span class="space" *ngIf="i < words.length - 1">&nbsp;</span>
+                        </span>
+                    </ng-container>
+                    
+                    <!-- <span class="caret" [style.left]="caretPosition + 'px'" ></span> -->
+                </div>
+            </div>
+        
+            <!-- <input type="text" (keydown)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
+            <!-- <input type="text" (input)="onUserInput($event)" placeholder="Start Typing" #userInputElement> -->
+        
+        </div>
+
+    </div>
+</div>
+
+<div class="post-test-buttons">
+    <button (click)="generateNewTest()"> Next Test </button>
+    
+    <button (click)="togglePreviousTest()"> {{ showPreviousTest ? 'Hide Test History' : 'Show Test History' }} </button>
+</div>
 

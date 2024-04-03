@@ -33,6 +33,7 @@ export class QuicksettingsComponent implements OnInit {
     this.selectedTestType = this.quicksettingsService.testType;
     this.selectedTestDifficulty = this.quicksettingsService.testDifficulty;
     this.selectedTestDuration = this.quicksettingsService.testDuration;
+    this.selectedTestWordLimit = this.quicksettingsService.testWordLimit;
     // this.testGeneratorService.getRandomWordsTest(this.selectedTestType, this.selectedTestDifficulty); -> unnecessary
   }
 

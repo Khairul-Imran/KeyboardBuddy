@@ -141,6 +141,9 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.anyMistakeTracker = false; // To prevent any mistakes from carrying over to next test (if user didn't press space)
     this.testFinished = false; // New Apr 1
 
+    this.stopTimer() // Stop timer if you reset the test.
+    this.elapsedTime = 0;
+
     this.setUserFocus();
   }
 
@@ -148,7 +151,14 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     // const userInput = (event.target as HTMLInputElement).value;
     const userInput = event.key;
 
-    // ------------------------Insert Finishing Conditions here------------------ 1 Apr------
+    // Starting condition
+    // When any letter has been pressed
+    if (/^[a-zA-Z]$/.test(userInput) && this.currentLetterIndex === 0 && this.currentWordIndex === 0){
+      this.startTypingTest();
+    }
+
+
+    // ------------------------ Insert Finishing Conditions here ------------------ 1 Apr------
     
 
     if (userInput === ' ' && this.currentWordIndex === this.wordsFromPromise.length - 1) {
@@ -157,14 +167,11 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       console.info("You have finished the test: ", this.testFinished);
       console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
 
+      this.endTypingTest();// Added this 3 apr
+
       this.goToResultsComponent(); // Added this
       return;
     }
-
-    
-
-    // Need to prevent the user from making changes after finishing -> maybe route them straight to another page?
-
 
 
     // ------------------------Insert Finishing Conditions here------------------ 1 Apr------
@@ -184,8 +191,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       // Reached the last letter of the word. >= to include the trailing letters.
       if (this.currentLetterIndex === currentWord.letters.length - 1 && !currentLetter.untouched) {
 
-        console.info("Before space - current letter index: ", this.currentLetterIndex);
-        console.info("Before space - current word length: ", currentWord.letters.length - 1);
+        // console.info("Before space - current letter index: ", this.currentLetterIndex);
+        // console.info("Before space - current word length: ", currentWord.letters.length - 1);
 
 
         // If got errors
@@ -260,26 +267,29 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       // **** For last letters ****
       else if (this.currentLetterIndex === currentWord.letters.length - 1 && currentWord.letters[this.currentLetterIndex].untouched === true) {
         // at the last letter, and has NOT been touched.
-        console.info("Current index: ", this.currentLetterIndex);
-        console.log("You are at the last letter, and it has NOT been touched!!!")
+        // console.info("Current index: ", this.currentLetterIndex);
+        // console.log("You are at the last letter, and it has NOT been touched!!!")
         
         // Remember, no need to increment in this case as it is the last character.
         if (userInput === currentLetter.character) {
           currentLetter.untouched = false;
           currentLetter.correct = true;
 
-          // Another finishing condition here.
+          // ------------------------ Another finishing condition here. ------------------------
           // To auto finish if the user typed the last word correctly.
           if (this.isLastWord(currentWord) && this.hasFalseLetter(currentWord) === false) {
 
             this.testFinished = true;
-            console.info("You have finished the test: ", this.testFinished);
-            console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+            // console.info("You have finished the test: ", this.testFinished);
+            // console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
             this.updateCaret();
+
+            this.endTypingTest();
 
             this.goToResultsComponent(); // added this
             return;
           }
+          // ------------------------ Another finishing condition here. ------------------------
 
         } else {
           currentLetter.untouched = false;
@@ -463,6 +473,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   testTimer!: any;
 
   elapsedTime: number = 0; // Seconds
+  finalTestType!: string;
   interval!: any;
 
   // Need to have a time limit for time-based tests
@@ -499,10 +510,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       }
     }
 
-    console.info("Number of typed characters: ", allCharactersTyped);
-    console.info("Number of wrong characters: ", allCharactersTypedWrongly);
+    console.info("WPM: Number of typed characters: ", allCharactersTyped);
+    console.info("WPM: Number of wrong characters: ", allCharactersTypedWrongly);
 
-    const wpm = ((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60); // Net WPM calculation
+    const wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
 
     return wpm;
   }
@@ -523,8 +534,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       }
     }
 
-    console.info("Number of correct characters ", allCharactersTypedCorrectly);
-    console.info("Number of typed characters ", allCharactersTyped);
+    console.info("Accuracy: Number of correct characters ", allCharactersTypedCorrectly);
+    console.info("Accuracy: Number of typed characters ", allCharactersTyped);
 
     const accuracy = Math.round(allCharactersTypedCorrectly / allCharactersTyped * 100);
 
@@ -556,15 +567,33 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     console.log("TYPING TEST HAS STOPPED!!!!!");
     this.stopTimer();
 
-    // Do something****
+    console.log("DETERMINING TEST TYPE HEREEEEE!")
+    // Set the test type
+    // E.g. time 15 easy (type / how long / difficulty)
+    if (this.testType === 'time') {
+      console.log("Test is time-based");
+      this.finalTestType = `${this.testType} | ${this.testDuration}s | ${this.testDifficulty}`;
+      console.info("Test type: ", this.finalTestType);
+    } else if (this.testType === 'words') {
+      console.log("Test is word-based");
+      this.finalTestType = `${this.testType} | ${this.testWordLimit} words | ${this.testDifficulty}`;
+      console.info("Test type: ", this.finalTestType);
+    }
+
+    console.log("FINSISHED DETERMINING TEST TYPE HEREEEEE!")
+
     const overallWpm = this.overallWpmCalculator(this.elapsedTime);
     const accuracy = this.accuracyCalculator();
     console.info("Elapsed time: ", this.elapsedTime);
     console.info("Overall WPM: ", overallWpm);
     console.info("Accuracy: ", accuracy);
+    
+    // Do something****
     // Like send data to the TestData service. TODO!
     // REMEMBER: test type need to include the type, how long, difficulty
-    
+    this.testDataService.setTestType(this.finalTestType);
+    this.testDataService.setOverallWpm(overallWpm);
+    this.testDataService.setAccuracy(accuracy);
 
     this.elapsedTime = 0;
   }

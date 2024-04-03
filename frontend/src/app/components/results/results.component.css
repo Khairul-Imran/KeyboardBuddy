@@ -1,9 +1,29 @@
-.typing-group-container {
+h1 {
     display: flex;
     justify-content: center;
 }
 
+.typing-results-container {
+    display: flex;
+    justify-content: center;
+}
+
+.post-test-buttons {
+    justify-content: center;
+    display: flex;
+    padding: 30px;
+}
+
+
+
+
+
 /* For presentation of words */
+.typing-test-container {
+    display: flex;
+    justify-content: center;
+}
+
 .word {
     display: inline-block;
     margin-right: 15px;

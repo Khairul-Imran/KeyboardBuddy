@@ -30,6 +30,7 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.wordsFromPreviousTest = this.testDataService.getWordsFromPreviousTest();
+    // Results
     this.testType = this.testDataService.getTestType();
     this.overallWpm = this.testDataService.getOverallWpm();
     this.accuracy = this.testDataService.getAccuracy();
