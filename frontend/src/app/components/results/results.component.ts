@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { QuicksettingsService } from '../../quicksettings.service';
 import { TestgeneratorService } from '../../testgenerator.service';
 import { Observable } from 'rxjs';
-import { Word } from '../../Models/Words';
+import { Letter, Word } from '../../Models/Words';
 import { TestDataService } from '../../test-data.service';
 import { TestData } from '../../Models/TestData';
 
@@ -26,18 +26,28 @@ export class ResultsComponent implements OnInit {
   showPreviousTest: boolean = false;
 
   // Results related properties.
-  testData!: TestData[];
+  testData!: TestData;
+
+  // Testing only******
+  typedCharacters!: Letter[];
   
 
   ngOnInit(): void {
     this.wordsFromPreviousTest = this.testDataService.getWordsFromPreviousTest();
+
+    // TODO: Remove later.
+    // this.testType = this.testDataService.getTestType();
+    // this.overallWpm = this.testDataService.getOverallWpm();
+    // this.accuracy = this.testDataService.getAccuracy();
+    // if (this.testType.includes('words')) {
+      //   this.timeTaken = this.testDataService.getTimeTaken();
+      // }
+      
+
     // Results
-    this.testType = this.testDataService.getTestType();
-    this.overallWpm = this.testDataService.getOverallWpm();
-    this.accuracy = this.testDataService.getAccuracy();
-    if (this.testType.includes('words')) {
-      this.timeTaken = this.testDataService.getTimeTaken();
-    }
+    this.testData = this.testDataService.getCurrentTestData();
+    // Testing only
+    this.typedCharacters = this.testDataService.getTypedCharacters();
   }
 
   

@@ -1,29 +1,56 @@
 <h1>You finished the test!</h1>
 
-<!-- <button [routerLink]="['/']"> Next Test </button> -->
-
-
-<!-- TODO: Insert the test results here -->
 <div class="typing-results-container">
     <div>
-        Test Type: {{ testType }}
+        Test Type: {{ testData.testType }}
     </div>
     <div>
-        WPM: {{ overallWpm }}
+        WPM: {{ testData.wordsPerMinute }}
     </div>
     <div>
-        Accuracy: {{ accuracy }}%
+        Accuracy: {{ testData.accuracy }}%
     </div>
 
-    <div *ngIf="testType.includes('words')">
-        Time Taken: {{ timeTaken }}s
+    <div *ngIf="testData.testType.includes('words')">
+        Time Taken: {{ testData.timeTaken }}s
     </div>
 
+    Seconds Data:
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Second</th>
+                    <th>WPM</th>
+                    <th>Accuracy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of testData.secondsData">
+                    <td>{{ data.second }}</td>
+                    <td>{{ data.wordsPerMinute }}</td>
+                    <td>{{ data.accuracy }}%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    Typed Characters Array (Testing only):
+    <table>
+        <tr>
+            <th *ngFor="let letter of typedCharacters">{{ letter.character }}</th>
+        </tr>
+        <tr>
+            <td *ngFor="let letter of typedCharacters">{{ letter.correct }}</td>
+        </tr>
+    </table>
 </div>
 
 
 <!-- **********For showing the previous test********** -->
-
 <div class="typing-test-container">
     <div *ngIf="showPreviousTest">
 

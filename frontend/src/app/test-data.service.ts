@@ -1,16 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { Word } from './Models/Words';
+import { Letter, Word } from './Models/Words';
+import { SecondsData, TestData } from './Models/TestData';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestDataService {
 
-  // This service will store data relating to tests.
-
   constructor() { }
-
-  // TODO: Create a test data interface to hold the necessary info.
 
   wordsFromPreviousTest: any;
   testType!: string;
@@ -18,6 +15,36 @@ export class TestDataService {
   accuracy!: number;
   timeTaken!: number; // for word-based tests.
 
+  // --------------- For testing purposes ---------------
+  typedCharacters!: Letter[];
+
+  setTypedCharacters(typedCharacters: Letter[]) {
+    this.typedCharacters = typedCharacters;
+  }
+
+  getTypedCharacters() {
+    return this.typedCharacters;
+  }
+
+  // --------------- For testing purposes ---------------
+
+  // Test Data holder
+  private currentTestData: TestData = {
+    testType: '',
+    wordsPerMinute: 0,
+    accuracy: 0,
+    timeTaken: 0, // For word-based tests
+    secondsData: []
+  }
+
+  // Results
+  setCurrentTestData(testData: TestData) {
+    this.currentTestData = testData;
+  }
+
+  getCurrentTestData(): TestData {
+    return this.currentTestData;
+  }
 
   // Words
   setWordsFromPreviousTest(words: Word[]) {
@@ -37,42 +64,41 @@ export class TestDataService {
   // user chooses to do a new test (generateNewTest()) -> method CLEARS the existing test from the service -> navigates to typing page
 
 
+  // TODO: Remove later.
   // For results
-  setTestType(testType: string) {
-    this.testType = testType;
-  }
+  // setTestType(testType: string) {
+  //   this.testType = testType;
+  // }
 
-  getTestType() {
-    return this.testType;
-  }
+  // getTestType() {
+  //   return this.testType;
+  // }
 
-  setOverallWpm(overallWpm: number) {
-    if (overallWpm > 0) {
-      this.overallWpm = overallWpm;
-    } else {
-      this.overallWpm = "Invalid";
-    }
-  }
+  // setOverallWpm(overallWpm: number) {
+  //   if (overallWpm > 0) {
+  //     this.overallWpm = overallWpm;
+  //   } else {
+  //     this.overallWpm = "Invalid";
+  //   }
+  // }
 
-  getOverallWpm() {
-    return this.overallWpm;
-  }
+  // getOverallWpm() {
+  //   return this.overallWpm;
+  // }
 
-  setAccuracy(accuracy: number) {
-    this.accuracy = accuracy;
-  }
+  // setAccuracy(accuracy: number) {
+  //   this.accuracy = accuracy;
+  // }
 
-  getAccuracy() {
-    return this.accuracy;
-  }
+  // getAccuracy() {
+  //   return this.accuracy;
+  // }
 
-  setTimeTaken(timeTaken: number) {
-    this.timeTaken = timeTaken;
-  }
+  // setTimeTaken(timeTaken: number) {
+  //   this.timeTaken = timeTaken;
+  // }
 
-  getTimeTaken() {
-    return this.timeTaken;
-  }
-
-
+  // getTimeTaken() {
+  //   return this.timeTaken;
+  // }
 }
