@@ -14,8 +14,9 @@ export class TestDataService {
 
   wordsFromPreviousTest: any;
   testType!: string;
-  overallWpm!: number;
+  overallWpm!: any;
   accuracy!: number;
+  timeTaken!: number; // for word-based tests.
 
 
   // Words
@@ -46,7 +47,11 @@ export class TestDataService {
   }
 
   setOverallWpm(overallWpm: number) {
-    this.overallWpm = overallWpm;
+    if (overallWpm > 0) {
+      this.overallWpm = overallWpm;
+    } else {
+      this.overallWpm = "Invalid";
+    }
   }
 
   getOverallWpm() {
@@ -59,6 +64,14 @@ export class TestDataService {
 
   getAccuracy() {
     return this.accuracy;
+  }
+
+  setTimeTaken(timeTaken: number) {
+    this.timeTaken = timeTaken;
+  }
+
+  getTimeTaken() {
+    return this.timeTaken;
   }
 
 

@@ -5,12 +5,20 @@
 
 <!-- TODO: Insert the test results here -->
 <div class="typing-results-container">
-    <br>
-    Test Type: {{ testType }}
-    <br>
-    WPM: {{ overallWpm }}
-    <br>
-    Accuracy: {{ accuracy }}%
+    <div>
+        Test Type: {{ testType }}
+    </div>
+    <div>
+        WPM: {{ overallWpm }}
+    </div>
+    <div>
+        Accuracy: {{ accuracy }}%
+    </div>
+
+    <div *ngIf="testType.includes('words')">
+        Time Taken: {{ timeTaken }}s
+    </div>
+
 </div>
 
 

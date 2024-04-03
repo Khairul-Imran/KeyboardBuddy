@@ -567,7 +567,6 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     console.log("TYPING TEST HAS STOPPED!!!!!");
     this.stopTimer();
 
-    console.log("DETERMINING TEST TYPE HEREEEEE!")
     // Set the test type
     // E.g. time 15 easy (type / how long / difficulty)
     if (this.testType === 'time') {
@@ -580,8 +579,6 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       console.info("Test type: ", this.finalTestType);
     }
 
-    console.log("FINSISHED DETERMINING TEST TYPE HEREEEEE!")
-
     const overallWpm = this.overallWpmCalculator(this.elapsedTime);
     const accuracy = this.accuracyCalculator();
     console.info("Elapsed time: ", this.elapsedTime);
@@ -591,6 +588,9 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     // Do something****
     // Like send data to the TestData service. TODO!
     // REMEMBER: test type need to include the type, how long, difficulty
+    if (this.testType === 'words') {
+      this.testDataService.setTimeTaken(this.elapsedTime);
+    }
     this.testDataService.setTestType(this.finalTestType);
     this.testDataService.setOverallWpm(overallWpm);
     this.testDataService.setAccuracy(accuracy);

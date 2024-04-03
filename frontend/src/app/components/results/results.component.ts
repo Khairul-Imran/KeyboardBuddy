@@ -19,8 +19,9 @@ export class ResultsComponent implements OnInit {
   
   wordsFromPreviousTest: Word[] = [];
   testType!: string;
-  overallWpm!: number;
+  overallWpm!: any;
   accuracy!: number;
+  timeTaken!: number;
 
   showPreviousTest: boolean = false;
 
@@ -34,6 +35,9 @@ export class ResultsComponent implements OnInit {
     this.testType = this.testDataService.getTestType();
     this.overallWpm = this.testDataService.getOverallWpm();
     this.accuracy = this.testDataService.getAccuracy();
+    if (this.testType.includes('words')) {
+      this.timeTaken = this.testDataService.getTimeTaken();
+    }
   }
 
   
