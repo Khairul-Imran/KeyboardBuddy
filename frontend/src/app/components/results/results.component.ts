@@ -5,7 +5,7 @@ import { TestgeneratorService } from '../../testgenerator.service';
 import { Observable } from 'rxjs';
 import { Letter, Word } from '../../Models/Words';
 import { TestDataService } from '../../test-data.service';
-import { TestData } from '../../Models/TestData';
+import { TestData, TypedLetter } from '../../Models/TestData';
 
 @Component({
   selector: 'app-results',
@@ -29,7 +29,8 @@ export class ResultsComponent implements OnInit {
   testData!: TestData;
 
   // Testing only******
-  typedCharacters!: Letter[];
+  // typedCharacters!: Letter[];
+  typedCharacters!: TypedLetter[];
   
 
   ngOnInit(): void {

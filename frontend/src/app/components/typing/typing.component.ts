@@ -5,7 +5,7 @@ import { QuicksettingsService } from '../../quicksettings.service';
 import { Letter, Word } from '../../Models/Words';
 import { Router } from '@angular/router';
 import { TestDataService } from '../../test-data.service';
-import { SecondsData, TestData } from '../../Models/TestData';
+import { SecondsData, TestData, TypedLetter } from '../../Models/TestData';
 
 @Component({
   selector: 'app-typing',
@@ -32,10 +32,6 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   wordsP$!: Promise<Word[]>;
   // wordsFromObservable: Word[] = [];
   wordsFromPromise: Word[] = [];
-
-  typedCharacters: Letter[] = []; // For tracking each letter typed (right or wrong)
-  // If typed, add to the array (right or wrong)
-  // If backspaced, remove from the array
 
   // To be received from the service.
   wordsFromPreviousTest: Word[] = [];
@@ -247,7 +243,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           // console.info("Current letter after input: ", currentLetter);
           currentLetter.untouched = false;
           currentLetter.correct = true;
-          this.typedCharacters.push(currentLetter); // Just added 3 apr
+          // this.typedCharacters.push(currentLetter); // Just added 3 apr
+          this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
 
           // If not last letter.
           if (this.currentLetterIndex != currentWord.letters.length - 1) { // ******* -1 to ensure it doesn't go out of bounds*****
@@ -260,7 +257,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           currentLetter.untouched = false;
           currentLetter.correct = false;
           this.anyMistakeTracker = true;
-          this.typedCharacters.push(currentLetter); // Just added 3 apr
+          // this.typedCharacters.push(currentLetter); // Just added 3 apr
+          this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
 
           // If not last letter.
           if (this.currentLetterIndex != currentWord.letters.length - 1) { // ******* -1 to ensure it doesn't go out of bounds*****
@@ -281,7 +279,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
         if (userInput === currentLetter.character) {
           currentLetter.untouched = false;
           currentLetter.correct = true;
-          this.typedCharacters.push(currentLetter); // Just added 3 apr
+          // this.typedCharacters.push(currentLetter); // Just added 3 apr
+          this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
 
           // ------------------------ Another finishing condition here. ------------------------
           // To auto finish if the user typed the last word CORRECTLY.
@@ -305,7 +304,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           currentLetter.correct = false;
           this.anyMistakeTracker = true;
           console.log("Hey, you have a mistake here!!!!!!!!")
-          this.typedCharacters.push(currentLetter); // Just added 3 apr
+          // this.typedCharacters.push(currentLetter); // Just added 3 apr
+          this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
         }
       }
       
@@ -489,11 +489,24 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   testData!: TestData; // Might not need to be an array, just be one value.
   secondsData: SecondsData[] = [];
 
+  // typedCharacters: Letter[] = []; // For tracking each letter typed (right or wrong)
+  typedCharacters: TypedLetter[] = []; // Testingggg
+
+  // If typed, add to the array (right or wrong)
+  // If backspaced, remove from the array
+
+  // To get the letters that the user needs to type. (for comparison with letters that were actually typed)
+  // displayedCharacters: any = this.wordsFromPromise.map(word => word.letters.map(letter => letter.character)).flat();
+  // displayedCharacters: string[] = this.wordsFromPromise.flatMap(word => word.letters.map(letter => letter.character));
+
+  errors: Error[] = [];
+
   testTimer!: any;
 
-  elapsedTime: number = 0; // Seconds
+  elapsedTime: number = 0; // Current Second
   finalTestType!: string;
   interval!: any;
+  pastErrors: number = 0;
 
   // Need to have a time limit for time-based tests
 
@@ -509,16 +522,23 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       // Seconds calculations
       const wpm = this.perSecondWpmCalculator(this.elapsedTime);
       const accuracy = this.perSecondAccuracyCalculator();
+      // const totalErrors = this.perSecondErrorsCalculator();
+      // const errorsInCurrentSecond = totalErrors - this.pastErrors;
 
       const currentSecondsData: SecondsData = {
         second: this.elapsedTime,
         wordsPerMinute: wpm,
-        accuracy: accuracy
+        accuracy: accuracy,
+        errors: 0
+        // errors: errorsInCurrentSecond
       }
+
+      // this.pastErrors = totalErrors;
 
       console.info("SECONDS DATA - second: ", currentSecondsData.second);
       console.info("SECONDS DATA - wpm: ", currentSecondsData.wordsPerMinute);
       console.info("SECONDS DATA - accuracy: ", currentSecondsData.accuracy);
+      console.info("SECONDS DATA - errors: ", currentSecondsData.errors);
       this.secondsData.push(currentSecondsData);
     }, 1000)
   };
@@ -563,6 +583,29 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     return accuracy;
   }
 
+  // Only counting errors that are left behind, not those that are corrected by the user!
+  perSecondErrorsCalculator() {
+    // let errors = 0;
+
+    for (let char of this.typedCharacters) {
+      if (char.correct === false) {
+        // errors++;
+      }
+    }
+
+    // for (let i = 0; i < this.typedCharacters.length; i ++) {
+    //   if (this.typedCharacters[i].character !== this.wordsFromPromise[this.currentWordIndex].letters[i].character) {
+    //     console.info("typed: ", this.typedCharacters[i].character);
+    //     console.info("displayed: ", this.wordsFromPromise[this.currentWordIndex].letters[i].character);
+    //     errors++;
+    //   }
+    // }
+
+
+    // return errors; // This is the cumulative value.
+
+
+  }
 
   overallWpmCalculator(elapsedTime: number): number { // Calculating overall net wpm
 
@@ -627,8 +670,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
 
   endTypingTest() {
-    console.log("TYPING TEST HAS STOPPED!!!!!");
     this.stopTimer();
+    console.log("TYPING TEST HAS STOPPED!!!!!");
 
     // Set the test type
     // E.g. time 15 easy (type / how long / difficulty)
@@ -662,6 +705,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     // this.testDataService.setOverallWpm(overallWpm);
     // this.testDataService.setAccuracy(accuracy);
 
+    // Insert setErrorsData here!!!
+    this.setErrorsData(this.secondsData);
+
+
     // Insert values into TestData.
     const currentTestData: TestData = {
       testType: this.finalTestType,
@@ -679,6 +726,41 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.resetTestData()
     this.secondsData = [];
     this.elapsedTime = 0;
+    this.pastErrors = 0;
+    // Testing
+    console.info("Words from promise: ", this.wordsFromPromise);
+    // console.info("Displayed characters: ", this.displayedCharacters);
+  }
+
+  // To iterate through the array to update the errors.
+  // With the errors from typedCharacters array.
+  setErrorsData(secondsData: SecondsData[]) {
+    
+    // Count the number of errors for each second interval
+    // <second interval, error count>
+    const errorTrackerMap = new Map<number, number>();
+
+    this.typedCharacters.forEach(letter => {
+      if (!letter.correct) {
+        const second = letter.second < 1 ? 1 : Math.floor(letter.second); // Combine results for seconds 0 and 1
+        const count = errorTrackerMap.get(second) || 0;
+        errorTrackerMap.set(second, count + 1);
+      }
+    });
+
+    // Update the SecondsData[]'s errors property
+    secondsData.forEach(individualSecondsData => {
+      const errorCount = errorTrackerMap.get(individualSecondsData.second) || 0;
+      // individualSecondsData.errors = errorCount;
+
+      if (individualSecondsData.second === 1) {
+        const errorCountSecond0 = errorTrackerMap.get(0) || 0;
+        individualSecondsData.errors = errorCount + errorCountSecond0;
+      } else {
+        individualSecondsData.errors = errorCount;
+      }
+
+    });
   }
 
   resetTestData() {

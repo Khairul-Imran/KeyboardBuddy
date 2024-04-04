@@ -23,6 +23,7 @@
                     <th>Second</th>
                     <th>WPM</th>
                     <th>Accuracy</th>
+                    <th>Errors</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                     <td>{{ data.second }}</td>
                     <td>{{ data.wordsPerMinute }}</td>
                     <td>{{ data.accuracy }}%</td>
+                    <td>{{ data.errors }}</td>
                 </tr>
             </tbody>
         </table>
@@ -45,6 +47,9 @@
         </tr>
         <tr>
             <td *ngFor="let letter of typedCharacters">{{ letter.correct }}</td>
+        </tr>
+        <tr>
+            <td *ngFor="let letter of typedCharacters">{{ letter.second }}</td>
         </tr>
     </table>
 </div>

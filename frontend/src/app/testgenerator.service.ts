@@ -64,8 +64,7 @@ export class TestgeneratorService {
           const individualWords: Word[] = sentence.split(' ').map(word => ({
               letters: word.split('').map(c => ({ character: c, correct: false, untouched: true })),
               fullyCorrect: false,
-              untouched: true,
-              trailingLetters: []
+              untouched: true
             }));
             // console.log("Client: Retrieved data from server!");
             return individualWords;
@@ -111,8 +110,7 @@ export class TestgeneratorService {
           const individualWords: Word[] = sentence.split(' ').map(word => ({
             letters: word.split('').map(c => ({ character: c, correct: false, untouched: true})),
             fullyCorrect: false,
-            untouched: true,
-            trailingLetters: []
+            untouched: true
           }));
           return individualWords;
         })

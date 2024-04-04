@@ -12,4 +12,17 @@ export interface SecondsData {
     second: number; // At which second was this data gathered.
     wordsPerMinute: number;
     accuracy: number;
+    errors: number;
+}
+
+export interface Error {
+    second: number;
+    character: string;
+    fromWord: string;
+}
+
+export interface TypedLetter {
+    character: string;
+    correct: boolean;
+    second: number; // At which interval was it typed.
 }

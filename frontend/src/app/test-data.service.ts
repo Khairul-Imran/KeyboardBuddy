@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Letter, Word } from './Models/Words';
-import { SecondsData, TestData } from './Models/TestData';
+import { SecondsData, TestData, TypedLetter } from './Models/TestData';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class TestDataService {
   timeTaken!: number; // for word-based tests.
 
   // --------------- For testing purposes ---------------
-  typedCharacters!: Letter[];
+  typedCharacters!: TypedLetter[]; // Changed this
 
-  setTypedCharacters(typedCharacters: Letter[]) {
+  setTypedCharacters(typedCharacters: TypedLetter[]) { // Changed this
     this.typedCharacters = typedCharacters;
   }
 
