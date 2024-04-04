@@ -164,34 +164,30 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
 
     // ------------------------ Insert Finishing Conditions here ------------------------
+
+    if (userInput === ' ' && this.currentWordIndex === this.wordsFromPromise.length - 1) { // If at the last word
+      if (this.currentLetterIndex === this.wordsFromPromise[this.currentWordIndex].letters.length - 1 && 
+        this.wordsFromPromise[this.currentWordIndex].letters[this.currentLetterIndex].untouched === false) { // If last word has been typed
+          
+          // If the last word is wrong -> underline
+          this.wordsFromPromise[this.currentWordIndex].fullyCorrect = false;
+          this.wordsFromPromise[this.currentWordIndex].untouched = false;
     
-
-    if (userInput === ' ' && this.currentWordIndex === this.wordsFromPromise.length - 1) {
-
-      // If the last word is wrong -> underline
-      this.wordsFromPromise[this.currentWordIndex].fullyCorrect = false;
-      this.wordsFromPromise[this.currentWordIndex].untouched = false;
-
-      this.testFinished = true;
-      console.info("You have finished the test: ", this.testFinished);
-      console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
-
-      this.endTypingTest();// Added this 3 apr
-
-      this.goToResultsComponent(); // Added this
-      return;
+          this.testFinished = true;
+          console.info("You have finished the test: ", this.testFinished);
+          console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+    
+          this.endTypingTest();// Added this 3 apr
+    
+          this.goToResultsComponent(); // Added this
+          return;
+      }
     }
-
-
     // ------------------------Insert Finishing Conditions here------------------------
 
 
     const currentWord: Word = this.wordsFromPromise[this.currentWordIndex];
     const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];
-    // const previousWord: Word = this.wordsFromPromise[this.currentWordIndex - 1];
-
-    // console.info("Current word before input: ", currentWord);
-    // console.info("Current letter before input: ", currentLetter);
 
     this.updateCaret();
     
@@ -288,8 +284,9 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           this.typedCharacters.push(currentLetter); // Just added 3 apr
 
           // ------------------------ Another finishing condition here. ------------------------
-          // To auto finish if the user typed the last word correctly.
+          // To auto finish if the user typed the last word CORRECTLY.
           if (this.isLastWord(currentWord) && this.hasFalseLetter(currentWord) === false) {
+            currentWord.fullyCorrect = true;
 
             this.testFinished = true;
             // console.info("You have finished the test: ", this.testFinished);
@@ -567,18 +564,19 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   }
 
 
-  overallWpmCalculator(elapsedTime: number): number { // Calculating overall score first (net wpm)
+  overallWpmCalculator(elapsedTime: number): number { // Calculating overall net wpm
 
     let allCharactersTyped = 0; // Regardless right or wrong.
     let allCharactersTypedWrongly = 0; // Wrong only
 
-    for (let i = 0; i < this.wordsFromPromise.length; i ++) { // accessing each word
-      for (let j = 0; j < this.wordsFromPromise[i].letters.length; j ++) { // accessing each letter in the word
-        if (this.wordsFromPromise[i].letters[j].untouched === false) {
+    for (let word of this.wordsFromPromise) { // Accessing each word
+      for (let char of word.letters) {  // Accessing each letter in word
+
+        if (char.untouched === false) {
           allCharactersTyped++;
         }
 
-        if (this.wordsFromPromise[i].letters[j].untouched === false && this.wordsFromPromise[i].letters[j].correct === false) {
+        if (char.untouched === false && char.correct === false) {
           allCharactersTypedWrongly++;
         }
       }
@@ -599,13 +597,14 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     let allCharactersTyped = 0; // Regardless right or wrong.
     let allCharactersTypedCorrectly = 0; // Correct only
 
-    for (let i = 0; i < this.wordsFromPromise.length; i ++) { // accessing each word
-      for (let j = 0; j < this.wordsFromPromise[i].letters.length; j ++) { // accessing each letter in the word
-        if (this.wordsFromPromise[i].letters[j].untouched === false) {
+    for (let word of this.wordsFromPromise) { // Accessing each word
+      for (let char of word.letters) {  // Accessing each letter in word
+
+        if (char.untouched === false) {
           allCharactersTyped++;
         }
 
-        if (this.wordsFromPromise[i].letters[j].untouched === false && this.wordsFromPromise[i].letters[j].correct === true) {
+        if (char.untouched === false && char.correct === true) {
           allCharactersTypedCorrectly++;
         }
       }
