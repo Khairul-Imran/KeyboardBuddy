@@ -11,7 +11,6 @@ export interface TestData {
 export interface SecondsData {
     second: number; // At which second was this data gathered.
     wordsPerMinute: number;
-    accuracy: number;
     errors: number;
 }
 

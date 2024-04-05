@@ -22,7 +22,6 @@
                 <tr>
                     <th>Second</th>
                     <th>WPM</th>
-                    <th>Accuracy</th>
                     <th>Errors</th>
                 </tr>
             </thead>
@@ -30,7 +29,6 @@
                 <tr *ngFor="let data of testData.secondsData">
                     <td>{{ data.second }}</td>
                     <td>{{ data.wordsPerMinute }}</td>
-                    <td>{{ data.accuracy }}%</td>
                     <td>{{ data.errors }}</td>
                 </tr>
             </tbody>

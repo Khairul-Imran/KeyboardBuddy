@@ -143,6 +143,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
     this.stopTimer() // Stop timer if you reset the test.
     this.elapsedTime = 0;
+    this.secondsData = [];
     this.typedCharacters = [];
 
     this.setUserFocus();
@@ -516,30 +517,41 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   // ------------------------ Results-related methods ------------------------
 
   startTimer() {
+    this.elapsedTime = 0;
+
+    setTimeout(() => {
+
+      const wpm = this.perSecondWpmCalculator(this.elapsedTime);
+  
+      // To capture the data for 0 seconds
+      const ZeroSecondsData: SecondsData = {
+        second: this.elapsedTime,
+        wordsPerMinute: wpm,
+        errors: 0
+      };
+
+      this.secondsData.push(ZeroSecondsData);
+    }, 999);
+
+
     this.interval = setInterval(() => {
       this.elapsedTime++;
 
       // Seconds calculations
       const wpm = this.perSecondWpmCalculator(this.elapsedTime);
-      const accuracy = this.perSecondAccuracyCalculator();
-      // const totalErrors = this.perSecondErrorsCalculator();
-      // const errorsInCurrentSecond = totalErrors - this.pastErrors;
 
       const currentSecondsData: SecondsData = {
         second: this.elapsedTime,
         wordsPerMinute: wpm,
-        accuracy: accuracy,
         errors: 0
-        // errors: errorsInCurrentSecond
       }
-
-      // this.pastErrors = totalErrors;
 
       console.info("SECONDS DATA - second: ", currentSecondsData.second);
       console.info("SECONDS DATA - wpm: ", currentSecondsData.wordsPerMinute);
-      console.info("SECONDS DATA - accuracy: ", currentSecondsData.accuracy);
       console.info("SECONDS DATA - errors: ", currentSecondsData.errors);
       this.secondsData.push(currentSecondsData);
+
+      // this.elapsedTime++;
     }, 1000)
   };
 
@@ -551,60 +563,33 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   perSecondWpmCalculator(elapsedTime: number): number {
     const allCharactersTyped = this.typedCharacters.length;
-    let allCharactersTypedWrongly = 0;
+    // let allCharactersTypedWrongly = 0;
 
     // Finding the letters typed wrongly.
-    for (let char of this.typedCharacters) {
-      if (char.correct === false) {
-        allCharactersTypedWrongly++;
-      }
-    }
-
-    let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
-    // if (wpm < 0) {
-    //   wpm = 0;
-    // }
-
-    return wpm;
-  }
-
-  perSecondAccuracyCalculator(): number {
-    const allCharactersTyped = this.typedCharacters.length;
-    let allCharactersTypedCorrectly = 0;
-
-    for (let char of this.typedCharacters) {
-      if (char.correct === true) {
-        allCharactersTypedCorrectly++;
-      }
-    }
-    
-    const accuracy = Math.round(allCharactersTypedCorrectly / allCharactersTyped * 100);
-
-    return accuracy;
-  }
-
-  // Only counting errors that are left behind, not those that are corrected by the user!
-  perSecondErrorsCalculator() {
-    // let errors = 0;
-
-    for (let char of this.typedCharacters) {
-      if (char.correct === false) {
-        // errors++;
-      }
-    }
-
-    // for (let i = 0; i < this.typedCharacters.length; i ++) {
-    //   if (this.typedCharacters[i].character !== this.wordsFromPromise[this.currentWordIndex].letters[i].character) {
-    //     console.info("typed: ", this.typedCharacters[i].character);
-    //     console.info("displayed: ", this.wordsFromPromise[this.currentWordIndex].letters[i].character);
-    //     errors++;
+    // for (let char of this.typedCharacters) {
+    //   if (char.correct === false) {
+    //     allCharactersTypedWrongly++;
     //   }
     // }
 
+    let wpm = 0;
 
-    // return errors; // This is the cumulative value.
+    if (elapsedTime === 0) {
+      if (allCharactersTyped > 0) {
+        wpm = Math.round(((allCharactersTyped / 5)) / (1 / 60)); // testing without /5
+      } 
+      else {
+        wpm = 0;
+      }
+    } else {
+      wpm = Math.round(((allCharactersTyped / 5)) / (elapsedTime / 60)); // WPM calculation
+    }
 
+    // let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
+    // let wpm = Math.round((allCharactersTyped / 5) / (elapsedTime / 60)); // WPM calculation
+    wpm = Math.max(0, wpm);
 
+    return wpm; 
   }
 
   overallWpmCalculator(elapsedTime: number): number { // Calculating overall net wpm
@@ -612,26 +597,33 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     let allCharactersTyped = 0; // Regardless right or wrong.
     let allCharactersTypedWrongly = 0; // Wrong only
 
-    for (let word of this.wordsFromPromise) { // Accessing each word
-      for (let char of word.letters) {  // Accessing each letter in word
+    // for (let word of this.wordsFromPromise) { // Accessing each word
+    //   for (let char of word.letters) {  // Accessing each letter in word
 
-        if (char.untouched === false) {
-          allCharactersTyped++;
-        }
+    //     if (char.untouched === false) {
+    //       allCharactersTyped++;
+    //     }
 
-        if (char.untouched === false && char.correct === false) {
-          allCharactersTypedWrongly++;
-        }
+    //     if (char.untouched === false && char.correct === false) {
+    //       allCharactersTypedWrongly++;
+    //     }
+    //   }
+    // }
+
+    // Trying to use typedCharacters instead
+    for (let letter of this.typedCharacters) {
+      if (!letter.correct) {
+        allCharactersTypedWrongly++;
       }
     }
+    allCharactersTyped = this.typedCharacters.length;
 
     console.info("WPM: Number of typed characters: ", allCharactersTyped);
     console.info("WPM: Number of wrong characters: ", allCharactersTypedWrongly);
 
-    let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
-    // if (wpm < 0) {
-    //   wpm = 0;
-    // }
+    // let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
+    let wpm = Math.round((allCharactersTyped / 5) / (elapsedTime / 60)); // WPM calculation
+    wpm = Math.max(0, wpm);
 
     return wpm;
   }
@@ -705,7 +697,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     // this.testDataService.setOverallWpm(overallWpm);
     // this.testDataService.setAccuracy(accuracy);
 
-    // Insert setErrorsData here!!!
+    // Gives secondsData the updated errors numbers.
     this.setErrorsData(this.secondsData);
 
 
@@ -725,6 +717,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     // Reset
     this.resetTestData()
     this.secondsData = [];
+    this.typedCharacters = [];
     this.elapsedTime = 0;
     this.pastErrors = 0;
     // Testing
@@ -735,31 +728,21 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   // To iterate through the array to update the errors.
   // With the errors from typedCharacters array.
   setErrorsData(secondsData: SecondsData[]) {
-    
+
     // Count the number of errors for each second interval
     // <second interval, error count>
     const errorTrackerMap = new Map<number, number>();
 
     this.typedCharacters.forEach(letter => {
       if (!letter.correct) {
-        const second = letter.second < 1 ? 1 : Math.floor(letter.second); // Combine results for seconds 0 and 1
-        const count = errorTrackerMap.get(second) || 0;
-        errorTrackerMap.set(second, count + 1);
+        const count = errorTrackerMap.get(letter.second) || 0;
+        errorTrackerMap.set(letter.second, count + 1);
       }
     });
 
-    // Update the SecondsData[]'s errors property
     secondsData.forEach(individualSecondsData => {
       const errorCount = errorTrackerMap.get(individualSecondsData.second) || 0;
-      // individualSecondsData.errors = errorCount;
-
-      if (individualSecondsData.second === 1) {
-        const errorCountSecond0 = errorTrackerMap.get(0) || 0;
-        individualSecondsData.errors = errorCount + errorCountSecond0;
-      } else {
-        individualSecondsData.errors = errorCount;
-      }
-
+      individualSecondsData.errors = errorCount;
     });
   }
 
