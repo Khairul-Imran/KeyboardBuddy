@@ -162,24 +162,24 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
     // ------------------------ Insert Finishing Conditions here ------------------------
 
-    if (userInput === ' ' && this.currentWordIndex === this.wordsFromPromise.length - 1) { // If at the last word
-      if (this.currentLetterIndex === this.wordsFromPromise[this.currentWordIndex].letters.length - 1 && 
-        this.wordsFromPromise[this.currentWordIndex].letters[this.currentLetterIndex].untouched === false) { // If last word has been typed
+    // if (userInput === ' ' && this.currentWordIndex === this.wordsFromPromise.length - 1) { // If at the last word
+    //   if (this.currentLetterIndex === this.wordsFromPromise[this.currentWordIndex].letters.length - 1 && 
+    //     this.wordsFromPromise[this.currentWordIndex].letters[this.currentLetterIndex].untouched === false) { // If last word has been typed
           
-          // If the last word is wrong -> underline
-          this.wordsFromPromise[this.currentWordIndex].fullyCorrect = false;
-          this.wordsFromPromise[this.currentWordIndex].untouched = false;
+    //       // If the last word is wrong -> underline
+    //       this.wordsFromPromise[this.currentWordIndex].fullyCorrect = false;
+    //       this.wordsFromPromise[this.currentWordIndex].untouched = false;
     
-          this.testFinished = true;
-          console.info("You have finished the test: ", this.testFinished);
-          console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+    //       this.testFinished = true;
+    //       console.info("You have finished the test: ", this.testFinished);
+    //       console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
     
-          this.endTypingTest();// Added this 3 apr
+    //       this.endTypingTest();// Added this 3 apr
     
-          this.goToResultsComponent(); // Added this
-          return;
-      }
-    }
+    //       this.goToResultsComponent(); // Added this
+    //       return;
+    //   }
+    // }
     // ------------------------Insert Finishing Conditions here------------------------
 
 
@@ -283,22 +283,37 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           // this.typedCharacters.push(currentLetter); // Just added 3 apr
           this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
 
-          // ------------------------ Another finishing condition here. ------------------------
-          // To auto finish if the user typed the last word CORRECTLY.
-          if (this.isLastWord(currentWord) && this.hasFalseLetter(currentWord) === false) {
-            currentWord.fullyCorrect = true;
+          // -------------------------- Finishing condition - if last word is correct / wrong --------------------------
 
-            this.testFinished = true;
-            // console.info("You have finished the test: ", this.testFinished);
-            // console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
-            this.updateCaret();
+          if (this.isLastWord(currentWord)) {
+            if (this.hasFalseLetter(currentWord) === false) { // Last word is correct && Last letter correct
+              currentWord.fullyCorrect = true;
 
-            this.endTypingTest();
+              console.info("You have finished the test: ", this.testFinished);
+              console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+              
+              this.testFinished = true;
+              this.updateCaret();
+              this.endTypingTest();
+              this.goToResultsComponent();
+              return;
 
-            this.goToResultsComponent(); // added this
-            return;
+            } else { // Last word is wrong && Last letter correct
+              currentWord.fullyCorrect = false;
+              currentWord.untouched = false;
+
+              console.info("You have finished the test: ", this.testFinished);
+              console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+                
+              this.testFinished = true;
+              this.updateCaret();
+              this.endTypingTest();
+              this.goToResultsComponent();
+              return;
+            }
           }
-          // ------------------------ Another finishing condition here. ------------------------
+
+          // -------------------------- Finishing condition - if last word is correct / wrong --------------------------
 
         } else {
           currentLetter.untouched = false;
@@ -307,6 +322,26 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           console.log("Hey, you have a mistake here!!!!!!!!")
           // this.typedCharacters.push(currentLetter); // Just added 3 apr
           this.typedCharacters.push({ character: currentLetter.character, correct: currentLetter.correct, second: this.elapsedTime});
+
+          // -------------------------- Finishing condition - if last word is wrong && last letter wrong--------------------------
+        
+          if (this.isLastWord(currentWord)) {
+            if (this.hasFalseLetter(currentWord) === true) { // Last word is false.
+              currentWord.fullyCorrect = false;
+              currentWord.untouched = false;
+
+              console.info("You have finished the test: ", this.testFinished);
+              console.log("YOU HAVE FINISHED THE TEST!!!! YAYYYYYYYYY");
+                
+              this.testFinished = true;
+              this.updateCaret();
+              this.endTypingTest();
+              this.goToResultsComponent();
+              return;
+            }
+          }
+
+          // -------------------------- Finishing condition - if last word is wrong && last letter wrong --------------------------
         }
       }
       
@@ -519,39 +554,27 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   startTimer() {
     this.elapsedTime = 0;
 
-    setTimeout(() => {
+    const ZeroSecondsData: SecondsData = {
+      second: this.elapsedTime,
+      wordsPerMinute: 0,
+      errors: 0
+    };
 
-      const wpm = this.perSecondWpmCalculator(this.elapsedTime);
-  
-      // To capture the data for 0 seconds
-      const ZeroSecondsData: SecondsData = {
-        second: this.elapsedTime,
-        wordsPerMinute: wpm,
-        errors: 0
-      };
-
-      this.secondsData.push(ZeroSecondsData);
-    }, 999);
-
+    this.secondsData.push(ZeroSecondsData);
 
     this.interval = setInterval(() => {
       this.elapsedTime++;
 
-      // Seconds calculations
-      const wpm = this.perSecondWpmCalculator(this.elapsedTime);
-
       const currentSecondsData: SecondsData = {
         second: this.elapsedTime,
-        wordsPerMinute: wpm,
+        wordsPerMinute: 0,
         errors: 0
-      }
+      };
 
       console.info("SECONDS DATA - second: ", currentSecondsData.second);
-      console.info("SECONDS DATA - wpm: ", currentSecondsData.wordsPerMinute);
       console.info("SECONDS DATA - errors: ", currentSecondsData.errors);
       this.secondsData.push(currentSecondsData);
 
-      // this.elapsedTime++;
     }, 1000)
   };
 
@@ -561,56 +584,23 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   // ---------------------- Calculations ---------------------- //
 
-  perSecondWpmCalculator(elapsedTime: number): number {
-    const allCharactersTyped = this.typedCharacters.length;
-    // let allCharactersTypedWrongly = 0;
+  perSecondWpmCalculator(allCharactersTyped: number, allCharactersTypedWrongly: number) {
+    let errorPenalty = 0.2;
 
-    // Finding the letters typed wrongly.
-    // for (let char of this.typedCharacters) {
-    //   if (char.correct === false) {
-    //     allCharactersTypedWrongly++;
-    //   }
-    // }
+    console.info("allCharsTyped: ", allCharactersTyped);
+    console.info("allCharsTypedWrongly: ", allCharactersTypedWrongly);
 
-    let wpm = 0;
-
-    if (elapsedTime === 0) {
-      if (allCharactersTyped > 0) {
-        wpm = Math.round(((allCharactersTyped / 5)) / (1 / 60)); // testing without /5
-      } 
-      else {
-        wpm = 0;
-      }
-    } else {
-      wpm = Math.round(((allCharactersTyped / 5)) / (elapsedTime / 60)); // WPM calculation
-    }
-
-    // let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
-    // let wpm = Math.round((allCharactersTyped / 5) / (elapsedTime / 60)); // WPM calculation
+    let wpm = Math.round(((allCharactersTyped / 5) - (allCharactersTypedWrongly * errorPenalty)) / (1 / 60)); // WPM calculation with penalty
     wpm = Math.max(0, wpm);
 
-    return wpm; 
+    return wpm;
   }
 
-  overallWpmCalculator(elapsedTime: number): number { // Calculating overall net wpm
+  overallWpmCalculator(elapsedTime: number): number {
+    let allCharactersTyped = 0;
+    let allCharactersTypedWrongly = 0;
+    let errorPenalty = 0.3;
 
-    let allCharactersTyped = 0; // Regardless right or wrong.
-    let allCharactersTypedWrongly = 0; // Wrong only
-
-    // for (let word of this.wordsFromPromise) { // Accessing each word
-    //   for (let char of word.letters) {  // Accessing each letter in word
-
-    //     if (char.untouched === false) {
-    //       allCharactersTyped++;
-    //     }
-
-    //     if (char.untouched === false && char.correct === false) {
-    //       allCharactersTypedWrongly++;
-    //     }
-    //   }
-    // }
-
-    // Trying to use typedCharacters instead
     for (let letter of this.typedCharacters) {
       if (!letter.correct) {
         allCharactersTypedWrongly++;
@@ -618,37 +608,30 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     }
     allCharactersTyped = this.typedCharacters.length;
 
-    console.info("WPM: Number of typed characters: ", allCharactersTyped);
-    console.info("WPM: Number of wrong characters: ", allCharactersTypedWrongly);
+    console.info("Overall WPM: Number of typed characters: ", allCharactersTyped);
+    console.info("Overall WPM: Number of wrong characters: ", allCharactersTypedWrongly);
 
-    // let wpm = Math.round(((allCharactersTyped / 5) - allCharactersTypedWrongly)/ (elapsedTime / 60)); // Net WPM calculation
-    let wpm = Math.round((allCharactersTyped / 5) / (elapsedTime / 60)); // WPM calculation
+    let wpm = Math.round(((allCharactersTyped / 5) - (allCharactersTypedWrongly * errorPenalty))/ (elapsedTime / 60)); // WPM calculation with penalty
     wpm = Math.max(0, wpm);
 
     return wpm;
   }
 
   overallAccuracyCalculator(): number {
-    let allCharactersTyped = 0; // Regardless right or wrong.
-    let allCharactersTypedCorrectly = 0; // Correct only
+    let allCharactersTyped = 0;
+    let allCharactersTypedCorrectly = 0;
 
-    for (let word of this.wordsFromPromise) { // Accessing each word
-      for (let char of word.letters) {  // Accessing each letter in word
-
-        if (char.untouched === false) {
-          allCharactersTyped++;
-        }
-
-        if (char.untouched === false && char.correct === true) {
-          allCharactersTypedCorrectly++;
-        }
+    for (let letter of this.typedCharacters) {
+      if (letter.correct) {
+        allCharactersTypedCorrectly++;
       }
     }
+    allCharactersTyped = this.typedCharacters.length;
 
     console.info("Accuracy: Number of correct characters ", allCharactersTypedCorrectly);
     console.info("Accuracy: Number of typed characters ", allCharactersTyped);
 
-    const accuracy = Math.round(allCharactersTypedCorrectly / allCharactersTyped * 100);
+    const accuracy = Math.round((allCharactersTypedCorrectly / allCharactersTyped) * 100);
 
     return accuracy;
   }
@@ -684,21 +667,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     console.info("Overall accuracy: ", accuracy);
 
 
-    
     // Do something****
-    // Like send data to the TestData service. TODO!
-    // REMEMBER: test type need to include the type, how long, difficulty
-
-    // TODO: Remove this later.
-    // if (this.testType === 'words') {
-    //   this.testDataService.setTimeTaken(this.elapsedTime);
-    // }
-    // this.testDataService.setTestType(this.finalTestType);
-    // this.testDataService.setOverallWpm(overallWpm);
-    // this.testDataService.setAccuracy(accuracy);
-
     // Gives secondsData the updated errors numbers.
     this.setErrorsData(this.secondsData);
+    this.setPerSecondWpmData(this.secondsData);
 
 
     // Insert values into TestData.
@@ -744,6 +716,49 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       const errorCount = errorTrackerMap.get(individualSecondsData.second) || 0;
       individualSecondsData.errors = errorCount;
     });
+  }
+
+  setPerSecondWpmData (secondsData: SecondsData[]) {
+    // <second interval, wpm for that interval>
+    const wpmtrackerMap = new Map<number, number>();
+
+    let secondsInterval = 0; // For traversing through typedCharacters array.
+    let lastIndex = this.typedCharacters.length - 1;
+    let maximumSecondsInterval = this.typedCharacters[lastIndex].second;
+
+    let allCharactersTypedInTheSecond = 0;
+    let allCharactersTypedWronglyInTheSecond = 0;
+
+
+    while (secondsInterval <= maximumSecondsInterval) { // Instead of using this.elapsedTime
+
+      for (let char of this.typedCharacters) {
+        if (char.second === secondsInterval) { // Finding characters in the same interval
+          allCharactersTypedInTheSecond++;
+        }
+  
+        if (char.second === secondsInterval && !char.correct) { // If in the same interval AND typed wrongly
+          allCharactersTypedWronglyInTheSecond++;
+        }
+
+        // Finished iterating through the array for this interval
+      }
+
+      let wpm = this.perSecondWpmCalculator(allCharactersTypedInTheSecond, allCharactersTypedWronglyInTheSecond);
+      wpmtrackerMap.set(secondsInterval, wpm); // Updating the map
+      console.log(wpmtrackerMap);
+
+      secondsInterval++;
+      // Resetting.
+      allCharactersTypedInTheSecond = 0;
+      allCharactersTypedWronglyInTheSecond = 0;
+    }
+
+    // Assigns the calculated wpm to each second (inside secondsData).
+    secondsData.forEach(individualSecondsData => {
+      const wpm = wpmtrackerMap.get(individualSecondsData.second) || 0;
+      individualSecondsData.wordsPerMinute = wpm;
+    })
   }
 
   resetTestData() {
