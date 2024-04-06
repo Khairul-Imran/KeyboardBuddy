@@ -10,25 +10,6 @@ export class TestgeneratorService {
 
   private http = inject(HttpClient);
 
-  // // Time-based test
-  // getRandomWordsTest(testType: string, testDifficulty: string): Promise<Word[]> {
-  //   const params = new HttpParams()
-  //     .set('testType', testType)
-  //     .set('testDifficulty', testDifficulty);
-
-  //   return lastValueFrom(this.http.get<any>('/api/words', { params: params, responseType: 'json' }));
-  // }
-
-  // // Words-based test
-  // getRandomWordsTestLimited(testType: string, testDifficulty: string, limit: number): Promise<Word[]> {
-  //   const params = new HttpParams()
-  //     .set('testType', testType)
-  //     .set('testDifficulty', testDifficulty)
-  //     .set('limit', limit);
-
-  //   return lastValueFrom(this.http.get<any>('/api/words', { params: params, responseType: 'json' }));
-  // }
-
   // Time-based test
   // getRandomWordsTest(testType: string, testDifficulty: string): Observable<Word[]> {
   //   const params = new HttpParams()

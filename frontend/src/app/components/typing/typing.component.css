@@ -25,12 +25,6 @@
     margin-right: 1px;
 } */
 
-.word .trailing-letter {
-    color: #B22222;
-    margin-right: 4px;
-}
-
-
 .space {
     display: inline-block;
     width: 2px;
@@ -70,6 +64,29 @@
 .typing-container {
     position: relative;
 }
+
+/* Time */
+.typing-container-time {
+    position: relative;
+}
+
+.word-time {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 25px;
+    visibility: hidden;
+}
+
+.word-time span {
+    letter-spacing: -3px;
+}
+
+.word-time.visible {
+    visibility: visible;
+}
+
+
+
 
 .caret {
     background-color: black;

@@ -19,7 +19,7 @@ public class WordsRepository {
 
     // Time-based tests
     public List<WordStore> getEasyWordsRandomised() {
-        int limit = 20; // Manually setting limit.
+        int limit = 100; // Manually setting limit.
         long wordCount = mongoTemplate.estimatedCount("easywords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 
@@ -38,7 +38,7 @@ public class WordsRepository {
     }
 
     public List<WordStore> getHardWordsRandomised() {
-        int limit = 20; // Manually setting limit
+        int limit = 80; // Manually setting limit
         long wordCount = mongoTemplate.estimatedCount("hardwords");
         int randomSkipPoint = (int) (Math.random() * (wordCount - limit));
 
