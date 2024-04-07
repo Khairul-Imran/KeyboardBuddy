@@ -65,6 +65,9 @@
     position: relative;
 }
 
+
+
+
 /* Time */
 .typing-container-time {
     position: relative;
@@ -74,7 +77,7 @@
     display: inline-block;
     margin-right: 15px;
     font-size: 25px;
-    visibility: hidden;
+    visibility: hidden; /* New */
 }
 
 .word-time span {
@@ -82,7 +85,7 @@
 }
 
 .word-time.visible {
-    visibility: visible;
+    visibility: visible; /* New */
 }
 
 

@@ -6,6 +6,7 @@
         <div>
             <div class="typing-container" #typingContainerElement>
                 <ng-container *ngIf="wordsP$ | async as words">
+                <!-- <ng-container *ngIf="wordsFromPromise as words"> -->
                     <span class="word" *ngFor="let word of words; let i = index" 
                     [ngClass]="{
                         'correct-word': word.fullyCorrect, 
@@ -37,10 +38,12 @@
         <div>
             <div class="typing-container-time" #typingContainerElement>
                 <ng-container *ngIf="wordsP$ | async as words">
+                <!-- <ng-container *ngIf="wordsFromPromise as words"> -->
                     <span class="word-time" *ngFor="let word of words; let i = index" 
                     [ngClass]="{
                         'correct-word': word.fullyCorrect, 
-                        'incorrect-word': !word.fullyCorrect && !word.untouched
+                        'incorrect-word': !word.fullyCorrect && !word.untouched,
+                        'visible': i < visibleWords
                         }">
                         <span class="letter" *ngFor="let letter of word.letters" 
                         [ngClass]="{

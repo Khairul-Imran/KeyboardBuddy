@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren, inject } from '@angular/core';
 import { TestgeneratorService } from '../../testgenerator.service';
 import { Observable, Subscription, last, map } from 'rxjs';
 import { QuicksettingsService } from '../../quicksettings.service';
@@ -24,14 +24,20 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   @ViewChild('userInputElement') userInputElement!: ElementRef;
   anyMistakeTracker: boolean = false; // To track if even 1 mistake is made for the word.
   // To have a mistake counter too, to keep track of total errors?
-  
   @ViewChild('typingContainerElement') typingContainerElement!: ElementRef;
+
   caretPosition = 0;
   
   // words$!: Observable<Word[]>;
   wordsP$!: Promise<Word[]>;
   // wordsFromObservable: Word[] = [];
   wordsFromPromise: Word[] = [];
+  
+  // ------------------------ New ------------------------
+  
+  visibleWords: number = 0; // Newly added 7 Apr
+
+  // ------------------------ New ------------------------
 
   // To be received from the service.
   wordsFromPreviousTest: Word[] = [];
@@ -87,13 +93,6 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  // Ended up not using
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['testFinished'].currentValue === true && changes['testFinished']) {
-  //     console.log("onChanges: the test has been completed.");
-  //     this.goToResultsComponent();
-  //   }
-  // }
 
   generateNewTest() {
     console.log("Generating new test");
@@ -106,6 +105,9 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           console.info("Words to be inserted: ", words);
           this.wordsFromPromise = words;
           console.info("Words in the array: ", this.wordsFromPromise);
+
+          this.updateVisibility(); // Initial words to be displayed.
+
           return this.wordsFromPromise;
         })
         .catch(error => {
@@ -149,6 +151,35 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.setUserFocus();
   }
 
+  // ------------------------ New ------------------------
+
+  updateVisibility() {
+    console.info("Length of wordsFromPromise: ", this.wordsFromPromise.length);
+    this.visibleWords = Math.floor(this.wordsFromPromise.length * 0.25); // Calculating words to be visible at the beginning.
+    console.info("Number of words to be visible: ", this.visibleWords);
+  }
+
+  // Activated after each VALID (at the end of a word) spacebar
+  afterWordTyped() {
+    let typedWords: number = 0;
+
+    for (let word of this.wordsFromPromise) {
+      if (!word.untouched) {
+        typedWords++;
+      }
+    }
+
+    if (typedWords >= this.visibleWords * 0.6) { // After typedWords reaches a certain point
+      const nextMilestone = Math.min(Math.ceil((this.visibleWords + 1) / this.wordsFromPromise.length * 4) * 25, 100);
+      // const nextMilestone = Math.min((this.visibleWords + 25), 100);
+
+      this.visibleWords = Math.floor(this.wordsFromPromise.length * (nextMilestone / 100));
+    }
+  }
+
+
+  // ------------------------ New ------------------------
+
   onUserInput(event: KeyboardEvent) {
     // const userInput = (event.target as HTMLInputElement).value;
     const userInput = event.key;
@@ -190,7 +221,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     
 
     if (userInput === ' ') { // **** User entered space ****
-      // Reached the last letter of the word. >= to include the trailing letters.
+      // Reached the last letter of the word.
       if (this.currentLetterIndex === currentWord.letters.length - 1 && !currentLetter.untouched) {
 
         // console.info("Before space - current letter index: ", this.currentLetterIndex);
@@ -211,6 +242,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           // If no errors
           currentWord.fullyCorrect = true;
           currentWord.untouched = false;
+
+          this.afterWordTyped(); // ************************ Added this ************************
 
           // Reset for the next word.
           this.currentWordIndex++;
@@ -518,6 +551,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
     console.log("You are now navigating to the results page!");
     this.router.navigate(['/results']);
+  }
+
+  determineProgress() {
+
   }
 
   // ------------------------ Results related properties ------------------------
