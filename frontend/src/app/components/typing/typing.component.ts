@@ -49,6 +49,28 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   // ------------------------ Results related properties ------------------------
 
+
+  // ---------------------------- Countdown ----------------------------
+
+  
+  // ngOnInit(): void {
+  //   this.subscription = this.quicksettingsService.countDown$.subscribe(testDuration => {
+  //     this.duration = testDuration;
+  //     this.remainingTime = testDuration;
+  //   });
+  // }
+  
+  // startTimer() {
+    
+  // }
+  
+  // stopTimer() {
+    
+  // }
+
+  // ---------------------------- Countdown ----------------------------
+  
+
   currentLetterIndex: number = 0;
   currentWordIndex: number = 0;
   testFinished: boolean = false; // New Apr 1
@@ -73,7 +95,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       this.testType = settings.testType;
       this.testDifficulty = settings.testDifficulty;
       this.testWordLimit = settings.testWordLimit;
-      this.testDuration = settings.testDuration;
+      this.testDuration = settings.testDuration; // For countdown too.
+
       console.log("Settings have changed: \n type: " + 
         this.testType + "\n difficulty: " + 
         this.testDifficulty + "\n word limit: " + 
@@ -83,6 +106,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       
       this.generateNewTest();
     })
+
+    this.remainingTime = this.testDuration; // Countdown
   }
   
   ngAfterViewInit(): void {
@@ -91,6 +116,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    // Countdown.
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
   }
 
 
@@ -148,6 +177,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.secondsData = [];
     this.typedCharacters = [];
 
+    clearInterval(this.countdownInterval); // For countdown
+    this.remainingTime = this.testDuration // For countdown
     this.setUserFocus();
   }
 
@@ -582,6 +613,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   pastErrors: number = 0;
 
   // Need to have a time limit for time-based tests
+  // Countdown
+  remainingTime = 0;
+  countdownInterval: any;
+
 
   // ------------------------ Results related properties ------------------------
 
@@ -600,17 +635,21 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.secondsData.push(ZeroSecondsData);
 
     this.interval = setInterval(() => {
-      this.elapsedTime++;
 
-      const currentSecondsData: SecondsData = {
-        second: this.elapsedTime,
-        wordsPerMinute: 0,
-        errors: 0
-      };
+      if (this.elapsedTime < this.testDuration) {
+        this.elapsedTime++;
+  
+        const currentSecondsData: SecondsData = {
+          second: this.elapsedTime,
+          wordsPerMinute: 0,
+          errors: 0
+        };
+  
+        console.info("SECONDS DATA - second: ", currentSecondsData.second);
+        console.info("SECONDS DATA - errors: ", currentSecondsData.errors);
+        this.secondsData.push(currentSecondsData);
 
-      console.info("SECONDS DATA - second: ", currentSecondsData.second);
-      console.info("SECONDS DATA - errors: ", currentSecondsData.errors);
-      this.secondsData.push(currentSecondsData);
+      }
 
     }, 1000)
   };
@@ -618,6 +657,29 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   stopTimer() {
     clearInterval(this.interval);
   }
+
+  // ----------------------- Countdown -----------------------
+
+  startCountdown() {
+    this.countdownInterval = setInterval(() => {
+      if (this.remainingTime > 0) {
+        this.remainingTime--;
+      } else {
+        console.log("Count down reached 0, stopping the countdown")
+        this.stopCountdown();
+      }
+      console.info("Remaining time: ", this.remainingTime);
+    }, 1000);
+  }
+
+  stopCountdown() {
+    console.log("Countdown has stopped, ending the typing test.")
+    this.endTypingTest();
+    clearInterval(this.countdownInterval);
+    this.goToResultsComponent();
+  }
+
+  // ----------------------- Countdown -----------------------
 
   // ---------------------- Calculations ---------------------- //
 
@@ -678,6 +740,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   startTypingTest() {
     console.log("TYPING TEST HAS STARTED!!!!!");
     this.startTimer();
+
+    if (this.testType === 'time') {
+      this.startCountdown(); // Countdown
+    }
   }
 
 
@@ -729,6 +795,7 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.typedCharacters = [];
     this.elapsedTime = 0;
     this.pastErrors = 0;
+    this.remainingTime = 0; // Countdown
     // Testing
     console.info("Words from promise: ", this.wordsFromPromise);
     // console.info("Displayed characters: ", this.displayedCharacters);

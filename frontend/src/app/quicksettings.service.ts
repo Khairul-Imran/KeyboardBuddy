@@ -39,6 +39,19 @@ export class QuicksettingsService {
     this.settingsSource.next(newSettings);
   }
 
+  // // -------------------------------- Countdown --------------------------------
+
+  // private countdownTimerSource = new BehaviorSubject<number>(0);
+
+  // countDown$: Observable<number> = this.countdownTimerSource.asObservable();
+
+  // sendUpdatedCountdown(number: number) {
+  //   this.countdownTimerSource.next(number);
+
+  // }
+
+  // // -------------------------------- Countdown --------------------------------
+
 
   // Getters and setters.
   public set testType(v : string) {
@@ -73,6 +86,7 @@ export class QuicksettingsService {
     console.info("From quicksettings service: Test duration has been set to: ", this.settings.testDuration);
 
     this.sendUpdatedSettings(this.settings);
+    // this.sendUpdatedCountdown(this.settings.testDuration); // New
   }
 
   public get testType() : string {

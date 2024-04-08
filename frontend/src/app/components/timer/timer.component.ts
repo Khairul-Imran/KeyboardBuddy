@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { QuicksettingsService } from '../../quicksettings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-timer',
@@ -7,7 +8,36 @@ import { QuicksettingsService } from '../../quicksettings.service';
   styleUrl: './timer.component.css'
 })
 export class TimerComponent {
-
+  
   private quicksettingsService = inject(QuicksettingsService);
+  private subscription!: Subscription;
+  
+  // MIGHT NOT NEED THIS COMPONENT
+
+
+  duration = 0;
+  remainingTime = 0;
+  interval: any;
+  
+  // ngOnInit(): void {
+  //   this.subscription = this.quicksettingsService.countDown$.subscribe(testDuration => {
+  //     this.duration = testDuration;
+  //     this.remainingTime = testDuration;
+  //   });
+  // }
+  
+  // startTimer() {
+
+  // }
+  
+  // stopTimer() {
+    
+  // }
+  
+  // ngOnDestroy(): void {
+
+  // }
+
+
 
 }
