@@ -9,7 +9,6 @@ create table users (
     username varchar(64) unique not null,
     email varchar(128) unique not null,
     password varchar(128) not null,
-    has_premium boolean default false,
 
     primary key(user_id)
 );
@@ -21,6 +20,7 @@ create table user_profiles (
     time_spent_typing int not null,
     current_streak int not null,
     selected_theme varchar(64),
+    has_premium boolean default false,
     user_id int not null,
 
     primary key(profile_id),

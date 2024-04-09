@@ -16,7 +16,6 @@ public class User {
     String username;
     String email;
     String password;
-    Boolean hasPremium; // Remember need to be able to tell whether this user has premium or not (component store?)
-
+    UserProfile userProfile;
 
 }

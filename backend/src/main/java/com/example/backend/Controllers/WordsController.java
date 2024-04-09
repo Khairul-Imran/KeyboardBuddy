@@ -16,9 +16,7 @@ import com.example.backend.Models.WordStore;
 import com.example.backend.Services.WordsService;
 
 import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200"})

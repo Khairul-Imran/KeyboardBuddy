@@ -14,9 +14,10 @@ public class UserProfile {
     Integer profileId; // PK
 
     Integer testsCompleted;
-    Time timeSpentTyping;
+    Integer timeSpentTyping;
     Integer currentStreak; // Consecutive days doing at least 1 test.
     String selectedTheme;
+    Boolean hasPremium;
     // Integer personalBestWpm;
     // TestData[] personalBestRecords; // -> made a new table
 
