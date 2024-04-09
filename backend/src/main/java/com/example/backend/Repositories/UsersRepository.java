@@ -2,11 +2,9 @@ package com.example.backend.Repositories;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -82,8 +80,28 @@ public class UsersRepository {
     }
 
 
-    // Delete user and userProfile -> another transaction
+    public boolean updateUserProfileAfterTest(UserProfile userProfile) {
+        System.out.println("Users Repo - Updating existing user profile: " + userProfile.toString());
 
+        int updateAttempt = 0;
+        updateAttempt = template.update(SQLQueries.SQL_UPDATE_USER_PROFILE_BY_USER_ID_FOR_AFTER_TESTS,
+            userProfile.getTestsCompleted(),
+            userProfile.getTimeSpentTyping(),
+            userProfile.getCurrentStreak(),
+            userProfile.getUserId() // Criteria
+        );
+
+        if (updateAttempt > 0) {
+            System.out.println("User Profile successfully updated.");
+            return true;
+        }
+
+        return false;
+    }
+
+    // TODO ******
+    // Need to update user profile for when hasPremium and selected theme changes......
+    // Streak will update (++) after a test is done (above method)
 
 
 

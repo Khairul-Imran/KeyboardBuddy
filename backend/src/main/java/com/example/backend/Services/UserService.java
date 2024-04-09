@@ -21,7 +21,6 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // Through HTTP
     // Create
     @Transactional (rollbackFor = UserException.class)
     public boolean createUser(User user) throws UserException {
@@ -54,24 +53,13 @@ public class UserService {
         return usersRepository.findUserProfileByUserId(userId);
     }
 
-    // Find test data and personal records
-
 
     // Delete -> If have time -> should delete user's data in all tables. (Transactional)
 
 
 
-
-    
-    // Through websockets
-    // Create test data and pesonal records
-    // If test data is the "high score", will create or UPDATE (if there is existing test type) a personal record too
-    // 
-
-
-
-    // Update -> mainly for updating the data in userProfile, and personal records
-    // Purely to be done through websockets.
+    // Update userProfile
+    // Update for selected theme and haspremium
 
 
 
