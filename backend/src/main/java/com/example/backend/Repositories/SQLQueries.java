@@ -68,4 +68,16 @@ public class SQLQueries {
                     where user_id = ?
                     """;
 
+    public static final String SQL_UPDATE_USER_PROFILE_BY_USER_ID_FOR_PREMIUM = """
+                    update user_profiles
+                    set has_premium = ?
+                    where user_id = ?
+                    """;
+
+    public static final String SQL_UPDATE_USER_PROFILE_BY_USER_ID_FOR_THEMES = """
+                    update user_profiles
+                    set selected_theme = ?
+                    where user_id = ?
+                    """;
+
 }

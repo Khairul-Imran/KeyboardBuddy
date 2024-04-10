@@ -22,7 +22,7 @@ public class TestDataService {
     @Autowired
     private UsersRepository usersRepository;
 
-    // Insert test data, user profile data and personal records after a test is done
+    // Insert test data, some user profile data and personal records data (if necessary) after a test is done
     @Transactional
     public void insertTestData(TestData testData) {
 
@@ -35,20 +35,22 @@ public class TestDataService {
 
             // Update that user profile with setters, then call the repo method to update
             existingUserProfile.setTestsCompleted(existingUserProfile.getTestsCompleted() + 1); // Increment by one
-            existingUserProfile.setTimeSpentTyping(testData.getTimeTaken());
-            existingUserProfile.setCurrentStreak(existingUserProfile.getCurrentStreak() + 1); // To change. Need to detect if done for the day or not.....
+            existingUserProfile.setTimeSpentTyping(existingUserProfile.getTimeSpentTyping() + testData.getTimeTaken()); // Add the time taken on the new test
+            // If......first test for the day -> streak + 1
+            // If......not the first test for the day -> maintain...
+            existingUserProfile.setCurrentStreak(existingUserProfile.getCurrentStreak() + 1); // To change. Need to detect if done for the day or not********
             
             usersRepository.updateUserProfileAfterTest(existingUserProfile);
         }
 
         // Update personal records if needed
         Optional<PersonalRecords> optionalPersonalRecord = testDataRepository.findPersonalRecordByUserIdAndTestType(testData.getUserId(), testData.getTestType());
-        if (optionalPersonalRecord.isPresent()) { // Personal Record for that test type exists
+        if (optionalPersonalRecord.isPresent()) { // Personal Record for that user and test type exists
             PersonalRecords personalRecord =  optionalPersonalRecord.get();
 
             if (testData.getWordsPerMinute() > personalRecord.getWordsPerMinute()) { // New test data has higher wpm score
                 // Updating the EXISTING personal record
-                personalRecord.setTestDate(new java.sql.Date(System.currentTimeMillis()));
+                personalRecord.setTestDate(new java.sql.Date(System.currentTimeMillis())); // Updates with the current date
                 personalRecord.setWordsPerMinute(testData.getWordsPerMinute());
                 personalRecord.setAccuracy(testData.getTimeTaken());
                 personalRecord.setTimeTaken(testData.getTimeTaken());
@@ -59,7 +61,7 @@ public class TestDataService {
 
             // If new wpm is not more than existing wpm, do nothing for PR.
 
-        } else { // Personal Record does not exist -> add it in
+        } else { // Personal Record does not exist -> add in a new one
 
             PersonalRecords personalRecordToAdd = new PersonalRecords();
             personalRecordToAdd.setTestType(testData.getTestType());
@@ -71,7 +73,6 @@ public class TestDataService {
             // Inserting brand new PR
             testDataRepository.insertPersonalRecord(personalRecordToAdd);
         }
-
     }
 
     // Find test data and personal records

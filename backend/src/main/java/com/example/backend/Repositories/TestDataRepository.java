@@ -83,9 +83,7 @@ public class TestDataRepository {
         return template.query(SQLQueries.SQL_GET_PERSONAL_RECORD_BY_USER_ID_AND_TEST_TYPE, new PersonalRecordsRowMapper(), userId, testType).stream().findFirst();
     }
 
-
-    // Keep in mind, when updating the personal records, it should be updating instead of creating right? since we don't need a new personal_record_id?
-    // Not sure if should leave this as void or not....
+    // Update personal record
     public boolean updatePersonalRecord(PersonalRecords personalRecords) {
         System.out.println("Test Data Repo - Updating existing personal record with new record: " + personalRecords.toString());
 

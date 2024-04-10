@@ -103,9 +103,39 @@ public class UsersRepository {
     // Need to update user profile for when hasPremium and selected theme changes......
     // Streak will update (++) after a test is done (above method)
 
+    public boolean updateUserProfileForThemes(UserProfile userProfile) {
+        System.out.println("Users Repo - Updating existing user profile's selected theme: " + userProfile.toString());
 
+        int updateAttempt = 0;
+        updateAttempt = template.update(SQLQueries.SQL_UPDATE_USER_PROFILE_BY_USER_ID_FOR_THEMES,
+            userProfile.getSelectedTheme(),
+            userProfile.getUserId() // Criteria  
+        );
 
+        if (updateAttempt > 0) {
+            System.out.println("User theme successfully updated.");
+            return true;
+        }
 
+        return false;
+    }
+
+    public boolean updateUserProfileForPremium(UserProfile userProfile) {
+        System.out.println("Users Repo - Updating existing user profile's premium status: " + userProfile.toString());
+
+        int updateAttempt = 0;
+        updateAttempt = template.update(SQLQueries.SQL_UPDATE_USER_PROFILE_BY_USER_ID_FOR_PREMIUM,
+            userProfile.getHasPremium(),
+            userProfile.getUserId() // Criteria
+        );
+
+        if (updateAttempt > 0) {
+            System.out.println("User premium status successfully updated.");
+            return true;
+        }
+
+        return false;
+    }
 
     // Static methods.
     private static class UserRowMapper implements RowMapper<User> {
