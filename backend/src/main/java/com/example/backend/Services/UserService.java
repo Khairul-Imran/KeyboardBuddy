@@ -38,6 +38,15 @@ public class UserService {
         return result;
     }
 
+    // Check if email and username exists
+    public boolean isEmailRegistered(String email) {
+        return usersRepository.findUserByEmail(email).isPresent();
+    }
+
+    public boolean isUsernameUsed(String username) {
+        return usersRepository.findUserByUsername(username).isPresent();
+    }
+
     // Find user
     public Optional<User> authenticateUserLogin(String email, String password) {
         Optional<User> userCheck = usersRepository.findUserByEmail(email);
@@ -83,11 +92,8 @@ public class UserService {
             throw new ProfileNotFoundException("Profile not found for User ID: " + userId);
         }
     }
-    
-    
+        
     // Delete -> If have time -> should delete user's data in all tables. (Transactional)
 
 
-
-    
 }

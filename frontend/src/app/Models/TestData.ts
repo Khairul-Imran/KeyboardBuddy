@@ -1,5 +1,5 @@
 export interface TestData {
-    // testId: number;
+    // testDataId: number;
     // date: Date;
     testType: string; // E.g. time 15 easy (type / how long / difficulty)
     wordsPerMinute: number;

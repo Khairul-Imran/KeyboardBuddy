@@ -1,9 +1,67 @@
 <h1>This is the login component!</h1>
 
-<button [routerLink]="['/profile']"> Login </button>
-
-<button>Register</button>
+<!-- <button [routerLink]="['/profile']"> Login </button> -->
 
 <p>You should only see this page if you haven't logged in yet, and you pressed the profile button.</p>
 <p>or if you've just logged out. If user just logged out, show some kind of notice message.</p>
 <p>login form will appear here</p>
+
+
+<div>
+    <div>Register</div>
+
+    <form [formGroup]="registrationForm" (submit)="submitUserRegistrationForm()">
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td>
+                    <input type="text" size="30" placeholder="username" formControlName="username">
+                </td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td>
+                    <input type="text" size="30" placeholder="email" formControlName="email">
+                </td>
+            </tr>
+            <tr>
+                <td>Password: </td>
+                <td>
+                    <input type="text" size="30" placeholder="password" formControlName="password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" [disabled]="registrationForm.invalid">Sign Up</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+<div>
+    <div>Login</div>
+
+    <form [formGroup]="loginForm" (submit)="submitUserLoginForm()">
+        <table>
+            <tr>
+                <td>Email: </td>
+                <td>
+                    <input type="text" size="30" placeholder="email" formControlName="email">
+                </td>
+            </tr>
+            <tr>
+                <td>Password: </td>
+                <td>
+                    <input type="text" size="30" placeholder="password" formControlName="password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

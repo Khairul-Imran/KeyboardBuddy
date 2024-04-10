@@ -1,8 +1,31 @@
 <h1>This is the profile component!</h1>
 
 <button [routerLink]="['/login']"> Logout </button>
-<p>Logout button sends the user to the login page</p>
+<p>Logout button sends the user to the login page. Needs to be changed, to use a method to confirm the user logs out.***</p>
 
 <p>The profile button should reflect the users name if logged in.</p>
 <p>Your user profile will appear here</p>
 <p>If user is not logged in, will route them to the login page</p>
+
+<div *ngIf="testData$ | async as testData; else loading">
+    <div *ngIf="testData.length > 0; else noTestData">
+        <div *ngFor="let data of testData">
+            <!-- To be shown in rows, instead of columns, tomorrow settle these.... -->
+            <p>{{ data.testDate }}</p>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #loading>
+    <p>Loading.....</p>
+</ng-template>
+
+<ng-template #noTestData>
+    <p>You have not taken any tests yet.</p>
+</ng-template>
+
+<ng-template #noPersonalRecords>
+    <p>You have not taken any tests yet.</p>
+</ng-template>

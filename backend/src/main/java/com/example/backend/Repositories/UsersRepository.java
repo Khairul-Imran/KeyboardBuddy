@@ -73,11 +73,18 @@ public class UsersRepository {
         return template.query(SQLQueries.SQL_GET_USER_BY_EMAIL, new UserRowMapper(), email).stream().findFirst();
     }
 
+    public Optional<User> findUserByUsername(String username) {
+        System.out.println("Users Repo - Checking if email exists: " + username);
+
+        return template.query(SQLQueries.SQL_GET_USER_BY_USERNAME, new UserRowMapper(), username).stream().findFirst();
+    }
+
     public Optional<UserProfile> findUserProfileByUserId(Integer userId) {
         System.out.println("Users Repo - Finding user profile by user id: " + userId);
 
         return template.query(SQLQueries.SQL_GET_USER_PROFILE_BY_USER_ID, new UserProfileRowMapper(), userId).stream().findFirst();
     }
+
 
 
     public boolean updateUserProfileAfterTest(UserProfile userProfile) {

@@ -31,6 +31,11 @@ public class SQLQueries {
                     select * from users
                     where email = ?
                     """;
+    
+    public static final String SQL_GET_USER_BY_USERNAME = """
+                    select * from users        
+                    where username = ?
+                    """;
 
     public static final String SQL_GET_USER_PROFILE_BY_USER_ID = """
                     select * from user_profiles

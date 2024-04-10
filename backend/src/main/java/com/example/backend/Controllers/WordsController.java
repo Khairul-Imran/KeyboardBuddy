@@ -77,38 +77,4 @@ public class WordsController {
         return ResponseEntity.ok(wordsFormattedToJsonObject.toString());
     }
             
-            // // Time-based tests
-            // @GetMapping(path = "/easy-time")
-            // public ResponseEntity<String> getEasyWords() {
-            //     List<Word> words = wordsService.getEasyWords();
-        
-            //     String wordsFormatted = String.join(" ", words.stream()
-            //         .map(Word::getWord)
-            //         .collect(Collectors.toList()));
-        
-            //     if (wordsFormatted.isEmpty()) {
-            //         return ResponseEntity.status(404).body(
-            //             Json.createObjectBuilder().add("Message: ", "Cannot get easy words.").build().toString()
-            //         );
-            //     }
-                
-            //     return ResponseEntity.ok(wordsFormatted);
-            // }
-        
-            // @GetMapping(path = "/hard")
-            // public ResponseEntity<String> getHardWords() {
-            //     List<Word> words = wordsService.getHardWords();
-        
-            //     String wordsFormatted = String.join(" ", words.stream()
-            //         .map(Word::getWord)
-            //         .collect(Collectors.toList()));
-        
-            //     if (wordsFormatted.isEmpty()) {
-            //         return ResponseEntity.status(404).body(
-            //             Json.createObjectBuilder().add("Message: ", "Cannot get hard words.").build().toString()
-            //         );
-            //     }
-                
-            //     return ResponseEntity.ok(wordsFormatted);
-            // }
 }

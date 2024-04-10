@@ -22,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { QuicksettingsComponent } from './components/quicksettings/quicksettings.component';
 import { QuicksettingsService } from './quicksettings.service';
 import { TestDataService } from './test-data.service';
+import { UserDataService } from './user-data.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { TestDataService } from './test-data.service';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [ TestgeneratorService, QuicksettingsService, TestDataService ],
+  providers: [ TestgeneratorService, QuicksettingsService, TestDataService, UserDataService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
