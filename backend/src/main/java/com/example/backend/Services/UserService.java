@@ -24,7 +24,7 @@ public class UserService {
 
     // Create user and user profile
     @Transactional (rollbackFor = UserCreationException.class)
-    public boolean createUser(User user) throws UserCreationException {
+    public User createUser(User user) throws UserCreationException {
         // Hashing the password before storing
         String hash = passwordEncoder.encode(user.getPassword());
         user.setPassword(hash);
@@ -35,7 +35,15 @@ public class UserService {
             throw new UserCreationException("There is a user exception. Try creating a user again.");
         }
 
-        return result;
+        Optional<User> optionalInsertedUser = usersRepository.findUserByUsername(user.getUsername());
+        User insertedUser = optionalInsertedUser.get();
+        Optional<UserProfile> optionalUserProfile = usersRepository.findUserProfileByUserId(insertedUser.getUserId());
+        UserProfile insertedUserProfile = optionalUserProfile.get();
+        insertedUser.setUserProfile(insertedUserProfile);
+
+        System.out.println("Service: User and User Profile successfully created!");
+
+        return insertedUser;
     }
 
     // Check if email and username exists

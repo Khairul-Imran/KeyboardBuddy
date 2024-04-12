@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DEFAULT_LOGIN, DEFAULT_REGISTRATION, UserLogin, UserRegistration } from '../../Models/User';
+import { DEFAULT_LOGIN, DEFAULT_REGISTRATION, User, UserLogin, UserRegistration, UserSlice } from '../../Models/User';
 import { UserDataService } from '../../user-data.service';
+import { UserStoreService } from '../../user-store.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +12,12 @@ import { UserDataService } from '../../user-data.service';
 })
 export class LoginComponent implements OnInit {
 
+  // Registration and Login is done here
+
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private userDataService = inject(UserDataService);
+  private userStoreService = inject(UserStoreService);
   
   registrationForm!: FormGroup;
   loginForm!: FormGroup;
@@ -49,12 +53,31 @@ export class LoginComponent implements OnInit {
 
     this.userDataService.postUserRegistration(userRegistrationFromForm)
       .then(response => {
+        const user: User = {
+          userId: response.userId, 
+          joinedDate: response.joinedDate, 
+          username: response.username, 
+          email: response.email,
+          userProfile: {
+            profileId: response.userProfile.profileId, 
+            testsCompleted: response.userProfile.testsCompleted, 
+            timeSpentTyping: response.userProfile.timeSpentTyping, 
+            currentStreak: response.userProfile.currentStreak, 
+            selectedTheme: response.userProfile.selectedTheme, 
+            hasPremium: response.userProfile.hasPremium, 
+            userId: response.userProfile.userId
+          }
+        };
+
+        this.userStoreService.updateUserStore(user);
         console.info("Response: ", response);
-        this.router.navigate([]); // Do something here.... go where? user profile page?
+        this.router.navigate(['/profile']); // Need to include user data inside here?
       })
       .catch(response => {
         alert(`Error while registering: ${response.error.message}`);
       });
+
+      // this.submitUserLoginForm();
   }
 
   submitUserLoginForm() {
@@ -62,9 +85,11 @@ export class LoginComponent implements OnInit {
     console.info("Processing user login: ", userLoginFromForm);
 
     this.userDataService.postUserLogin(userLoginFromForm)
-      .then(response => {
-        console.info("Response: ", response);
-        this.router.navigate([]) // Do something here... go where? user profile page too?
+      .then(response => { // Assuming the response is the user data
+
+
+        console.info("Response: ", response); // Use this response
+        this.router.navigate(['/profile']); // Need to include user data inside here?
       })
       .catch(response => {
         alert(`Error while logging in: ${response.error.message}`);

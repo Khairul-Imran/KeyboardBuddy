@@ -77,10 +77,14 @@ public class TestDataService {
 
     // Find test data and personal records
     public Optional<List<TestData>> findAllTestDataByUserId(Integer userId) {
+        System.out.println("SERVICE - Finding test data...");
+
         return testDataRepository.findAllTestDataByUserId(userId);
     }
 
     public Optional<List<PersonalRecords>> findAllPersonalRecordsByUserId(Integer userId) {
+        System.out.println("SERVICE - finding personal records...");
+
         return testDataRepository.findAllPersonalRecordsByUserId(userId);
     }
 

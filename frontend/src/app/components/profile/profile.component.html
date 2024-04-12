@@ -7,14 +7,129 @@
 <p>Your user profile will appear here</p>
 <p>If user is not logged in, will route them to the login page</p>
 
-<div *ngIf="testData$ | async as testData; else loading">
-    <div *ngIf="testData.length > 0; else noTestData">
-        <div *ngFor="let data of testData">
-            <!-- To be shown in rows, instead of columns, tomorrow settle these.... -->
-            <p>{{ data.testDate }}</p>
-        </div>
-    </div>
+
+<h2>Profile</h2>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Joined Date:</th>
+                <th>Tests Completed</th>
+                <th>Time Spent Typing</th>
+                <th>Current Streak</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ userStore.username }}</td>
+                <td>{{ userStore.joinedDate }}</td>
+                <td>{{ userStore.userProfile.testsCompleted }}</td>
+                <td>{{ userStore.userProfile.timeSpentTyping }}</td>
+                <td>{{ userStore.userProfile.currentStreak }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+
+<!-- For now displaying records this way, if have time, change to the preferred way. -->
+<h2>Personal Records:</h2>
+<div *ngIf="timeBasedRecords.length > 0 else noPersonalRecords">
+    <h3>Time-Based Records</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Time Limit</th>
+                <th>Difficulty</th>
+                <th>Words Per Minute</th>
+                <th>Accuracy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let record of timeBasedRecords">
+                <td>{{ record.testDate }}</td>
+                <td>{{ record.timeLimit }}</td>
+                <td>{{ record.difficulty }}</td>
+                <td>{{ record.wordsPerMinute }}</td>
+                <td>{{ record.accuracy }}</td>
+            </tr>    
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="wordsBasedRecords.length > 0 else noPersonalRecords">
+    <h3>Words-Based Records</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Word Count</th>
+                <th>Difficulty</th>
+                <th>Words Per Minute</th>
+                <th>Accuracy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let record of wordsBasedRecords">
+                <td>{{ record.testDate }}</td>
+                <td>{{ record.wordCount }}</td>
+                <td>{{ record.difficulty }}</td>
+                <td>{{ record.wordsPerMinute }}</td>
+                <td>{{ record.accuracy }}</td>
+            </tr>    
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="quotesRecords.length > 0 else noPersonalRecords">
+    <h3>Quotes Records</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Date</th>
+                <th>Word Count</th>
+                <th>Words Per Minute</th>
+                <th>Accuracy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let record of quotesRecords">
+                <td>{{ record.testDate }}</td>
+                <td>{{ record.wordCount }}</td>
+                <td>{{ record.wordsPerMinute }}</td>
+                <td>{{ record.accuracy }}</td>
+            </tr>    
+        </tbody>
+    </table>
+</div>
+
+
+<table>
+    <h2>Test Data:</h2>
+    <thead>
+        <tr>
+            <th>Test Date</th>
+            <th>Test Type</th>
+            <th>Words Per Minute</th>
+            <th>Accuracy</th>
+            <th>Time Taken</th>
+        </tr>
+    </thead>
+    <!-- Remember to ensure that these are organised based on most recent. See the dates to verify -->
+    <tbody *ngIf="testData$ | async as testData; else loading">
+        <div *ngIf="testData.length > 0; else noTestData">
+            <tr *ngFor="let data of testData">
+                <td>{{ data.testDate }}</td>
+                <td>{{ data.testType }}</td>
+                <td>{{ data.wordsPerMinute }}</td>
+                <td>{{ data.accuracy }}</td>
+                <td>{{ data.timeTaken }}</td>
+            </tr>
+        </div>
+    </tbody>
+</table>
 
 
 
@@ -28,4 +143,8 @@
 
 <ng-template #noPersonalRecords>
     <p>You have not taken any tests yet.</p>
+</ng-template>
+
+<ng-template #noUserProfile>
+    <p>You don't have a profile. (Should not be able to see this!!!)</p>
 </ng-template>

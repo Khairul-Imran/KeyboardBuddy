@@ -23,6 +23,7 @@ import { QuicksettingsComponent } from './components/quicksettings/quicksettings
 import { QuicksettingsService } from './quicksettings.service';
 import { TestDataService } from './test-data.service';
 import { UserDataService } from './user-data.service';
+import { UserStoreService } from './user-store.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { UserDataService } from './user-data.service';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [ TestgeneratorService, QuicksettingsService, TestDataService, UserDataService ],
+  providers: [ TestgeneratorService, QuicksettingsService, TestDataService, UserDataService, UserStoreService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

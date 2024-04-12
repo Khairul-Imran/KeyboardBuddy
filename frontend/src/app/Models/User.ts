@@ -20,6 +20,16 @@ export const DEFAULT_LOGIN: UserLogin = {
     password: ''
 }
 
+export interface User {
+    userId: number;
+
+    joinedDate: Date; // Might change
+    username: string;
+    email: string;
+
+    userProfile: UserProfile;
+}
+
 export interface UserProfile {
     profileId: number;
 
@@ -30,6 +40,36 @@ export interface UserProfile {
     hasPremium: boolean;
 
     userId: number;
+}
+
+export interface UserSlice {
+    user: User;
+    // userProfile: UserProfile;
+}
+
+// export const USER_SLICE_INIT_STATE: UserSlice = {
+//     user: {
+//         userId: 0, 
+//         joinedDate: new Date(), 
+//         username: '', 
+//         email: ''}
+// }
+
+export const SLICE_INIT_STATE: UserSlice = {
+    user: {
+        userId: 0, 
+        joinedDate: new Date(), 
+        username: '', 
+        email: '',
+    userProfile: {
+        profileId: 0, 
+        testsCompleted: 0, 
+        timeSpentTyping: 0, 
+        currentStreak: 0, 
+        selectedTheme: '', 
+        hasPremium: false, 
+        userId: 0}
+    }
 }
 
 export interface DisplayedTestData {
@@ -52,6 +92,9 @@ export interface PersonalRecords {
     wordsPerMinute: number;
     accuracy: number;
     timeTaken: number;
+    difficulty?: string;
+    timeLimit?: string;
+    wordCount?: string;
 
     userId: number;
 }

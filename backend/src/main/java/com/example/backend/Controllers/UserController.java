@@ -25,9 +25,13 @@ import com.example.backend.Models.UserProfile;
 import com.example.backend.Services.TestDataService;
 import com.example.backend.Services.UserService;
 
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200"})
-@RequestMapping 
+@RequestMapping("/api")
 public class UserController {
     
     @Autowired
@@ -67,8 +71,14 @@ public class UserController {
         newUser.setUserProfile(newUserProfile);
 
         try {
-            userService.createUser(newUser); // Contains userProfile
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            System.out.println("Controller: Creating user: " + newUser.toString());
+            User insertedUser = userService.createUser(newUser);
+
+            System.out.println("CONTROLLER: we are converting to json: " + insertedUser);
+            JsonObject insertedUserInJson = insertedUser.toJson();
+
+            System.out.println("Controller: Returning to client....");
+            return ResponseEntity.status(HttpStatus.CREATED).body(insertedUserInJson.toString());
 
         } catch (UserCreationException e) {
 
@@ -77,48 +87,10 @@ public class UserController {
         }
     }
 
-    // Register
-    // @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<String> userRegistration(@RequestBody RegistrationRequest registrationRequest) {
-
-    //     if (userService.isUsernameUsed(registrationRequest.getUsername())) {
-    //         return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already being used.");
-    //     }
-
-    //     if (userService.isEmailRegistered((registrationRequest.getEmail()))) {
-    //         return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already being used.");
-    //     }
-        
-    //     // Username and email are not used.
-    //     User newUser = new User();
-    //     newUser.setUsername(registrationRequest.getUsername());
-    //     newUser.setEmail(registrationRequest.getEmail());
-    //     newUser.setPassword(registrationRequest.getPassword());
-
-    //     UserProfile newUserProfile = new UserProfile();
-    //     newUserProfile.setTestsCompleted(0);
-    //     newUserProfile.setTimeSpentTyping(0);
-    //     newUserProfile.setCurrentStreak(0);
-    //     newUserProfile.setSelectedTheme("");
-    //     // newUserProfile.setHasPremium(false); // SQL set by default false.
-
-    //     newUser.setUserProfile(newUserProfile);
-
-    //     try {
-    //         userService.createUser(newUser); // Contains userProfile
-    //         return ResponseEntity.status(HttpStatus.CREATED).build();
-
-    //     } catch (UserCreationException e) {
-
-    //         e.printStackTrace();
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while registering user.");
-    //     }
-    // }
-
     
     // Login
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> userLogin(@RequestBody String payload) {
+    public ResponseEntity<String> userLogin(@RequestBody String payload) {
         System.out.printf(">>> POST payload: %s\n", payload);
 
         LoginRequest loginRequest = LoginRequest.toLoginRequest(payload);
@@ -127,7 +99,11 @@ public class UserController {
             Optional<User> authenticateLoginAttempt = userService.authenticateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
     
             if (authenticateLoginAttempt.isPresent()) {
-                return ResponseEntity.ok(authenticateLoginAttempt.get());
+
+                User existingUser = authenticateLoginAttempt.get();
+                JsonObject existingUserInJson = existingUser.toJson();
+
+                return ResponseEntity.ok(existingUserInJson.toString());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
@@ -137,35 +113,19 @@ public class UserController {
     }
 
 
-    // Login
-    // @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<User> userLogin(@RequestBody LoginRequest loginRequest) {
-
-    //     try {
-    //         Optional<User> authenticateLoginAttempt = userService.authenticateUserLogin(loginRequest.getEmail(), loginRequest.getPassword());
-    
-    //         if (authenticateLoginAttempt.isPresent()) {
-    //             return ResponseEntity.ok(authenticateLoginAttempt.get());
-    //         } else {
-    //             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-    //         }
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    //     }
-    // }
-
-
 
     // Access user profile page (includes user profile, test data, and personal records)
     @GetMapping("/{userId}/userProfile")
-    public ResponseEntity<UserProfile> getUserProfile(@PathVariable Integer userId) {
+    public ResponseEntity<String> getUserProfile(@PathVariable Integer userId) {
         
         try {
             Optional<UserProfile> optionalUserProfile = userService.findUserProfileByUserId(userId);
 
             if (optionalUserProfile.isPresent()) {
                 UserProfile existingUserProfile = optionalUserProfile.get();
-                return ResponseEntity.ok(existingUserProfile);
+                JsonObject existingUserProfileInJson =  existingUserProfile.toJson();
+
+                return ResponseEntity.ok(existingUserProfileInJson.toString());
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -174,33 +134,56 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/testData")
-    public ResponseEntity<List<TestData>> getTestData(@PathVariable Integer userId) {
+    // @GetMapping("/{userId}/user")
+    // public ResponseEntity<User> getUser(@PathVariable Integer userId) {
+
+        // Shouldn't we be sending these get requests as a json string??
+
+    // }
+
+    @GetMapping("/testData/{userId}")
+    public ResponseEntity<String> getTestData(@PathVariable Integer userId) {
+
+        System.out.println("CONTROLLER - Start getting test data.....");
      
         try {
             Optional<List<TestData>> optionalTestData = testDataService.findAllTestDataByUserId(userId);
 
             if (optionalTestData.isPresent()) {
                 List<TestData> existingTestData = optionalTestData.get();
-                return ResponseEntity.ok(existingTestData);
+
+                JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                existingTestData.stream()
+                    .map(TestData::toJson)
+                    .forEach(arrayBuilder::add);
+
+                return ResponseEntity.ok(arrayBuilder.build().toString());
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.noContent().build();
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     
-    @GetMapping("/{userId}/personalRecords")
-    public ResponseEntity<List<PersonalRecords>> getPersonalRecords(@PathVariable Integer userId) {
+    @GetMapping("/personalRecords/{userId}")
+    public ResponseEntity<String> getPersonalRecords(@PathVariable Integer userId) {
+
+        System.out.println("CONTROLLER - Start getting personal records.....");
         
         try {
             Optional<List<PersonalRecords>> optionalPersonalRecords = testDataService.findAllPersonalRecordsByUserId(userId);
             if (optionalPersonalRecords.isPresent()) {
                 List<PersonalRecords> existingPersonalRecords = optionalPersonalRecords.get();
-                return ResponseEntity.ok(existingPersonalRecords);
+
+                JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                existingPersonalRecords.stream()
+                    .map(PersonalRecords::toJson)
+                    .forEach(arrayBuilder::add);
+
+                return ResponseEntity.ok(arrayBuilder.build().toString());
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.noContent().build();
             }
 
         } catch (Exception e) {

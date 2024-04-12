@@ -1,8 +1,12 @@
 package com.example.backend.Models;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
+import org.bson.Document;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +26,28 @@ public class TestData {
 
     Integer userId; // FK
 
-    // Include the dates of the tests too -> to add in angular side too.
+    public JsonObject toJson() {
+        return Json.createObjectBuilder()
+            .add("testDataId", getTestDataId())
+            .add("testDate", (JsonValue) getTestDate())
+            .add("testType", getTestType())
+            .add("wordsPerMinute", getWordsPerMinute())
+            .add("accuracy", getAccuracy())
+            .add("timeTaken", getTimeTaken())
+            .add("userId", getUserId())
+            .build();
+    }
 
+    public static TestData toTestData(Document document) {
+        TestData testData = new TestData();
+        testData.setTestDataId(document.getInteger("testDataId"));
+        testData.setTestDate((Date) document.getDate("testDate"));
+        testData.setTestType(document.getString("testType"));
+        testData.setWordsPerMinute(document.getInteger("wordsPerMinute"));
+        testData.setAccuracy(document.getInteger("accuracy"));
+        testData.setTimeTaken(document.getInteger("timeTaken"));
+        testData.setUserId(document.getInteger("userId"));
 
+        return testData;
+    }   
 }

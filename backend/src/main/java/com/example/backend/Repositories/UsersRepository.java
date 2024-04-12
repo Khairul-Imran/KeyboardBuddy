@@ -74,7 +74,7 @@ public class UsersRepository {
     }
 
     public Optional<User> findUserByUsername(String username) {
-        System.out.println("Users Repo - Checking if email exists: " + username);
+        System.out.println("Users Repo - Checking if username exists: " + username);
 
         return template.query(SQLQueries.SQL_GET_USER_BY_USERNAME, new UserRowMapper(), username).stream().findFirst();
     }
