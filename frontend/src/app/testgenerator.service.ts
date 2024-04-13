@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, lastValueFrom, map } from 'rxjs';
-import { Word } from './Models/Words';
+import { Letter, Quote, Word } from './Models/Words';
 
 @Injectable({
   providedIn: 'root'
@@ -51,4 +51,11 @@ export class TestgeneratorService {
         })
       ));
   }
+
+  // getQuoteTest(): Promise<Quote> {
+  //   return lastValueFrom(this.http.get<string>('/api/quotes', { responseType: 'json'}))
+  // }
+
+
+
 }

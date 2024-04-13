@@ -1,0 +1,92 @@
+h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.typing-results-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-test-buttons {
+    justify-content: center;
+    display: flex;
+    padding: 30px;
+}
+
+
+/* For presentation of words */
+.typing-test-container {
+    display: flex;
+    justify-content: center;
+}
+
+.word {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 25px;
+}
+
+.word span {
+    letter-spacing: -3px;
+}
+
+/* .letter {
+    display: inline-block;
+    margin-right: 1px;
+} */
+
+.word .trailing-letter {
+    color: #B22222;
+    margin-right: 4px;
+}
+
+
+.space {
+    display: inline-block;
+    width: 2px;
+}
+
+/* Conditional classes for letters */
+.untouched-letter {
+    color: #999;
+    opacity: 0.5;
+}
+
+.correct-letter {
+    color: green;
+    /* font-weight: bold; */
+}
+
+.incorrect-letter {
+    /* No underline */
+    color: red;
+    /* letter-spacing: 2px; */
+}
+
+/* For now we make it change to green, but might just leave it as white instead */
+.correct-word {
+    color: green;
+    /* font-weight: bold; */ /* Might be causing issues with the spacing for the caret */
+}
+
+/* Only want the word to be underlined, but the line must be red */
+.word.incorrect-word {
+    /* color: red; */
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: red;
+}
+
+.typing-container {
+    position: relative;
+}

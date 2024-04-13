@@ -581,7 +581,8 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.testDataService.setWordsFromPreviousTest(this.wordsFromPromise);
 
     console.log("You are now navigating to the results page!");
-    this.router.navigate(['/results']);
+    // this.router.navigate(['/results']);
+    this.router.navigate(['/standalone']); // TESTING THIS******
   }
 
   determineProgress() {

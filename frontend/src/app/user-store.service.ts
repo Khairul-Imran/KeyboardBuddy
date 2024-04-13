@@ -25,6 +25,7 @@ export class UserStoreService extends ComponentStore<User> {
     ...user
   }));
 
-
+  // Need to update for user logout too.
+  
 
 }

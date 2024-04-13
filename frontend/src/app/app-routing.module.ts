@@ -7,12 +7,14 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ResultsComponent } from './components/results/results.component';
 import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
 import { AboutComponent } from './components/about/about.component';
+import { StandaloneComponent } from './components/standalone/standalone.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent }, // View 0
   { path: 'login', component: LoginComponent }, // Login View
   { path: 'profile', component: ProfileComponent }, // Profile View
   { path: 'results', component: ResultsComponent }, // Results View
+  { path: 'standalone', component: StandaloneComponent}, // TESTING THIS********
   { path: 'settings', component: SettingsComponent }, // Settings View
   { path: 'about', component: AboutComponent }, // About View
   { path: 'leaderboards', component: LeaderboardsComponent }, // Leaderboards View

@@ -8,17 +8,17 @@ import { TestDataService } from '../../test-data.service';
 import { TestData, TypedLetter } from '../../Models/TestData';
 import { BaseChartDirective } from 'ng2-charts'; // Added this
 import { ChartDataset, ChartOptions } from 'chart.js';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
-  // standalone: true, // Added this
-  // imports: [BaseChartDirective], // Added this
-  selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrl: './results.component.css'
+  standalone: true,
+  imports: [BaseChartDirective, CommonModule],
+  selector: 'app-standalone',
+  templateUrl: './standalone.component.html',
+  styleUrl: './standalone.component.css'
 })
-export class ResultsComponent implements OnInit {
-  
+export class StandaloneComponent implements OnInit {
+
   private router = inject(Router);
   private testDataService = inject(TestDataService);
   
@@ -49,9 +49,9 @@ export class ResultsComponent implements OnInit {
     // Testing only
     this.typedCharacters = this.testDataService.getTypedCharacters();
 
-
-
-
+    this.generateChartData();
+    this.generateChartLabels();
+    this.generateChartOptions();
   }
 
   
@@ -65,15 +65,11 @@ export class ResultsComponent implements OnInit {
   }
 
   // Chart
-  generateChartLabels() {
-    this.chartLabels = this.testData.secondsData.map(data => data.second);
-  }
-
   generateChartData() {
     this.chartData = [
       {
         data: this.testData.secondsData.map(data => data.wordsPerMinute),
-        label: "Words per Minute",
+        label: "WPM",
         type: 'line',
         yAxisID: 'wpm-axis'
       }, 
@@ -81,35 +77,69 @@ export class ResultsComponent implements OnInit {
         data: this.testData.secondsData.map(data => data.errors),
         label: "Errors",
         type: 'line',
+        showLine: false,
         yAxisID: 'errors-axis',
-        pointStyle: 'cross',
-        pointRadius: 8,
-        showLine: false
+        pointStyle: 'crossRot',
+        pointRadius: (hasError) => {
+          const errors = hasError.dataset.data[hasError.dataIndex];
+          return typeof errors === 'number' && errors > 0 ? 8 : 0;
+        },
+        pointBorderWidth: 3
       }
     ];
   }
 
-  // generateChartOptions() {
-  //   this.chartOptions = {
-  //     responsive: true,
-  //     scales: {
-  //       xAxes: [{ scaleLabel: {display: true, labelString: 'Seconds'} }],
-  //       yAxes: [
-  //         {
-  //           id: 'wpm-axis',
-  //           position: 'left',
-  //           scaleLabel: {display: true, labelString: 'Words per Minute'},
-  //           ticks: { beginAtZero: true }
-  //         },
-  //         {
-  //           id: 'errors-axis',
-  //           position: 'right',
-  //           scaleLabel: { display: true, labelString: 'Errors' },
-  //           ticks: { beginAtZero: true, stepSize: 1 }
-  //         }
-  //       ]
-  //     }
-  //   }
-  // }
+  generateChartOptions() {
+    this.chartOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        tooltip: {
+          enabled: true
+        }
+      },
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Seconds'
+          }
+        },
+        'errors-axis': {
+          title: {
+            display: true,
+            text: 'Errors Made'
+          },
+          grid: {
+            display: false
+          },
+          position: 'right',
+          ticks: {
+            stepSize: 1
+          },
+          suggestedMax: 5,
+          beginAtZero: true
+        },
+        'wpm-axis': {
+          title: {
+            display: true,
+            text: 'WPM'
+          },
+          position: 'left',
+          beginAtZero: true
+        }
+      }
+    }
+  }
+
+  generateChartLabels() {
+    this.chartLabels = this.testData.secondsData.map(data => data.second);
+  }
 
 }

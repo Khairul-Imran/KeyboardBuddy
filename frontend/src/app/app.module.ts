@@ -24,6 +24,12 @@ import { QuicksettingsService } from './quicksettings.service';
 import { TestDataService } from './test-data.service';
 import { UserDataService } from './user-data.service';
 import { UserStoreService } from './user-store.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+// import { StandaloneComponent } from './components/standalone/standalone.component';
+
+
+// import { rxStompServiceFactory } from './rx-stomp-service-factory';
 
 @NgModule({
   declarations: [
@@ -40,15 +46,25 @@ import { UserStoreService } from './user-store.service';
     TimerComponent,
     LeaderboardsComponent,
     AboutComponent,
-    QuicksettingsComponent
+    QuicksettingsComponent,
+    // StandaloneComponent
   ],
   imports: [
     HttpClientModule,
     ReactiveFormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    
   ],
-  providers: [ TestgeneratorService, QuicksettingsService, TestDataService, UserDataService, UserStoreService ],
+  providers: [ 
+    TestgeneratorService, 
+    QuicksettingsService, 
+    TestDataService, 
+    UserDataService, 
+    UserStoreService,
+    RxStompService,
+    provideCharts(withDefaultRegisterables())
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
