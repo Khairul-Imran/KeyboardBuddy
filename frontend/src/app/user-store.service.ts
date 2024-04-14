@@ -14,6 +14,7 @@ export class UserStoreService extends ComponentStore<User> {
   
   private userDataService = inject(UserDataService);
   
+  // If store is empty, route user to registration/login page
   // ngrxOnStoreInit(): void {
 
   // }

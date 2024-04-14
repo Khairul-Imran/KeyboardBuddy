@@ -25,6 +25,7 @@ export class ProfileComponent implements OnInit {
   user$!: Promise<User>; // TODO!!!!
   userProfile$!: Promise<UserProfile>;
   testData$!: Promise<DisplayedTestData[]>;
+  testDataFromPromise!: DisplayedTestData[];
   personalRecords$!: Promise<PersonalRecords[]>;
 
   timeBasedRecords: PersonalRecords[] = [];
@@ -36,10 +37,21 @@ export class ProfileComponent implements OnInit {
       this.userStore = userFromStore;
     })
 
-    // this.userProfile$ = this.userDataService.getUserProfile(this.userId);
+    // this.userProfile$ = this.userDataService.getUserProfile(this.userId); -> don't need anymore
 
-    this.testData$ = this.userDataService.getTestData(this.userStore.userId);
-    this.getPersonalRecords();
+    this.testData$ = this.userDataService.getTestData(this.userStore.userId)
+      .then(testData => {
+        this.testDataFromPromise = testData;
+        return this.testDataFromPromise;
+      })
+      .catch(error => {
+        console.error("Error fetching test data: ", error);
+        return [];
+      });
+
+    if (this.userStore.userProfile.testsCompleted > 0) {
+      this.getPersonalRecords();
+    }
   }
 
   getPersonalRecords() {

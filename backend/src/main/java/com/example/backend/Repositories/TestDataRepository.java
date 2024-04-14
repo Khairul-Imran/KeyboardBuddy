@@ -126,7 +126,7 @@ public class TestDataRepository {
         @Override
         public PersonalRecords mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             PersonalRecords personalRecords = new PersonalRecords();
-            personalRecords.setPersonalRecordsId(resultSet.getInt("test_data_id"));
+            personalRecords.setPersonalRecordsId(resultSet.getInt("personal_records_id"));
             personalRecords.setTestDate(resultSet.getDate("test_date")); // Not sure if should use getDate here or timestamp
             personalRecords.setTestType(resultSet.getString("test_type"));            
             personalRecords.setWordsPerMinute(resultSet.getInt("words_per_minute"));

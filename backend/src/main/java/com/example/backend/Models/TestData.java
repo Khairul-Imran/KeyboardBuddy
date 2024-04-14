@@ -1,11 +1,16 @@
 package com.example.backend.Models;
 
+import java.io.StringReader;
 import java.sql.Date;
+import java.util.List;
 
 import org.bson.Document;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +34,7 @@ public class TestData {
     public JsonObject toJson() {
         return Json.createObjectBuilder()
             .add("testDataId", getTestDataId())
-            .add("testDate", (JsonValue) getTestDate())
+            .add("testDate", getTestDate().getTime())
             .add("testType", getTestType())
             .add("wordsPerMinute", getWordsPerMinute())
             .add("accuracy", getAccuracy())
@@ -49,5 +54,29 @@ public class TestData {
         testData.setUserId(document.getInteger("userId"));
 
         return testData;
-    }   
+    }
+
+    // public static JsonArray testDataListToJson(List<TestData> testDatas) {
+    //     JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+
+    //     System.out.println("Test Data Object class - Converting test data!!!");
+
+    //     for (TestData testData : testDatas) {
+    //         JsonObject testDataJson = Json.createObjectBuilder()
+    //             .add("testDataId", testData.getTestDataId())
+    //             .add("testDate", testData.getTestDate().getTime())
+    //             .add("testType", testData.getTestType())
+    //             .add("wordsPerMinute", testData.getWordsPerMinute())
+    //             .add("accuracy", testData.getAccuracy())
+    //             .add("timeTaken", testData.getTimeTaken())
+    //             .add("userId", testData.getUserId())
+    //             .build();
+    //         jsonArrayBuilder.add(testDataJson);
+    //     }
+    //     JsonArray jsonTestDataArray = jsonArrayBuilder.build();
+
+    //     System.out.println(jsonTestDataArray);
+
+    //     return jsonTestDataArray;
+    // }
 }

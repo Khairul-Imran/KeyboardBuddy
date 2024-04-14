@@ -60,6 +60,14 @@ public class UserService {
         Optional<User> userCheck = usersRepository.findUserByEmail(email);
         if (userCheck.isPresent()) {
             User user = userCheck.get();
+
+            // Need to populate the userProfile
+            Optional<UserProfile> optionalUserProfile = usersRepository.findUserProfileByUserId(user.getUserId());
+            if (optionalUserProfile.isPresent()) {
+                UserProfile userProfile = optionalUserProfile.get();
+                user.setUserProfile(userProfile);
+            }
+
             if (passwordEncoder.matches(password, user.getPassword())) {
                 return Optional.of(user);
             }
@@ -98,6 +106,26 @@ public class UserService {
             usersRepository.updateUserProfileForPremium(existingUserProfile);
         } else {
             throw new ProfileNotFoundException("Profile not found for User ID: " + userId);
+        }
+    }
+
+    // Update UserProfile (tests taken etc.)
+    @Transactional
+    public Boolean updateUserProfileAfterTest(Integer userId, Integer testsCompleted, Integer timeSpentTyping, Integer currentStreak) throws ProfileNotFoundException{
+        Optional<UserProfile> optionalUserProfile = usersRepository.findUserProfileByUserId(userId);
+        if (optionalUserProfile.isPresent()) {
+            UserProfile existingUserProfile = optionalUserProfile.get();
+
+            existingUserProfile.setTestsCompleted(testsCompleted);
+            existingUserProfile.setTimeSpentTyping(timeSpentTyping);
+            existingUserProfile.setCurrentStreak(currentStreak);
+
+            Boolean insertAttempt = usersRepository.updateUserProfileAfterTest(existingUserProfile);
+
+            return insertAttempt;
+
+        } else {
+            throw new ProfileNotFoundException("Profile not found for User Id: " + userId);
         }
     }
         

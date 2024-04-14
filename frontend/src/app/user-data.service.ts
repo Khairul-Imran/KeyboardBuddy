@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { DisplayedTestData, PersonalRecords, User, UserLogin, UserProfile, UserRegistration } from './Models/User';
-import { lastValueFrom, map } from 'rxjs';
+import { Observable, lastValueFrom, map } from 'rxjs';
+import { TestData } from './Models/TestData';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class UserDataService {
               userId: response.userProfile.userId
             }
           };
-          console.info("Angular service: we received and organised the user: ", user);
+          console.info("Angular user data service: we received and organised the user: ", user);
           return user;
         })
       )
@@ -61,6 +62,7 @@ export class UserDataService {
               userId: response.userProfile.userId
             }
           };
+          console.info("Angular user data service: we received and organised the user: ", user);
           return user;
         })
       )
@@ -87,11 +89,6 @@ export class UserDataService {
     );
   }
 
-  // TODO
-  // getUser() {
-
-  // }
-
 
   getTestData(userId: number): Promise<DisplayedTestData[]> {
     return lastValueFrom(this.http.get<any>(`/api/testData/${userId}`));
@@ -99,6 +96,28 @@ export class UserDataService {
 
   getPersonalRecords(userId: number): Promise<PersonalRecords[]> {
     return lastValueFrom(this.http.get<PersonalRecords[]>(`/api/personalRecords/${userId}`));
+  }
+
+  // Post Test Data
+  postTestData(testData: TestData, userId: number): Promise<any> {
+    const params = new HttpParams()
+      .set('userId', userId);
+    
+    return lastValueFrom(this.http.post('/api/testData', testData, { params, responseType: 'text' }));
+  }
+
+  
+  updateUserProfileAfterTest(userId: number, testsCompleted: number, timeSpentTyping: number, currentStreak: number): Promise<any> {
+
+    const requestBody = {
+      testsCompleted: testsCompleted,
+      timeSpentTyping: timeSpentTyping,
+      currentStreak: currentStreak
+    };
+
+    console.info("HTTP Method - This is your request body: ", requestBody);
+
+    return lastValueFrom(this.http.put(`/api/updateAfterTest/${userId}`, requestBody, { responseType: 'text' }));
   }
 
 }

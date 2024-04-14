@@ -76,7 +76,7 @@ export interface DisplayedTestData {
     testDataId: number;
 
     testDate: Date;
-    testType: string; 
+    testType: string;
     wordsPerMinute: number;
     accuracy: number;
     timeTaken: number; 

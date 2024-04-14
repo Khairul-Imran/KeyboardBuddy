@@ -29,7 +29,7 @@ public class PersonalRecords {
     public JsonObject toJson() {
         return Json.createObjectBuilder()
             .add("personalRecordsId", getPersonalRecordsId())
-            .add("testDate", (JsonValue) getTestDate())
+            .add("testDate", getTestDate().getTime())
             .add("testType", getTestType())
             .add("wordsPerMinute", getWordsPerMinute())
             .add("accuracy", getAccuracy())

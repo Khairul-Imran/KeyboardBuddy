@@ -86,7 +86,23 @@ export class LoginComponent implements OnInit {
 
     this.userDataService.postUserLogin(userLoginFromForm)
       .then(response => { // Assuming the response is the user data
+        const user: User = {
+          userId: response.userId, 
+          joinedDate: response.joinedDate, 
+          username: response.username, 
+          email: response.email,
+          userProfile: {
+            profileId: response.userProfile.profileId, 
+            testsCompleted: response.userProfile.testsCompleted, 
+            timeSpentTyping: response.userProfile.timeSpentTyping, 
+            currentStreak: response.userProfile.currentStreak, 
+            selectedTheme: response.userProfile.selectedTheme, 
+            hasPremium: response.userProfile.hasPremium, 
+            userId: response.userProfile.userId
+          }
+        };
 
+        this.userStoreService.updateUserStore(user);
 
         console.info("Response: ", response); // Use this response
         this.router.navigate(['/profile']); // Need to include user data inside here?
@@ -94,6 +110,8 @@ export class LoginComponent implements OnInit {
       .catch(response => {
         alert(`Error while logging in: ${response.error.message}`);
       })
+
+    
   }
 
 }

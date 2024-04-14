@@ -89,7 +89,6 @@
         <thead>
             <tr>
                 <th>Test Date</th>
-                <th>Word Count</th>
                 <th>Words Per Minute</th>
                 <th>Accuracy</th>
             </tr>
@@ -97,7 +96,6 @@
         <tbody>
             <tr *ngFor="let record of quotesRecords">
                 <td>{{ record.testDate }}</td>
-                <td>{{ record.wordCount }}</td>
                 <td>{{ record.wordsPerMinute }}</td>
                 <td>{{ record.accuracy }}</td>
             </tr>    
@@ -118,7 +116,7 @@
         </tr>
     </thead>
     <!-- Remember to ensure that these are organised based on most recent. See the dates to verify -->
-    <tbody *ngIf="testData$ | async as testData; else loading">
+    <tbody *ngIf="testDataFromPromise as testData; else loading">
         <div *ngIf="testData.length > 0; else noTestData">
             <tr *ngFor="let data of testData">
                 <td>{{ data.testDate }}</td>

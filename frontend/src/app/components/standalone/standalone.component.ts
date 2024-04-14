@@ -9,6 +9,9 @@ import { TestData, TypedLetter } from '../../Models/TestData';
 import { BaseChartDirective } from 'ng2-charts'; // Added this
 import { ChartDataset, ChartOptions } from 'chart.js';
 import { CommonModule } from '@angular/common';
+import { UserDataService } from '../../user-data.service';
+import { UserStoreService } from '../../user-store.service';
+import { User } from '../../Models/User';
 
 @Component({
   standalone: true,
@@ -21,6 +24,8 @@ export class StandaloneComponent implements OnInit {
 
   private router = inject(Router);
   private testDataService = inject(TestDataService);
+  private userDataService = inject(UserDataService);
+  private userStoreService = inject(UserStoreService);
   
   wordsFromPreviousTest: Word[] = [];
   testType!: string;
@@ -32,6 +37,8 @@ export class StandaloneComponent implements OnInit {
 
   // Results related properties.
   testData!: TestData;
+  userStore!: User; // User and User Profile data
+  userHolder!: User;
 
   // Testing only******
   // typedCharacters!: Letter[];
@@ -46,7 +53,7 @@ export class StandaloneComponent implements OnInit {
 
     // Results
     this.testData = this.testDataService.getCurrentTestData();
-    console.info("Test Data: ", this.testData);
+    console.info("Results page - Test Data: ", this.testData);
     
     // Testing only
     this.typedCharacters = this.testDataService.getTypedCharacters();
@@ -54,6 +61,83 @@ export class StandaloneComponent implements OnInit {
     this.generateChartData();
     this.generateChartLabels();
     this.generateChartOptions();
+
+    // Gets the user store.
+    this.userStoreService.user$.subscribe((userFromStore: User) => {
+      this.userStore = userFromStore;
+    })
+
+    console.info("USER STORE - ", this.userStore);
+
+    // Send test data to server ****this isn't working also
+    this.userDataService.postTestData(this.testData, this.userStore.userId)
+      .then(
+        response => {
+          console.log(response);
+        }
+      )
+      .catch(
+        error => {
+          console.error("Error updating the data: ", error);
+        }
+      );
+
+    console.info("************");
+    console.info("Accessing individual store values:");
+    console.info("tests completed - ", this.userStore.userProfile.testsCompleted);
+    console.info("time spent typing - ", this.userStore.userProfile.timeSpentTyping);
+
+    
+    // Initialise the holder
+    this.userHolder = {
+      userId: this.userStore.userId, 
+      joinedDate: this.userStore.joinedDate, 
+      username: this.userStore.username, 
+      email: this.userStore.email,
+      userProfile: {
+        profileId: this.userStore.userProfile.profileId, 
+        testsCompleted: this.userStore.userProfile.testsCompleted, 
+        timeSpentTyping: this.userStore.userProfile.timeSpentTyping, 
+        currentStreak: this.userStore.userProfile.currentStreak, 
+        selectedTheme: this.userStore.userProfile.selectedTheme, 
+        hasPremium: this.userStore.userProfile.hasPremium, 
+        userId: this.userStore.userProfile.userId
+      }
+    };
+    
+    console.info("TEMPORARY USER HOLDER - ", this.userHolder);
+
+    // Update the relevant values for the holder.
+    this.userHolder.userProfile.testsCompleted = this.userStore.userProfile.testsCompleted + 1;
+    this.userHolder.userProfile.timeSpentTyping = this.userStore.userProfile.timeSpentTyping + this.testData.timeTaken; // Will all tests have a time taken?
+    // Do one for streak too.
+
+    // Update the store.
+    this.userStoreService.updateUserStore(this.userHolder);
+
+    // Update the database (for changes in the User Profile)
+    console.info("Saving test data into DB for userId: ", this.userStore.userId);
+    console.info("Tests completed: ", this.userHolder.userProfile.testsCompleted);
+    console.info("Time spent typing", this.userHolder.userProfile.timeSpentTyping);
+    console.info("Current Streak", this.userStore.userProfile.currentStreak);
+
+    this.userDataService.updateUserProfileAfterTest(
+      this.userStore.userId, 
+      this.userHolder.userProfile.testsCompleted, 
+      this.userHolder.userProfile.timeSpentTyping, 
+      this.userStore.userProfile.currentStreak)
+        .then(
+          response => {
+            console.log(response);
+          }
+        )
+        .catch(
+          error => {
+            console.error("Error updating the data: ", error);
+          }
+        );
+
+    console.info("Current user store: ", this.userStore);
   }
 
   
