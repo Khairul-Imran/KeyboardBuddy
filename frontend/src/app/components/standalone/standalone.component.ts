@@ -46,6 +46,8 @@ export class StandaloneComponent implements OnInit {
 
     // Results
     this.testData = this.testDataService.getCurrentTestData();
+    console.info("Test Data: ", this.testData);
+    
     // Testing only
     this.typedCharacters = this.testDataService.getTypedCharacters();
 
@@ -63,6 +65,7 @@ export class StandaloneComponent implements OnInit {
     this.testDataService.clearWordsFromPreviousTest();
     this.router.navigate(['/']);
   }
+
 
   // Chart
   generateChartData() {

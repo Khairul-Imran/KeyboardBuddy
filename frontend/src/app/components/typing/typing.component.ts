@@ -28,11 +28,10 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   caretPosition = 0;
   
-  // words$!: Observable<Word[]>;
   wordsP$!: Promise<Word[]>;
-  // wordsFromObservable: Word[] = [];
   wordsFromPromise: Word[] = [];
-  
+  authorForQuote!: string;
+
   // ------------------------ New ------------------------
   
   visibleWords: number = 0; // Newly added 7 Apr
@@ -163,6 +162,23 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
           console.error("Error fetching words: ", error);
           return [];
         })
+    } else if (this.testType === 'quote') {
+      // Quote-based
+      console.log(`Settings: Type=${this.testType}, Difficulty=${this.testDifficulty}, Word Limit=${this.testWordLimit}`);
+      this.wordsP$ = this.testgeneratorService.getQuoteTest()
+        .then(words => {
+          console.info("Words to be inserted: ", words.sentence);
+          this.wordsFromPromise = words.sentence;
+          this.authorForQuote = words.author;
+          console.info("Words in the array: ", this.wordsFromPromise);
+          console.info("Author of quote: ", this.authorForQuote);
+          return this.wordsFromPromise;
+        })
+        .catch(error => {
+          console.error("Error fetching words: ", error);
+          return [];
+        })
+
     }
 
     // Reset the indexes after generating each test.
@@ -762,6 +778,9 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
       console.log("Test is word-based");
       this.finalTestType = `${this.testType} | ${this.testWordLimit} words | ${this.testDifficulty}`;
       console.info("Test type: ", this.finalTestType);
+    } else if (this.testType === 'quote') {
+      console.log("Test is quote-based");
+      this.finalTestType = this.testType;
     }
 
     const overallWpm = this.overallWpmCalculator(this.elapsedTime);

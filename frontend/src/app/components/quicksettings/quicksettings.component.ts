@@ -12,11 +12,6 @@ export class QuicksettingsComponent implements OnInit {
   private quicksettingsService = inject(QuicksettingsService);
   private testGeneratorService = inject(TestgeneratorService);
   
-  // Old Default values. -> trying to not set them.
-  // selectedTestType: string = "time";
-  // selectedTestDifficulty: string = "easy";
-  // selectedTestWordLimit: number = 20; // If test type of 'words' is chosen
-  // selectedTestTimeLimit: number = 30;
 
   selectedTestType!: string;
   selectedTestDifficulty!: string;
@@ -34,7 +29,6 @@ export class QuicksettingsComponent implements OnInit {
     this.selectedTestDifficulty = this.quicksettingsService.testDifficulty;
     this.selectedTestDuration = this.quicksettingsService.testDuration;
     this.selectedTestWordLimit = this.quicksettingsService.testWordLimit;
-    // this.testGeneratorService.getRandomWordsTest(this.selectedTestType, this.selectedTestDifficulty); -> unnecessary
   }
 
   // Might need to reset certain values after an option is chosen....see how

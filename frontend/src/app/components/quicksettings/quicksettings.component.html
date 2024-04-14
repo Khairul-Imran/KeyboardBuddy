@@ -4,6 +4,12 @@
     <div class="settings-group">
         <button 
             class="settings-button" 
+            [class.selected]="selectedTestType === 'quote'" 
+            (click)="selectedType('quote')">
+            Quote
+        </button>
+        <button 
+            class="settings-button" 
             [class.selected]="selectedTestType === 'time'" 
             (click)="selectedType('time')">
             Time
@@ -17,7 +23,7 @@
     </div>
 
     <!-- Test Difficulty -->
-    <div class="settings-group">
+    <div class="settings-group" *ngIf="selectedTestType === 'time' || selectedTestType === 'words' ">
         <button 
             class="settings-button" 
             [class.selected]="selectedTestDifficulty === 'easy'" 
@@ -74,12 +80,6 @@
             (click)="selectedTimeLimit(45)">
             45
         </button>
-        <!-- <button 
-            class="settings-button" 
-            [class.selected]="selectedTestDuration === 60" 
-            (click)="selectedTimeLimit(60)">
-            60
-        </button> -->
     </div>
 
 </div>

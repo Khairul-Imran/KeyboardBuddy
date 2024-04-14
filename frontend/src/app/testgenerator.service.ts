@@ -52,10 +52,49 @@ export class TestgeneratorService {
       ));
   }
 
+  getQuoteTest(): Promise<Quote> {
+    return lastValueFrom(this.http.get<string>('/api/quotes', { responseType: 'json'})
+      .pipe(
+        map((response: any) => {
+          console.info("Original response: ", response);
+          const updatedQuote: string = response.quote.toLowerCase().replace(/[^a-z\s]/g, '');
+          console.info("Updated quote: ", updatedQuote);
+
+          const quoteWords: Word[] = updatedQuote.split(' ').map(word => {
+            const letters: Letter[] = word.split('').map(char => ({
+              character: char,
+              correct: false,
+              untouched: true
+            }));
+            console.info("Letters: ", letters);
+            return {
+              letters,
+              fullyCorrect: false,
+              untouched: true
+            };
+          });
+          console.info("Full quote: ", quoteWords);
+          return { sentence: quoteWords, author: response.author };
+        })
+      ))
+  }
+
   // getQuoteTest(): Promise<Quote> {
-  //   return lastValueFrom(this.http.get<string>('/api/quotes', { responseType: 'json'}))
+  //   return lastValueFrom(this.http.get<string>('/api/quotes', { responseType: 'json'})
+  //     .pipe(
+  //       map((response: any) => {
+  //         const updatedQuote: string = response.quote.toLowerCase().replace(/[^a-z]/g, '');
+
+  //         const quoteWords: Word[] = updatedQuote.split(' ').map(word => ({
+  //           letters: word.split('').map(c => ({ character: c, correct: false, untouched: true})),
+  //           fullyCorrect: false,
+  //           untouched: true
+  //         }
+          
+  //         ));
+  //         return { sentence: quoteWords, author: response.author };
+  //       })
+  //     ))
   // }
-
-
 
 }

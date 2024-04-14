@@ -63,42 +63,4 @@ export class TestDataService {
   // -> user goes to the results page -> 
   // user chooses to do a new test (generateNewTest()) -> method CLEARS the existing test from the service -> navigates to typing page
 
-
-  // TODO: Remove later.
-  // For results
-  // setTestType(testType: string) {
-  //   this.testType = testType;
-  // }
-
-  // getTestType() {
-  //   return this.testType;
-  // }
-
-  // setOverallWpm(overallWpm: number) {
-  //   if (overallWpm > 0) {
-  //     this.overallWpm = overallWpm;
-  //   } else {
-  //     this.overallWpm = "Invalid";
-  //   }
-  // }
-
-  // getOverallWpm() {
-  //   return this.overallWpm;
-  // }
-
-  // setAccuracy(accuracy: number) {
-  //   this.accuracy = accuracy;
-  // }
-
-  // getAccuracy() {
-  //   return this.accuracy;
-  // }
-
-  // setTimeTaken(timeTaken: number) {
-  //   this.timeTaken = timeTaken;
-  // }
-
-  // getTimeTaken() {
-  //   return this.timeTaken;
-  // }
 }
