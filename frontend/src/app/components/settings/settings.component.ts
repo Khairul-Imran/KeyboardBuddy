@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ThemeService } from '../../theme.service';
+import { Router } from '@angular/router';
 
 
 
@@ -15,6 +16,7 @@ import { ThemeService } from '../../theme.service';
 export class SettingsComponent {
 
   private themeService = inject(ThemeService);
+  private router = inject(Router)
   
   // chosenTheme!: string;
   currentTheme!: string;
@@ -31,6 +33,10 @@ export class SettingsComponent {
 
   detectThemeChanges(newTheme: string) {
     this.themeService.sendUpdatedTheme(newTheme);
+  }
+
+  goToOrderPreviewPage() {
+    this.router.navigate(['/order-preview']);
   }
 
 }

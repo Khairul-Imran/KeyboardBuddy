@@ -30,6 +30,9 @@ import { LocalStorageService } from './local-storage.service';
 import { LoginStatusServiceService } from './login-status-service.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ThemeService } from './theme.service';
+import { SuccessPageComponent } from './components/success-page/success-page.component';
+import { CancelPageComponent } from './components/cancel-page/cancel-page.component';
+import { OrderPreviewPageComponent } from './components/order-preview-page/order-preview-page.component';
 // import { StandaloneComponent } from './components/standalone/standalone.component';
 
 
@@ -51,6 +54,9 @@ import { ThemeService } from './theme.service';
     LeaderboardsComponent,
     AboutComponent,
     QuicksettingsComponent,
+    SuccessPageComponent,
+    CancelPageComponent,
+    OrderPreviewPageComponent,
     // StandaloneComponent
   ],
   imports: [

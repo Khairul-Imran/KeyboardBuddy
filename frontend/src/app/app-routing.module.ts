@@ -8,6 +8,9 @@ import { ResultsComponent } from './components/results/results.component';
 import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
 import { AboutComponent } from './components/about/about.component';
 import { StandaloneComponent } from './components/standalone/standalone.component';
+import { SuccessPageComponent } from './components/success-page/success-page.component';
+import { CancelPageComponent } from './components/cancel-page/cancel-page.component';
+import { OrderPreviewPageComponent } from './components/order-preview-page/order-preview-page.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent }, // View 0
@@ -18,11 +21,14 @@ const routes: Routes = [
   { path: 'settings', component: SettingsComponent }, // Settings View
   { path: 'about', component: AboutComponent }, // About View
   { path: 'leaderboards', component: LeaderboardsComponent }, // Leaderboards View
+  { path: 'success', component: SuccessPageComponent }, // Successful payment
+  { path: 'cancel', component: CancelPageComponent }, // Cancelled payment
+  { path: 'order-preview', component: OrderPreviewPageComponent }, // Order preview
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
