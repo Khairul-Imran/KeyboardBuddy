@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +28,8 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { LocalStorageService } from './local-storage.service';
 import { LoginStatusServiceService } from './login-status-service.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { ThemeService } from './theme.service';
 // import { StandaloneComponent } from './components/standalone/standalone.component';
 
 
@@ -56,6 +58,12 @@ import { LoginStatusServiceService } from './login-status-service.service';
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     
   ],
   providers: [ 
@@ -67,6 +75,7 @@ import { LoginStatusServiceService } from './login-status-service.service';
     RxStompService,
     LocalStorageService,
     LoginStatusServiceService,
+    ThemeService,
     provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [ AppComponent ]

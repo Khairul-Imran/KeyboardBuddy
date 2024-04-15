@@ -1,6 +1,11 @@
 
-<app-header [userIsLoggedIn]="userLoginState" [user]="userStore"></app-header>
 
-<router-outlet></router-outlet>
+<div [ngClass]="'theme-' + currentTheme">
+    
+    <app-header [userIsLoggedIn]="userLoginState" [user]="userStore"></app-header>
+    
+    <router-outlet></router-outlet>
+    
+    <app-footer></app-footer>
 
-<app-footer></app-footer>
+</div>

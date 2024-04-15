@@ -17,7 +17,7 @@
 }
 
 .word span {
-    letter-spacing: -3px;
+    letter-spacing: -8px;
 }
 
 /* .letter {
@@ -78,7 +78,7 @@
 }
 
 .word-time span {
-    letter-spacing: -3px;
+    letter-spacing: -8px;
 }
 
 .word-time.visible {
@@ -91,23 +91,6 @@
     text-decoration-thickness: 2px;
     text-decoration-color: red;
 }
-
-
-/* Dont need this already */
-/* Quote */
-/* .typing-container-quote {
-    position: relative;
-}
-
-.word-quote {
-    display: inline-block;
-    margin-right: 15px;
-    font-size: 25px;
-}
-
-.word-quote span {
-    letter-spacing: -3px;
-} */
 
 
 .caret {

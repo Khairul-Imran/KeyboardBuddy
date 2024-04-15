@@ -1,10 +1,17 @@
-<h1>This is the settings component!</h1>
+<div [ngClass]="'theme-' + currentTheme">
+  <h1>This is the settings component!</h1>
 
-<div id="messages">
-    <button class="btn btn-primary">Send Test Message</button>
-    <h2>Received messages</h2>
-    <ol>
-      <!-- we will use Angular binding to populate list of messages -->
-      <li class="message">messagez</li>
-    </ol>
+
+  <div>
+    <button (click)="detectThemeChanges('theme1')">Serika Dark</button>
+    <button (click)="detectThemeChanges('theme2')">Future Funk</button>
+    <button (click)="detectThemeChanges('theme3')">Dracula</button>
+    <button (click)="detectThemeChanges('theme4')">Solarized Light</button>
+    <button (click)="detectThemeChanges('theme5')">Solarized Dark</button>
+    <button (click)="detectThemeChanges('theme6')">Darling</button>
+    <button (click)="detectThemeChanges('theme7')">Lavender</button>
+    <button (click)="detectThemeChanges('theme8')">Mizu</button>
   </div>
+
+
+</div>
