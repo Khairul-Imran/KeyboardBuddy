@@ -13,20 +13,21 @@ export class UserStoreService extends ComponentStore<User> {
   }
   
   private userDataService = inject(UserDataService);
-  
-  // If store is empty, route user to registration/login page
-  // ngrxOnStoreInit(): void {
 
-  // }
-
+  // Subscribe to the changes using this.
   readonly user$ = this.select(state => state);
   
+  // Updates the store
   readonly updateUserStore = this.updater((state, user: User) => ({
     ...state,
     ...user
   }));
 
-  // Need to update for user logout too.
+  // Updates the store when logging out
+  readonly updateForUserLogout = this.updater((state) => ({
+    ...state,
+    user: null
+  }))
   
 
 }

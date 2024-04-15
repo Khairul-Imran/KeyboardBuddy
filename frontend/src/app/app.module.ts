@@ -26,6 +26,8 @@ import { UserDataService } from './user-data.service';
 import { UserStoreService } from './user-store.service';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { LocalStorageService } from './local-storage.service';
+import { LoginStatusServiceService } from './login-status-service.service';
 // import { StandaloneComponent } from './components/standalone/standalone.component';
 
 
@@ -63,6 +65,8 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     UserDataService, 
     UserStoreService,
     RxStompService,
+    LocalStorageService,
+    LoginStatusServiceService,
     provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [ AppComponent ]

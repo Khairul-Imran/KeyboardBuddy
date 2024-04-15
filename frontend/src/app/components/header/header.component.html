@@ -1,7 +1,36 @@
-<h1> Insert App Name here (This is the header) </h1>
+<div class="header-left">
+    <h1> Insert App Name here (This is the header) </h1>
+    
+    <button [routerLink]="['/']"> Main </button>
+    <button [routerLink]="['/leaderboards']"> Leaderboards </button>
+    <button [routerLink]="['/about']"> About </button>
+    <button [routerLink]="['/settings']"> Settings (to delete) </button>
+    <!-- <button [routerLink]="['/profile']"> Profile / Login </button> -->
+</div>
 
-<button [routerLink]="['/']"> Main </button>
-<button [routerLink]="['/leaderboards']"> Leaderboards </button>
-<button [routerLink]="['/about']"> About </button>
-<button [routerLink]="['/profile']"> Profile / Login </button>
-<button [routerLink]="['/settings']"> Settings </button>
+
+<!-- If user is logged in -->
+<div *ngIf="userIsLoggedIn" class="header-middle">
+    <div> Tests Taken: {{ user?.userProfile?.testsCompleted }} </div>
+    <div> Time Spent Typing: {{ user?.userProfile?.timeSpentTyping }} seconds</div>
+</div>
+
+
+<!-- If user is logged in -->
+<div *ngIf="userIsLoggedIn"  class="header-right">
+    
+    <div>
+        <button [routerLink]="['/profile']"> {{ user?.username }} </button>
+    </div>
+
+    <div>
+        <!-- Click to logout -->
+        <button (click)="logout()">Logout</button>
+    </div>
+</div>
+
+
+<!-- If user is logged out -->
+<div *ngIf="!userIsLoggedIn"  class="header-right">
+    <button [routerLink]="['/login']"> Login </button>
+</div>

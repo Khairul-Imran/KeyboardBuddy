@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { UserDataService } from '../../user-data.service';
 import { UserStoreService } from '../../user-store.service';
 import { User } from '../../Models/User';
+import { LocalStorageService } from '../../local-storage.service';
 
 @Component({
   standalone: true,
@@ -26,7 +27,8 @@ export class StandaloneComponent implements OnInit {
   private testDataService = inject(TestDataService);
   private userDataService = inject(UserDataService);
   private userStoreService = inject(UserStoreService);
-  
+  private localStorageService = inject(LocalStorageService);
+
   wordsFromPreviousTest: Word[] = [];
   testType!: string;
   overallWpm!: any;
@@ -65,11 +67,11 @@ export class StandaloneComponent implements OnInit {
     // Gets the user store.
     this.userStoreService.user$.subscribe((userFromStore: User) => {
       this.userStore = userFromStore;
+      this.localStorageService.saveUserToLocalStorage(userFromStore);
     })
 
     console.info("USER STORE - ", this.userStore);
 
-    // Send test data to server ****this isn't working also
     this.userDataService.postTestData(this.testData, this.userStore.userId)
       .then(
         response => {
@@ -104,8 +106,6 @@ export class StandaloneComponent implements OnInit {
         userId: this.userStore.userProfile.userId
       }
     };
-    
-    console.info("TEMPORARY USER HOLDER - ", this.userHolder);
 
     // Update the relevant values for the holder.
     this.userHolder.userProfile.testsCompleted = this.userStore.userProfile.testsCompleted + 1;
@@ -114,6 +114,7 @@ export class StandaloneComponent implements OnInit {
 
     // Update the store.
     this.userStoreService.updateUserStore(this.userHolder);
+    this.localStorageService.saveUserToLocalStorage(this.userHolder);
 
     // Update the database (for changes in the User Profile)
     console.info("Saving test data into DB for userId: ", this.userStore.userId);

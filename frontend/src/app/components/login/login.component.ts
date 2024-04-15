@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { DEFAULT_LOGIN, DEFAULT_REGISTRATION, User, UserLogin, UserRegistration, UserSlice } from '../../Models/User';
 import { UserDataService } from '../../user-data.service';
 import { UserStoreService } from '../../user-store.service';
+import { LocalStorageService } from '../../local-storage.service';
+import { LoginStatusServiceService } from '../../login-status-service.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,8 @@ export class LoginComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private userDataService = inject(UserDataService);
   private userStoreService = inject(UserStoreService);
+  private localStorageService = inject(LocalStorageService);
+  private loginStatusService = inject(LoginStatusServiceService);
   
   registrationForm!: FormGroup;
   loginForm!: FormGroup;
@@ -70,6 +74,9 @@ export class LoginComponent implements OnInit {
         };
 
         this.userStoreService.updateUserStore(user);
+        this.localStorageService.saveUserToLocalStorage(user);
+        this.loginStatusService.userLoggedIn();
+
         console.info("Response: ", response);
         this.router.navigate(['/profile']); // Need to include user data inside here?
       })
@@ -103,6 +110,8 @@ export class LoginComponent implements OnInit {
         };
 
         this.userStoreService.updateUserStore(user);
+        this.localStorageService.saveUserToLocalStorage(user);
+        this.loginStatusService.userLoggedIn();
 
         console.info("Response: ", response); // Use this response
         this.router.navigate(['/profile']); // Need to include user data inside here?

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { DEFAULT_LOGIN, DEFAULT_REGISTRATION, DisplayedTestData, PersonalRecords, User, UserLogin, UserProfile, UserRegistration } from '../../Models/User';
 import { UserDataService } from '../../user-data.service';
 import { UserStoreService } from '../../user-store.service';
+import { LocalStorageService } from '../../local-storage.service';
+import { LoginStatusServiceService } from '../../login-status-service.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,12 +17,13 @@ export class ProfileComponent implements OnInit {
   private router = inject(Router);
   private userDataService = inject(UserDataService);
   private userStoreService = inject(UserStoreService);
+  private localStorageService = inject(LocalStorageService);
+  private loginStatusService = inject(LoginStatusServiceService);
 
-  // How can i get the userId???? After login, get the userId, and store it in the component store??
-  // When logout, clear it?
   userId: number = 0;
 
   userStore!: User; // User and User Profile data
+  localUserStore!: User | undefined;
 
   user$!: Promise<User>; // TODO!!!!
   userProfile$!: Promise<UserProfile>;
@@ -35,13 +38,16 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userStoreService.user$.subscribe((userFromStore: User) => {
       this.userStore = userFromStore;
+      this.localStorageService.saveUserToLocalStorage(userFromStore);
     })
-
-    // this.userProfile$ = this.userDataService.getUserProfile(this.userId); -> don't need anymore
+    
+    this.localUserStore = this.localStorageService.getUserFromLocalStorage();
 
     this.testData$ = this.userDataService.getTestData(this.userStore.userId)
       .then(testData => {
         this.testDataFromPromise = testData;
+        this.testDataFromPromise.sort((a, b) => Number(b.testDate) - Number(a.testDate));
+
         return this.testDataFromPromise;
       })
       .catch(error => {
@@ -52,6 +58,8 @@ export class ProfileComponent implements OnInit {
     if (this.userStore.userProfile.testsCompleted > 0) {
       this.getPersonalRecords();
     }
+
+    this.localStorageService.saveTestDataToLocalStorage(this.testDataFromPromise);
   }
 
   getPersonalRecords() {
@@ -73,6 +81,7 @@ export class ProfileComponent implements OnInit {
               break;
           }
         });
+        this.localStorageService.savePersonalRecordsToLocalStorage(record);
         return record;
       })
       .catch(error => {

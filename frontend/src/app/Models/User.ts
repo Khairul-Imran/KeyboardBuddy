@@ -98,3 +98,7 @@ export interface PersonalRecords {
 
     userId: number;
 }
+
+export interface UserLoginState {
+    isUserLoggedIn: boolean;
+}
