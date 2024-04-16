@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Exceptions.TestDataInsertionException;
 import com.example.backend.Exceptions.UserCreationException;
+import com.example.backend.Models.EmailToSend;
 import com.example.backend.Models.LoginRequest;
 import com.example.backend.Models.PersonalRecords;
 import com.example.backend.Models.RegistrationRequest;
@@ -27,6 +28,7 @@ import com.example.backend.Models.TestData;
 import com.example.backend.Models.TestDataFromClient;
 import com.example.backend.Models.User;
 import com.example.backend.Models.UserProfile;
+import com.example.backend.Services.EmailService;
 import com.example.backend.Services.TestDataService;
 import com.example.backend.Services.UserService;
 
@@ -45,6 +47,8 @@ public class UserController {
 
     @Autowired
     private TestDataService testDataService;
+
+    @Autowired EmailService emailService;
 
     // Register
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -84,6 +88,19 @@ public class UserController {
             JsonObject insertedUserInJson = insertedUser.toJson();
 
             System.out.println("Controller: Returning to client....");
+
+            System.out.println("Sending email!");
+            EmailToSend emailToSend = new EmailToSend();
+            emailToSend.setSendToEmail(insertedUser.getEmail());
+            emailToSend.setContent("Welcome to KeyboardBuddy. We look forward to helping you improve your typing skills!");
+            emailToSend.setSubject("Thank you for registering!");
+            System.out.println("Email to be sent: " + emailToSend.toString());
+
+            emailService.sendEmail(
+                emailToSend.getSendToEmail(), 
+                emailToSend.getSubject(), 
+                emailToSend.getContent());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(insertedUserInJson.toString());
 
         } catch (UserCreationException e) {
