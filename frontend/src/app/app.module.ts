@@ -20,7 +20,6 @@ import { QuicksettingsService } from './quicksettings.service';
 import { TestDataService } from './test-data.service';
 import { UserDataService } from './user-data.service';
 import { UserStoreService } from './user-store.service';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { LocalStorageService } from './local-storage.service';
 import { LoginStatusServiceService } from './login-status-service.service';
@@ -31,9 +30,6 @@ import { CancelPageComponent } from './components/cancel-page/cancel-page.compon
 import { OrderPreviewPageComponent } from './components/order-preview-page/order-preview-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { StandaloneComponent } from './components/standalone/standalone.component';
-
-
-// import { rxStompServiceFactory } from './rx-stomp-service-factory';
 
 @NgModule({
   declarations: [
@@ -72,7 +68,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TestDataService, 
     UserDataService, 
     UserStoreService,
-    RxStompService,
     LocalStorageService,
     LoginStatusServiceService,
     ThemeService,
