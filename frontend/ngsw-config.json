@@ -1,6 +1,23 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups": [
+    {
+      "name": "wordsDB",
+      "urls": [
+        "http://localhost:8080/api/words?testType=time&testDifficulty=easy",
+        "http://localhost:8080/api/words?testType=time&testDifficulty=hard",
+        "http://localhost:8080/api/words?testType=word&testDifficulty=easy&limit=10",
+        "http://localhost:8080/api/words?testType=word&testDifficulty=easy&limit=20",
+        "http://localhost:8080/api/words?testType=word&testDifficulty=easy&limit=30"
+      ],
+      "cacheConfig": {
+        "maxAge": "2h",
+        "timeout": "3m",
+        "cacheOpaqueResponses": false
+      }
+    }
+  ],
   "assetGroups": [
     {
       "name": "app",

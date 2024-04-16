@@ -6,14 +6,10 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './components/main/main.component';
 import { LoginComponent } from './components/login/login.component';
 import { TypingComponent } from './components/typing/typing.component';
-import { ResultsComponent } from './components/results/results.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ProgressbarComponent } from './components/progressbar/progressbar.component';
-import { TimerComponent } from './components/timer/timer.component';
-import { LeaderboardsComponent } from './components/leaderboards/leaderboards.component';
 import { AboutComponent } from './components/about/about.component';
 import { TestgeneratorService } from './testgenerator.service';
 
@@ -33,6 +29,7 @@ import { ThemeService } from './theme.service';
 import { SuccessPageComponent } from './components/success-page/success-page.component';
 import { CancelPageComponent } from './components/cancel-page/cancel-page.component';
 import { OrderPreviewPageComponent } from './components/order-preview-page/order-preview-page.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { StandaloneComponent } from './components/standalone/standalone.component';
 
 
@@ -44,14 +41,10 @@ import { OrderPreviewPageComponent } from './components/order-preview-page/order
     MainComponent,
     LoginComponent,
     TypingComponent,
-    ResultsComponent,
     ProfileComponent,
     SettingsComponent,
     HeaderComponent,
     FooterComponent,
-    ProgressbarComponent,
-    TimerComponent,
-    LeaderboardsComponent,
     AboutComponent,
     QuicksettingsComponent,
     SuccessPageComponent,
@@ -70,6 +63,7 @@ import { OrderPreviewPageComponent } from './components/order-preview-page/order
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
+    NgbModule,
     
   ],
   providers: [ 

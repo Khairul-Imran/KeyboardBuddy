@@ -1,67 +1,83 @@
-<h1>This is the login component!</h1>
+<!-- <h1>This is the login component!</h1> -->
 
-<!-- <button [routerLink]="['/profile']"> Login </button> -->
+<div class="container d-flex align-items-center justify-content-center vh-100">
 
-<p>You should only see this page if you haven't logged in yet, and you pressed the profile button.</p>
-<p>or if you've just logged out. If user just logged out, show some kind of notice message.</p>
-<p>login form will appear here</p>
+    <div class="form-signin text-center">
+        <!-- <div>Register</div> -->
+        <h2 class="h3 mb-1 fw-normal">Register</h2>
+    
+        <form [formGroup]="registrationForm" (submit)="submitUserRegistrationForm()">
+            <table>
+                <tr>
+                    <!-- <td>Username: </td> -->
+                    <td>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInput" size="30" placeholder="username" formControlName="username">
+                            <label for="floatingInput">Username</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- <td>Email: </td> -->
+                    <td>
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingEmail" size="30" placeholder="name@example.com" formControlName="email">
+                            <label for="floatingEmail">Email</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- <td>Password: </td> -->
+                    <td>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="floatingPassword" size="30" placeholder="password" formControlName="password">
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-primary w-100 py2" [disabled]="registrationForm.invalid">Sign Up</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
+    
+    <div class="form-signin text-center">
+        <!-- <div>Login</div> -->
+        <h2 class="h3 mb-1 fw-normal">Login</h2>
+    
+        <form [formGroup]="loginForm" (submit)="submitUserLoginForm()">
+            <table>
+                <tr>
+                    <!-- <td>Email: </td> -->
+                    <td>
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingEmail" size="30" placeholder="name@example.com" formControlName="email">
+                            <label for="floatingEmail">Email</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- <td>Password: </td> -->
+                    <td>
+                        <div class="form-floating"> 
+                            <input type="password" class="form-control" id="floatingPassword" size="30" placeholder="password" formControlName="password">
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-primary w-100 py2" [disabled]="loginForm.invalid">Sign In</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 
 
-<div>
-    <div>Register</div>
-
-    <form [formGroup]="registrationForm" (submit)="submitUserRegistrationForm()">
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td>
-                    <input type="text" size="30" placeholder="username" formControlName="username">
-                </td>
-            </tr>
-            <tr>
-                <td>Email: </td>
-                <td>
-                    <input type="text" size="30" placeholder="email" formControlName="email">
-                </td>
-            </tr>
-            <tr>
-                <td>Password: </td>
-                <td>
-                    <input type="text" size="30" placeholder="password" formControlName="password">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" [disabled]="registrationForm.invalid">Sign Up</button>
-                </td>
-            </tr>
-        </table>
-    </form>
 </div>
 
-
-<div>
-    <div>Login</div>
-
-    <form [formGroup]="loginForm" (submit)="submitUserLoginForm()">
-        <table>
-            <tr>
-                <td>Email: </td>
-                <td>
-                    <input type="text" size="30" placeholder="email" formControlName="email">
-                </td>
-            </tr>
-            <tr>
-                <td>Password: </td>
-                <td>
-                    <input type="text" size="30" placeholder="password" formControlName="password">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>

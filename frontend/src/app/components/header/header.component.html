@@ -3,43 +3,81 @@
     
 </div> -->
 
-<div class="header-left">
-    <h1> Insert App Name here (This is the header) </h1>
-    
-    <button [routerLink]="['/']"> Main </button>
-    <button [routerLink]="['/leaderboards']"> Leaderboards </button>
-    <button [routerLink]="['/about']"> About </button>
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottm">
 
-    <button *ngIf="userIsLoggedIn" [routerLink]="['/settings']"> Settings </button>
-    <button *ngIf="!userIsLoggedIn" [routerLink]="['/login']"> Login to view Settings </button>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <div>
+                <a [routerLink]="['/']" class="nav-link px-2">
+                    <h1> KeyboardBuddy </h1>
+                </a>
+            </div>
 
-    <!-- <button [routerLink]="['/profile']"> Profile / Login </button> -->
+            <a class="d-inline-flex link-body-emphasis text-decoration-none">
+                <!-- <img src="../../../images/keyboard.jpg" alt="KeyboardBuddy Logo"> -->
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li class="nav-item">
+                    <a [routerLink]="['/']" class="nav-link px-2 text-secondary">Main</a>
+                </li>
+
+                <li class="nav-item">
+                    <a [routerLink]="['/about']" class="nav-link px-2 text-secondary">About</a>
+                </li>
+                <li class="nav-item" *ngIf="userIsLoggedIn">
+                    <a [routerLink]="['/settings']" class="nav-link px-2 text-secondary">Settings</a>
+                </li>
+                <li class="nav-item" *ngIf="!userIsLoggedIn">
+                    <a [routerLink]="['/login']" class="nav-link px-2 text-secondary">Settings</a>
+                </li>
+            </ul>
+
+        </div>
+
+        <!-- <div class="header-left">
+            
+            <button [routerLink]="['/']"> Main </button>
+            <button [routerLink]="['/leaderboards']"> Leaderboards </button>
+            <button [routerLink]="['/about']"> About </button>
+        
+            <button *ngIf="userIsLoggedIn" [routerLink]="['/settings']"> Settings </button>
+            <button *ngIf="!userIsLoggedIn" [routerLink]="['/login']"> Login to view Settings </button>
+            
+        </div> -->
+        
+        
+        <!-- If user is logged in -->
+        <div *ngIf="userIsLoggedIn" class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+
+            <ul>
+                <!-- <li class="nav-item">
+                </li> -->
+                <div class="px-2 link-secondary"> Tests Taken: {{ user?.userProfile?.testsCompleted }} </div>
+                <div class="px-2 link-secondary"> Time Spent Typing: {{ user?.userProfile?.timeSpentTyping }} seconds</div>
+
+                <!-- <li class="nav-item">
+                </li> -->
+            </ul>
+        </div>
+        
+        
+        <!-- If user is logged in -->
+        <div *ngIf="userIsLoggedIn"  class="col-md-3 text-end">
+            
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary me-2" [routerLink]="['/profile']"> {{ user?.username }} </button>
+                
+                <!-- Click to logout -->
+                <button type="button" class="btn btn-outline-primary me-2" (click)="logout()">Logout</button>
+            </div>
+        </div>
+        
+        
+        <!-- If user is logged out -->
+        <div *ngIf="!userIsLoggedIn"  class="header-right">
+            <button type="button" class="btn btn-outline-primary me-2" [routerLink]="['/login']"> Login </button>
+        </div>
+
+    </header>
 </div>
-
-
-<!-- If user is logged in -->
-<div *ngIf="userIsLoggedIn" class="header-middle">
-    <div> Tests Taken: {{ user?.userProfile?.testsCompleted }} </div>
-    <div> Time Spent Typing: {{ user?.userProfile?.timeSpentTyping }} seconds</div>
-</div>
-
-
-<!-- If user is logged in -->
-<div *ngIf="userIsLoggedIn"  class="header-right">
-    
-    <div>
-        <button [routerLink]="['/profile']"> {{ user?.username }} </button>
-    </div>
-
-    <div>
-        <!-- Click to logout -->
-        <button (click)="logout()">Logout</button>
-    </div>
-</div>
-
-
-<!-- If user is logged out -->
-<div *ngIf="!userIsLoggedIn"  class="header-right">
-    <button [routerLink]="['/login']"> Login </button>
-</div>
-

@@ -8,7 +8,7 @@ export class ThemeService {
 
   constructor() { }
 
-  currentTheme: string = 'theme1';
+  currentTheme: string = 'theme0';
 
   // Receives updates from the .next method (in sendUpdatedTheme)
   private themeSource$ = new BehaviorSubject<string>(this.currentTheme);

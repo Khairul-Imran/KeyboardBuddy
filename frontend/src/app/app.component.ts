@@ -8,6 +8,7 @@ import { ThemeService } from './theme.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css', 
+    '../themes/theme0.css',
     '../themes/theme1.css', 
     '../themes/theme2.css',
     '../themes/theme3.css'
