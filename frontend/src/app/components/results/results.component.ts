@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Letter, Word } from '../../Models/Words';
 import { TestDataService } from '../../test-data.service';
 import { TestData, TypedLetter } from '../../Models/TestData';
-import { BaseChartDirective } from 'ng2-charts'; // Added this
+import { BaseChartDirective } from 'ng2-charts';
 import { ChartDataset, ChartOptions } from 'chart.js';
 
 

@@ -71,7 +71,7 @@ public class UserController {
         newUserProfile.setTestsCompleted(0);
         newUserProfile.setTimeSpentTyping(0);
         newUserProfile.setCurrentStreak(0);
-        newUserProfile.setSelectedTheme("");
+        newUserProfile.setSelectedTheme("theme0");
         // newUserProfile.setHasPremium(false); // SQL set by default false.
 
         newUser.setUserProfile(newUserProfile);
@@ -186,12 +186,6 @@ public class UserController {
                     .map(TestData::toJson)
                     .forEach(arrayBuilder::add);
 
-                // Don't need this anymore.
-                // JsonArray jsonTestDataArray = TestData.testDataListToJson(existingTestData);
-                // String jsonTestDataArrayInString = jsonTestDataArray.toString();
-
-                // System.out.println("Existing test data converted to json: " + jsonTestDataArrayInString);
-
                 return ResponseEntity.ok(arrayBuilder.build().toString());
             } else {
                 return ResponseEntity.noContent().build();
@@ -244,32 +238,47 @@ public class UserController {
             }
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occured.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
         }
     }
 
-    // @PutMapping("/updateAfterTest/{userId}")
-    // public ResponseEntity<String> updateUserProfileAfterTest(
-    //     @PathVariable Integer userId, 
-    //     @RequestParam Integer testsCompleted, 
-    //     @RequestParam Integer timeSpentTyping, 
-    //     @RequestParam Integer currentStreak) {
+    @PutMapping("/updateAfterPurchase/{userId}")
+    public ResponseEntity<String> updateUserProfileAfterPurchase(@PathVariable Integer userId, @RequestBody Map<String, Boolean> updateData) {
 
-    //     System.out.println("CONTROLLER - Received data to update after test for userId: " + userId);
+        System.out.println("CONTROLLER - Received data to update after purchase for userId: " + userId);
 
-    //     try {
+        Boolean hasPremium = updateData.get("hasPremium");
 
-    //         Boolean insertAttempt = userService.updateUserProfileAfterTest(userId, testsCompleted, timeSpentTyping, currentStreak);
-    //         if (insertAttempt) {
-    //             return ResponseEntity.ok("Data updated successfully!");
-    //         } else {
-    //             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to insert data.");
-    //         }
+        try {
+            Boolean updateAttempt = userService.updateUserProfilePremiumStatus(userId, hasPremium);
+            if (updateAttempt) {
+                return ResponseEntity.ok("hasPremium updated successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update has premium");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
+        }
+    }
 
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    //     }
-    // }
+    @PutMapping("/updateTheme/{userId}")
+    public ResponseEntity<String> updateUserProfileTheme(@PathVariable Integer userId, @RequestBody Map<String, String> updateData) {
+    
+        System.out.println("CONTROLLER - Received data to update theme for userId: " + userId);
+    
+        String currentTheme = updateData.get("selectedTheme");
+
+        try {
+            Boolean updateAttempt = userService.updateUserProfileTheme(userId, currentTheme);
+            if (updateAttempt) {
+                return ResponseEntity.ok("hasPremium updated successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update has premium");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
+        }
+    }
 
 
 }

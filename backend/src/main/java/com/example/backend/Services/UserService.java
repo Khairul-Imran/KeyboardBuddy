@@ -82,28 +82,32 @@ public class UserService {
 
     // Update userProfile (theme and hasPremium only)
     @Transactional
-    public void updateUserProfileTheme(Integer userId, String selectedTheme) throws ProfileNotFoundException {
+    public Boolean updateUserProfileTheme(Integer userId, String selectedTheme) throws ProfileNotFoundException {
 
         Optional<UserProfile> optionalUserProfile = usersRepository.findUserProfileByUserId(userId);
         if (optionalUserProfile.isPresent()) {
             UserProfile existingUserProfile = optionalUserProfile.get();
 
             existingUserProfile.setSelectedTheme(selectedTheme);
-            usersRepository.updateUserProfileForThemes(existingUserProfile);
+            Boolean insertAttempt = usersRepository.updateUserProfileForThemes(existingUserProfile);
+
+            return insertAttempt;
         } else {
             throw new ProfileNotFoundException("Profile not found for User ID: " + userId);
         }
     }
 
     @Transactional
-    public void updateUserProfilePremiumStatus(Integer userId, Boolean hasPremium) throws ProfileNotFoundException {
+    public Boolean updateUserProfilePremiumStatus(Integer userId, Boolean hasPremium) throws ProfileNotFoundException {
         // Should only be updating for if it is true. Since it is a one time purchase.
         Optional<UserProfile> optionalUserProfile = usersRepository.findUserProfileByUserId(userId);
         if (optionalUserProfile.isPresent()) {
             UserProfile existingUserProfile = optionalUserProfile.get();
 
             existingUserProfile.setHasPremium(hasPremium);
-            usersRepository.updateUserProfileForPremium(existingUserProfile);
+            Boolean insertAttempt = usersRepository.updateUserProfileForPremium(existingUserProfile);
+
+            return insertAttempt;
         } else {
             throw new ProfileNotFoundException("Profile not found for User ID: " + userId);
         }

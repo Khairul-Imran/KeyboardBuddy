@@ -38,11 +38,6 @@ export class UserDataService {
     );
   }
 
-  // Testing -> 
-  // postUserRegistration(userRegistration: UserRegistration): Promise<any> {
-  //   return lastValueFrom(this.http.post<any>('/api/register', userRegistration))
-  // }
-
   postUserLogin(userLogin: UserLogin): Promise<User> {
     return lastValueFrom(this.http.post<any>('/api/login', userLogin)
       .pipe(
@@ -118,6 +113,27 @@ export class UserDataService {
     console.info("HTTP Method - This is your request body: ", requestBody);
 
     return lastValueFrom(this.http.put(`/api/updateAfterTest/${userId}`, requestBody, { responseType: 'text' }));
+  }
+
+  // Update theme and premium
+  updateUserProfileAfterPurchase(userId: number, hasPremium: boolean): Promise<any> {
+    const requestBody = {
+      hasPremium: hasPremium
+    };
+
+    console.info("HTTP Method - This is your request body (has premium): ", requestBody);
+
+    return lastValueFrom(this.http.put(`/api/updateAfterPurchase/${userId}`, requestBody, { responseType: 'text'}));
+  }
+
+  updateUserProfileTheme(userId: number, selectedTheme: string): Promise<any> {
+    const requestBody = {
+      selectedTheme: selectedTheme
+    };
+
+    console.info("HTTP Method - This is your request body (theme): ", requestBody);
+
+    return lastValueFrom(this.http.put(`/api/updateTheme/${userId}`, requestBody, { responseType: 'text'}));
   }
 
 }

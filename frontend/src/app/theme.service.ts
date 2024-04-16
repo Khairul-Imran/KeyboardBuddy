@@ -18,6 +18,7 @@ export class ThemeService {
     return this.themeSource$.asObservable();
   }
 
+  // Use this to update themes.
   // Sends updated theme to themeSource.
   sendUpdatedTheme(newTheme: string) {
     this.themeSource$.next(newTheme);

@@ -9,6 +9,7 @@ export class LocalStorageService {
 
   constructor() { }
 
+  // User
   saveUserToLocalStorage(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
   }
@@ -20,6 +21,11 @@ export class LocalStorageService {
     }
 
     return undefined;
+  }
+
+  removeUserFromLocalStorage() {
+    localStorage.removeItem('user');
+    console.info("User has been removed from local storage.");
   }
 
   // Save the test data and personal records -> to be called after they are generated in the profile
@@ -49,5 +55,9 @@ export class LocalStorageService {
 
     return undefined;
   }
+
+  // Store the login stuff here also?
+
+  
 
 }

@@ -1,23 +1,30 @@
-<div [ngClass]="'theme-' + currentTheme">
-  <h1>This is the settings component!</h1>
+<!-- <div [ngClass]="'theme-' + currentTheme">
+    
+</div> -->
 
+<h1>This is the settings component!</h1>
 
-  <div>
-    <button (click)="detectThemeChanges('theme1')">Serika Dark</button>
-    <button (click)="detectThemeChanges('theme2')">Future Funk</button>
-    <button (click)="detectThemeChanges('theme3')">Dracula</button>
-    <button (click)="detectThemeChanges('theme4')">Solarized Light</button>
-    <button (click)="detectThemeChanges('theme5')">Solarized Dark</button>
-    <button (click)="detectThemeChanges('theme6')">Darling</button>
-    <button (click)="detectThemeChanges('theme7')">Lavender</button>
-    <button (click)="detectThemeChanges('theme8')">Mizu</button>
-  </div>
-
-  <div>
-    <h2>KeyboardBuddy Themes Pack</h2>
-    <p>$0.01</p>
-    <button (click)="goToOrderPreviewPage()">Buy Now</button>
-  </div>
-
-
+<div *ngIf="!userLocalStorage?.userProfile?.hasPremium">
+  <h2>KeyboardBuddy Themes Pack</h2>
+  <p>$0.01</p>
+  <button (click)="goToOrderPreviewPage()">Buy Now</button>
 </div>
+
+<div *ngIf="userLocalStorage?.userProfile?.hasPremium">
+  <h2>You have purchased the KeyboardBuddy Themes Pack!</h2>
+  <!-- <button (click)="goToOrderPreviewPage()">Buy Now</button> -->
+</div>
+
+
+<div>
+  <button (click)="detectThemeChanges('theme0')" [disabled]="userLocalStorage?.userProfile?.hasPremium">Default Theme</button>
+  <button (click)="detectThemeChanges('theme1')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Serika Dark</button>
+  <button (click)="detectThemeChanges('theme2')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Future Funk</button>
+  <button (click)="detectThemeChanges('theme3')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Dracula</button>
+  <button (click)="detectThemeChanges('theme4')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Solarized Light</button>
+  <button (click)="detectThemeChanges('theme5')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Solarized Dark</button>
+  <button (click)="detectThemeChanges('theme6')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Darling</button>
+  <button (click)="detectThemeChanges('theme7')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Lavender</button>
+  <button (click)="detectThemeChanges('theme8')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Mizu</button>
+</div>
+

@@ -6,6 +6,7 @@ import { UserDataService } from '../../user-data.service';
 import { UserStoreService } from '../../user-store.service';
 import { LocalStorageService } from '../../local-storage.service';
 import { LoginStatusServiceService } from '../../login-status-service.service';
+import { ThemeService } from '../../theme.service';
 
 @Component({
   selector: 'app-login',
@@ -22,12 +23,16 @@ export class LoginComponent implements OnInit {
   private userStoreService = inject(UserStoreService);
   private localStorageService = inject(LocalStorageService);
   private loginStatusService = inject(LoginStatusServiceService);
+  private themeService = inject(ThemeService);
   
   registrationForm!: FormGroup;
   loginForm!: FormGroup;
   
   defaultRegistration: UserRegistration = DEFAULT_REGISTRATION;
   defaultLogin: UserLogin = DEFAULT_LOGIN;
+
+  userLocalStore!: User | undefined;
+  userComponentStore!: User;
 
   ngOnInit(): void {
     this.registrationForm = this.createUserRegistrationForm(this.defaultRegistration);
@@ -112,6 +117,12 @@ export class LoginComponent implements OnInit {
         this.userStoreService.updateUserStore(user);
         this.localStorageService.saveUserToLocalStorage(user);
         this.loginStatusService.userLoggedIn();
+
+        this.userLocalStore = this.localStorageService.getUserFromLocalStorage();
+        // Gets the last chosen theme
+        if (this.userLocalStore !== undefined) {
+          this.themeService.sendUpdatedTheme(this.userLocalStore?.userProfile.selectedTheme);
+        }
 
         console.info("Response: ", response); // Use this response
         this.router.navigate(['/profile']); // Need to include user data inside here?
