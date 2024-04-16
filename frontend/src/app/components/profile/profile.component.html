@@ -1,124 +1,130 @@
 
+<div class="justify-content-center">
 
-<h2>Profile</h2>
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Joined Date:</th>
-                <th>Tests Completed</th>
-                <th>Time Spent Typing</th>
-                <th>Current Streak</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ userStore.username }}</td>
-                <td>{{ userStore.joinedDate | date }}</td>
-                <td>{{ userStore.userProfile.testsCompleted }}</td>
-                <td>{{ userStore.userProfile.timeSpentTyping }} seconds</td>
-                <td>{{ userStore.userProfile.currentStreak }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2>Profile</h2>
+    <div class="table table-striped mx auto">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Joined Date:</th>
+                    <th scope="col">Joined Date:</th>
+                    <th scope="col">Tests Completed</th>
+                    <th scope="col">Time Spent Typing</th>
+                    <!-- <th scope="col">Current Streak</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ userStore.username }}</td>
+                    <td>{{ userStore.joinedDate | date }}</td>
+                    <td>{{ userStore.userProfile.testsCompleted }}</td>
+                    <td>{{ userStore.userProfile.timeSpentTyping }} seconds</td>
+                    <!-- <td>{{ userStore.userProfile.currentStreak }}</td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    
+    <h2>Personal Records:</h2>
+    <div *ngIf="timeBasedRecords.length > 0 else noPersonalRecords" class="table table-striped">
+        <h3>Time-Based Records</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Test Date</th>
+                    <th scope="col">Time Limit</th>
+                    <th scope="col">Difficulty</th>
+                    <th scope="col">Words Per Minute</th>
+                    <th scope="col">Accuracy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of timeBasedRecords">
+                    <td>{{ record.testDate | date }}</td>
+                    <td>{{ record.timeLimit }}</td>
+                    <td>{{ record.difficulty }}</td>
+                    <td>{{ record.wordsPerMinute }}</td>
+                    <td>{{ record.accuracy }}%</td>
+                </tr>    
+            </tbody>
+        </table>
+    </div>
+    
+    <div *ngIf="wordsBasedRecords.length > 0 else noPersonalRecords" class="table table-striped">
+        <h3>Words-Based Records</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Test Date</th>
+                    <th scope="col">Word Count</th>
+                    <th scope="col">Difficulty</th>
+                    <th scope="col">Words Per Minute</th>
+                    <th scope="col">Accuracy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of wordsBasedRecords">
+                    <td>{{ record.testDate | date }}</td>
+                    <td>{{ record.wordCount }}</td>
+                    <td>{{ record.difficulty }}</td>
+                    <td>{{ record.wordsPerMinute }}</td>
+                    <td>{{ record.accuracy }}%</td>
+                </tr>    
+            </tbody>
+        </table>
+    </div>
+    
+    <div *ngIf="quotesRecords.length > 0 else noPersonalRecords" class="table table-striped">
+        <h3>Quotes Records</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Test Date</th>
+                    <th scope="col">Words Per Minute</th>
+                    <th scope="col">Accuracy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of quotesRecords">
+                    <td>{{ record.testDate | date }}</td>
+                    <td>{{ record.wordsPerMinute }}</td>
+                    <td>{{ record.accuracy }}%</td>
+                </tr>    
+            </tbody>
+        </table>
+    </div>
+    
+    
+    <div class="table table-striped">
+        <h2>Test Data:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Test Date</th>
+                    <th scope="col">Test Type</th>
+                    <th scope="col">Words Per Minute</th>
+                    <th scope="col">Accuracy</th>
+                    <th scope="col">Time Taken</th>
+                </tr>
+            </thead>
+        
+            <tbody *ngIf="testDataFromPromise as testData; else noTestData">
+                <div *ngIf="testData.length > 0; else noTestData">
+                    <tr *ngFor="let data of testData">
+                        <td>{{ data.testDate | date }}</td>
+                        <td>{{ data.testType }}</td>
+                        <td>{{ data.wordsPerMinute }}</td>
+                        <td>{{ data.accuracy }}%</td>
+                        <td>{{ data.timeTaken }}s</td>
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+    </div>
+
 </div>
-
-
-<h2>Personal Records:</h2>
-<div *ngIf="timeBasedRecords.length > 0 else noPersonalRecords">
-    <h3>Time-Based Records</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Test Date</th>
-                <th>Time Limit</th>
-                <th>Difficulty</th>
-                <th>Words Per Minute</th>
-                <th>Accuracy</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let record of timeBasedRecords">
-                <td>{{ record.testDate | date }}</td>
-                <td>{{ record.timeLimit }}</td>
-                <td>{{ record.difficulty }}</td>
-                <td>{{ record.wordsPerMinute }}</td>
-                <td>{{ record.accuracy }}%</td>
-            </tr>    
-        </tbody>
-    </table>
-</div>
-
-<div *ngIf="wordsBasedRecords.length > 0 else noPersonalRecords">
-    <h3>Words-Based Records</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Test Date</th>
-                <th>Word Count</th>
-                <th>Difficulty</th>
-                <th>Words Per Minute</th>
-                <th>Accuracy</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let record of wordsBasedRecords">
-                <td>{{ record.testDate | date }}</td>
-                <td>{{ record.wordCount }}</td>
-                <td>{{ record.difficulty }}</td>
-                <td>{{ record.wordsPerMinute }}</td>
-                <td>{{ record.accuracy }}%</td>
-            </tr>    
-        </tbody>
-    </table>
-</div>
-
-<div *ngIf="quotesRecords.length > 0 else noPersonalRecords">
-    <h3>Quotes Records</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Test Date</th>
-                <th>Words Per Minute</th>
-                <th>Accuracy</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let record of quotesRecords">
-                <td>{{ record.testDate | date }}</td>
-                <td>{{ record.wordsPerMinute }}</td>
-                <td>{{ record.accuracy }}%</td>
-            </tr>    
-        </tbody>
-    </table>
-</div>
-
-
-<table>
-    <h2>Test Data:</h2>
-    <thead>
-        <tr>
-            <th>Test Date</th>
-            <th>Test Type</th>
-            <th>Words Per Minute</th>
-            <th>Accuracy</th>
-            <th>Time Taken</th>
-        </tr>
-    </thead>
-
-    <tbody *ngIf="testDataFromPromise as testData; else noTestData">
-        <div *ngIf="testData.length > 0; else noTestData">
-            <tr *ngFor="let data of testData">
-                <td>{{ data.testDate | date }}</td>
-                <td>{{ data.testType }}</td>
-                <td>{{ data.wordsPerMinute }}</td>
-                <td>{{ data.accuracy }}%</td>
-                <td>{{ data.timeTaken }}s</td>
-            </tr>
-        </div>
-    </tbody>
-</table>
 
 
 

@@ -1,18 +1,34 @@
-<head>
-    <title>Buy cool new product</title>
-  </head>
-  <body>
-    <section>
-      <div class="product">
-        <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
-        <div class="description">
-          <h3>KeyboardBuddy Themes Pack</h3>
-          <h5>$0.50</h5>
+<!-- <section>
+    <div class="product">
+      <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+      <div class="description">
+        <h3>KeyboardBuddy Themes Pack</h3>
+        <h5>$0.50</h5>
+      </div>
+    </div>
+    <button (click)="makePayment()">Checkout Item</button>
+  </section> -->
+
+
+<div class="container mt-5">
+
+  <div class="row justify-content-center">
+  
+    <div class="col-md-6">
+      <div class="card mb-4 rounded-3 shadow-sm">
+        <div class="card-header py-3">
+          <h4 class="my-0 fw-normal">KeyboardBuddy Themes Pack</h4>
+        </div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">$0.50<small class="text-body-secondary fw-light"></small></h1>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>8 Themes Included</li>
+            <li>With more to come in the future</li>
+          </ul>
+          <button type="button" class="w-100 btn btn-lg btn-primary" (click)="makePayment()">Checkout Item</button>
         </div>
       </div>
-      <button (click)="makePayment()">Checkout Item</button>
-      <!-- <form action="/create-checkout-session" method="POST">
-        <button type="submit" id="checkout-button">Checkout</button>
-      </form> -->
-    </section>
-  </body>
+    </div>
+  </div>
+
+</div>

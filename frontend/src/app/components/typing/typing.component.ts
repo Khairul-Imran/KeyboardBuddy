@@ -531,7 +531,6 @@ export class TypingComponent implements OnInit, AfterViewInit ,OnDestroy {
   }
 
 
-  // TODO: to update the variable names
   updateCaret() {
     const currentWord = this.wordsFromPromise[this.currentWordIndex];
     const currentLetter: Letter = currentWord.letters[this.currentLetterIndex];

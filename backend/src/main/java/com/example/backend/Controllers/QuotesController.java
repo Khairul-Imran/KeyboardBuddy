@@ -14,7 +14,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://quaint-jar-production.up.railway.app/", "https://keyboardbuddy.khairul-imran.dev"})
 @RequestMapping("/api/quotes")
 public class QuotesController {
     

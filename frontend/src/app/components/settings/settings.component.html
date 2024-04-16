@@ -1,30 +1,42 @@
-<!-- <div [ngClass]="'theme-' + currentTheme">
-    
+
+<!-- <div *ngIf="!userLocalStorage?.userProfile?.hasPremium">
+  <h2>KeyboardBuddy Themes Pack</h2>
+  <button (click)="goToOrderPreviewPage()">Buy Now</button>
 </div> -->
 
-<h1>This is the settings component!</h1>
+<!-- <div *ngIf="userLocalStorage?.userProfile?.hasPremium">
+  <h2>You already own the KeyboardBuddy Themes Pack!</h2>
+</div> -->
 
-<div *ngIf="!userLocalStorage?.userProfile?.hasPremium">
-  <h2>KeyboardBuddy Themes Pack</h2>
-  <p>$0.01</p>
-  <button (click)="goToOrderPreviewPage()">Buy Now</button>
+<div class="container my-5">
+  <div class="p-5 text-center rounded-3">
+    <!-- <svg class="bi mt-4 mb-3" style="color: var(--bs-indigo);" width="100" height="100"><use xlink:href="#bootstrap"/></svg> -->
+    <h1 class="text-body-emphasis">KeyboardBuddy Themes Pack</h1>
+
+    <p class="col-lg-8 mx-auto fs-5 text-muted">
+      Typing has never looked this good.<code>Enhance</code> your typing experience with our vibrant Themes Pack.
+    </p>
+
+    <div class="d-inline-flex gap-2 mb-5" *ngIf="userLocalStorage?.userProfile?.hasPremium">
+      <h2>You already own the KeyboardBuddy Themes Pack!</h2>
+    </div>
+
+    <div class="d-inline-flex gap-2 mb-5" *ngIf="!userLocalStorage?.userProfile?.hasPremium">
+      <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button" (click)="goToOrderPreviewPage()">
+        Buy Now for $0.50
+      </button>
+    </div>
+  </div>
 </div>
 
-<div *ngIf="userLocalStorage?.userProfile?.hasPremium">
-  <h2>You have purchased the KeyboardBuddy Themes Pack!</h2>
-  <!-- <button (click)="goToOrderPreviewPage()">Buy Now</button> -->
+<div class="d-flex gap-2 justify-content-center py-1">
+  <button type="button" (click)="detectThemeChanges('theme0')">Default Theme</button>
+  <button type="button" (click)="detectThemeChanges('theme1')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Serika Dark</button>
+  <button type="button" (click)="detectThemeChanges('theme2')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Taro</button>
+  <button type="button" (click)="detectThemeChanges('theme3')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Dracula</button>
+  <button type="button" (click)="detectThemeChanges('theme4')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Solarized Light</button>
+  <button type="button" (click)="detectThemeChanges('theme5')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Botanical</button>
+  <button type="button" (click)="detectThemeChanges('theme6')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Darling</button>
+  <button type="button" (click)="detectThemeChanges('theme7')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Lavender</button>
+  <button type="button" (click)="detectThemeChanges('theme8')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Mizu</button>
 </div>
-
-
-<div>
-  <button (click)="detectThemeChanges('theme0')" [disabled]="userLocalStorage?.userProfile?.hasPremium">Default Theme</button>
-  <button (click)="detectThemeChanges('theme1')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Serika Dark</button>
-  <button (click)="detectThemeChanges('theme2')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Future Funk</button>
-  <button (click)="detectThemeChanges('theme3')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Dracula</button>
-  <button (click)="detectThemeChanges('theme4')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Solarized Light</button>
-  <button (click)="detectThemeChanges('theme5')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Solarized Dark</button>
-  <button (click)="detectThemeChanges('theme6')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Darling</button>
-  <button (click)="detectThemeChanges('theme7')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Lavender</button>
-  <button (click)="detectThemeChanges('theme8')" [disabled]="!userLocalStorage?.userProfile?.hasPremium">Mizu</button>
-</div>
-

@@ -16,7 +16,7 @@
         Time Taken: {{ testData.timeTaken }}s
     </div>
 
-
+<!-- 
     Seconds Data:
     <div>
         <table>
@@ -35,32 +35,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-
-    <br>
-    <br>
-    <br>
-
-    <!-- Typed Characters Array (Testing only):
-    <table>
-        <tr>
-            <th *ngFor="let letter of typedCharacters">{{ letter.character }}</th>
-        </tr>
-        <tr>
-            <td *ngFor="let letter of typedCharacters">{{ letter.correct }}</td>
-        </tr>
-        <tr>
-            <td *ngFor="let letter of typedCharacters">{{ letter.second }}</td>
-        </tr>
-    </table>
-</div> -->
+    </div> -->
 
 <div class="chart-container">
     <div class="title"></div>
     <div class="chart-wrapper">
     <canvas baseChart 
         width="1200"
-        height="400"
+        height="350"
         type="line"
         [labels]="chartLabels"
         [datasets]="chartData"
@@ -100,8 +82,6 @@
 
     </div>
 </div>
-
-
 
 
 <div class="post-test-buttons">

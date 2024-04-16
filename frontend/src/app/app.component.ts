@@ -11,7 +11,12 @@ import { ThemeService } from './theme.service';
     '../themes/theme0.css',
     '../themes/theme1.css', 
     '../themes/theme2.css',
-    '../themes/theme3.css'
+    '../themes/theme3.css',
+    '../themes/theme4.css',
+    '../themes/theme5.css',
+    '../themes/theme6.css',
+    '../themes/theme7.css',
+    '../themes/theme8.css'
   ]
 })
 export class AppComponent implements OnInit {

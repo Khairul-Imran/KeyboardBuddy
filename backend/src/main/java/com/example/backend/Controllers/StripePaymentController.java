@@ -15,13 +15,16 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://quaint-jar-production.up.railway.app/", "https://keyboardbuddy.khairul-imran.dev"})
 public class StripePaymentController {
 
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
-    String URL = "http://localhost:4200";
+    @Value("${local.client.url}")
+    private String localClientUrl;
+
+    String URL = localClientUrl;
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<String> createCheckoutSession() throws StripeException {
@@ -29,8 +32,8 @@ public class StripePaymentController {
         SessionCreateParams params = SessionCreateParams.builder()
             .setMode(SessionCreateParams.Mode.PAYMENT)
             // .setSuccessUrl(URL + "/success") // Removed .html
-            .setSuccessUrl(URL + "/success?session_id={CHECKOUT_SESSION_ID}") // Removed .html
-            .setCancelUrl(URL + "/cancel") // Removed .html
+            .setSuccessUrl(localClientUrl + "/success?session_id={CHECKOUT_SESSION_ID}") // Removed .html
+            .setCancelUrl(localClientUrl + "/cancel") // Removed .html
             .addLineItem(
                 SessionCreateParams.LineItem.builder()
                     .setQuantity(1L)
