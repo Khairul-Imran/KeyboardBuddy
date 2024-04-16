@@ -11,6 +11,7 @@ COPY frontend/package*.json .
 COPY frontend/angular.json .
 COPY frontend/tsconfig.* .
 COPY frontend/src src
+COPY frontend/ngsw-config.json .
 
 # Commands in the cli
 RUN npm ci && ng build
